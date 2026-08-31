@@ -270,25 +270,35 @@ ${WV_WORK_DIR}/<slug>_audio.wav`.
 - **Preserve per-recording settings**, especially `language`. Not every interview is in English,
   and a wrong language tag produces fluent, confident, wrong text.
 
-**A RECORDING CAN CHANGE LANGUAGE MID-WAY, AND `language=` IS SET ONCE.** The parameter above is
-a single value for the whole file, so a call that switches languages part-way gets fluent, confident,
-wrong text for the switched span -- and, because the words are wrong, every word-count metric over
-that span measures ASR failure rather than behaviour. This is not exotic: it happens whenever two
-speakers share a first language and drop into it for the logistics at the end.
+**A RECORDING CAN CHANGE LANGUAGE MID-WAY. FIND OUT WHICH ENGINE ACTUALLY BREAKS -- IT IS PROBABLY
+NOT WHISPER.** This happens whenever two speakers share a first language and drop into it for the
+logistics at the end. The instinct is that the whole transcript degrades there. **Measured on a real
+31-minute call on 2026-08-31, that is wrong**, and the correction matters because it decides which
+numbers survive:
 
-Detect it rather than discovering it in the numbers:
+- **`faster-whisper` large-v3 with `language="en"` transcribed the Portuguese span AS PORTUGUESE**,
+  coherently, and at BETTER than the file's mean confidence (-0.265 for the switched minutes against
+  a -0.381 whole-file mean). The `language=` parameter did not force English output. Whisper was
+  not the casualty.
+- **The casualty was the speaker-separated meeting export**, whose engine IS language-locked. It
+  returned word salad for the same span -- and no speaker labels with it.
 
-- Scan the segment stream for a span where the average segment confidence drops, repetition rises,
-  or the text stops being responsive to what the frames show. Re-transcribe that span alone with the
-  other language and compare -- the correct language produces coherent text and the wrong one does
-  not, and the difference is not subtle.
+So: **word-count metrics keyed to the EXPORT are void across the span; whisper-derived pace and
+silence are not.** Attribution across that boundary is inferred from turn logic, never measured. Say
+which engine produced which, and do not write "both engines degrade" without checking both.
+
+**DO NOT DETECT THE SWITCH BY CONFIDENCE. It does not work, and this was measured.** A per-minute
+`avg_logprob` scan over that same recording flagged three minutes -- all three of them fluent,
+correct ENGLISH -- and did not flag either of the two Portuguese minutes. A confidence scan is not
+sensitive to the axis it is being asked to vary. Detect it the direct way:
+
+- **Run language identification over the OUTPUT TEXT**, per window. The transcript says what language
+  it is in; that is the signal, and it is unambiguous.
+- `compression_ratio` is a weak corroborator only: it rose to 1.98 and 2.26 on the switched minutes
+  against a 1.6-1.8 baseline. Use it to second a language-ID hit, never to find one.
 - **Mark the span, and carry it as a boundary into Step 6, not into Limitations.** Its start time is
-  the end of the measured window (see "Declare the measured window BEFORE the numbers").
-- Speaker-separated exports fail here too, and usually harder: an English-only engine returns
-  garbage for the span AND no speaker labels for it, so attribution across that boundary is
-  inferred from turn logic, never measured. Say which.
-- On a real 31-minute call this cost the last 5m40s of every word-count metric. Reporting those
-  numbers would not have been slightly wrong; it would have been a measurement of the ASR.
+  the end of the measured window for export-derived metrics (see "Declare the measured window BEFORE
+  the numbers").
 
 **Transcript quality gate.** Assess completeness before trusting it: full-duration coverage, no
 long timestamp gaps, no repeated gibberish, no silence where the frames show someone speaking.

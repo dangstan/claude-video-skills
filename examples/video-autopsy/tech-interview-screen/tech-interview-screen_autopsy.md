@@ -1,4 +1,4 @@
-# Autopsy: tech company screening call, recruiter x candidate (2026-08-25)
+# Autopsy: tech company screening call, recruiter x candidate
 
 > SANITIZED EXAMPLE: real output of a real run, with personal names, employers, company identifiers,
 > compensation figures and private file references replaced or redacted. The source recording and
@@ -6,13 +6,13 @@
 
 ## Header
 
-- **Recording**: local recording, 31m32s, Google Meet, OBS local capture (desktop + mic, one audio
+- **Recording**: local recording, about 30 minutes, Google Meet, OBS local capture (desktop + mic, one audio
   track).
-- **Participants**: the recruiter -- Talent Acquisition & People Ops Manager, the company (an AI
-  engineering studio and startup incubator) -- interviewing the candidate for Lead AI Engineer. A
+- **Participants**: the recruiter -- a talent and people function, the company (an AI
+  engineering studio and startup incubator) -- interviewing the candidate for a senior engineering role. A
   third non-participant, a notetaker bot, joined to record/transcribe; it never speaks substantively
   and is excluded from every talk-share and disfluency count below.
-- **Date/time**: meeting started 2026-08-25 17:13:23 BRT, per the meeting-transcriber export header.
+- **Date/time**: the call is in August 2026; the exact start time is withheld, and the transcriber's stated time is in any case not corroborated by the wall clock in the frames.
 - **MODE 1 (subject)**: the exchange -- a two-participant screening call. Correct package.
 - **MODE 2 (self-review)**: SELF-REVIEW, operator-decided. The overlay below (outcome estimate,
   behavioural check, claims ledger) is included.
@@ -196,7 +196,7 @@ escalate.
 
 1. **A leftover frame directory of ambiguous provenance** (1893 files, 1280x1392) was found in
    scratch before this run's own extraction. Its file count (~1893) matches neither a 5 fps
-   extraction of this 1892s video (~9460 frames) nor any obvious round number, so it was not
+   extraction of this recording (~9460 frames) nor any obvious round number, so it was not
    trusted or reused; this run re-extracted its own 9464-frame set instead. Not a problem in
    itself, but a reminder that a stale scratch directory can look plausible enough to reuse by
    mistake.

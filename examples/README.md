@@ -35,6 +35,25 @@ a scrub keyed on IDENTIFIERS cannot contain a leak whose problem is PROVENANCE:
    a whole-section shell, in the markdown and in the HTML report alike; giving them the same
    line-by-line treatment is pending review.
 
+### The re-run pair, and the gate that refused the first pass
+
+`tech-interview-screen` ships TWO video-autopsy documents. The first is the original run. The second,
+`_rerun_autopsy.md`, is a second pass over the same recording under a hardened version of the skill,
+and it is here because of what it corrected rather than what it confirmed:
+
+- The first pass said both ASR engines degraded across a mid-call language switch. Measured, whisper
+  did not: it transcribed the switched span in the other language, coherently, at BETTER than the
+  file's mean confidence. The engine that failed was the language-locked meeting export.
+- The detection rule the skill had just gained -- find the switch by a drop in confidence -- was
+  refuted by the recording it was written for. It flagged three minutes of fluent correct English and
+  missed both switched minutes. The rule now runs language identification over the output text.
+- A phase the first pass marked VOID turned out to be a real measurement.
+
+Both documents were also re-published through `video-autopsy/publish_check.sh`, which **refused the
+first pass** on three quasi-identifiers -- an exact start time with a zone, a timestamp to the
+second, and an exact duration -- none of which names anybody and all of which let a person who was
+in that meeting match the document against their own calendar. They have been coarsened.
+
 ### Honesty policy: defects are flagged, never rewritten
 
 These are unmodified run outputs. When a document gets something wrong, the error stays and a
