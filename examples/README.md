@@ -35,7 +35,10 @@ a scrub keyed on IDENTIFIERS cannot contain a leak whose problem is PROVENANCE:
    a whole-section shell, in the markdown and in the HTML report alike; giving them the same
    line-by-line treatment is pending review.
 
-### The re-run pair, and the gate that refused the first pass
+### The re-run pairs, and the gate that refused the first pass
+
+TWO sources ship a re-run pair: a first video-autopsy run, and a second pass over the same recording
+under a hardened version of the skill. Each is here for what it corrected, not for what it confirmed.
 
 `tech-interview-screen` ships TWO video-autopsy documents. The first is the original run. The second,
 `_rerun_autopsy.md`, is a second pass over the same recording under a hardened version of the skill,
@@ -53,6 +56,45 @@ Both documents were also re-published through `video-autopsy/publish_check.sh`, 
 first pass** on three quasi-identifiers -- an exact start time with a zone, a timestamp to the
 second, and an exact duration -- none of which names anybody and all of which let a person who was
 in that meeting match the document against their own calendar. They have been coarsened.
+
+`founder-interview-podcast` ships the second pair. Its first run inverted the two participants'
+faces -- the defect note in that document is the largest one in this tree -- and the re-run is the
+pass that settled the map from the frames and found how the inversion happened. The route was not
+the one the skill had already been hardened against:
+
+- The first pass read identity off a personalised surface. The re-run walked into the OTHER route
+  to the same wrong answer: caption `>>` markers mark THAT the speaker changed, never TO WHOM, and
+  alternating over them from a confidently identified opening turn is only valid if no boundary was
+  ever missed. Measured on this file, 68 markers were correct for seven turns and then inverted at a
+  hard cut into a pre-recorded sponsor read -- a cut is not a speaker change any caption model can
+  see -- and stayed wrong for the rest of the recording.
+- That is the lesson the re-run is published for: hardening one route to a wrong map does not harden
+  the others. The rule now in `video-autopsy/SKILL.md` Step 3 came out of this run.
+- Its caption cross-check also produced a NEGATIVE result worth as much as the positive ones. The
+  dropout detector -- caption text with no whisper counterpart -- returned zero flagged bins while
+  whisper was in fact emitting a hallucination loop. A detector keyed on ABSENCE cannot see a
+  wrong-value failure; what found it was a run of segments of exactly 1.00 s and the compression
+  ratio.
+
+The gate refused this pair too, and on a different failure class: not quasi-identifiers but SOURCE.
+The run's "Run notes" section is external by construction -- it describes the machine the run
+executed on -- so it is a declared shell here, and the transcript of record and the reproduction
+scripts are not published for the same reason. That refusal exposed a defect in the document's own
+header, flagged in place: it declares "the publication gate does not apply" because the recording is
+public, and states that it carries no external-record tags while carrying six of them. The gate
+applies to what the RUN leaves behind, not to the subject's privacy. The exact-duration and
+calendar-date warnings are NOT coarsened here, unlike the `tech-interview-screen` pair: this
+recording is a published video anyone can watch and time, and its sibling document in the same
+directory has shipped the same duration since it was published. `publish_check.sh` encodes that
+distinction itself -- quasi-identifiers FAIL on `--source private` and only WARN on
+`--source published`.
+
+**One mismatch between the shipped examples and the current skill, so it is not read as a defect.**
+Every example here except `founder-interview-podcast_rerun_autopsy.*` predates the requirement,
+added 2026-08-31, that a report and transcript header name the signal that cross-checked the speaker
+attribution and its agreement rate. Under the honesty policy below these documents are not re-run to
+conform; a header that does not carry that line is a document written before the rule, not a run
+that skipped it.
 
 ### Honesty policy: defects are flagged, never rewritten
 
@@ -138,7 +180,9 @@ a look at the rendered page, because not one of these was reachable by a string 
   the tree: the run swapped the two participants' faces and so credits the sponsor read to the
   wrong man. Left in and flagged, with the evidence that settles it -- see the honesty policy
   above. It also carries a second note on its phase timeline, which draws four of the ten blocks
-  its own caption claims.
+  its own caption claims. It ships a **re-run pair**: `_rerun_autopsy.md/html` is the
+  second pass that settled the face map from the frames, found the route the inversion took, and
+  produced the turn-boundary rule now in the skill -- see the re-run section above.
 - [`harness-comparison-explainer/`](video-autopsy/harness-comparison-explainer/) -- what the
   skill does when pointed at footage it is not for: it stops before spending compute and routes
   to the right sibling. No autopsy deliverable exists for this source *because the run refused to
