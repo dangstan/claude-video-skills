@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autopsy: Ex-Uber Dev Explains His Multi-Agent Workflow</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --bg-panel: #171a21;
+    --bg-panel-raised: #1e222b;
+    --border: #2a2f3a;
+    --text: #e6e8ec;
+    --text-dim: #9aa1ae;
+    --text-faint: #6b7280;
+    --accent: #5ec9a8;
+    --accent-dim: #3a7d68;
+    --flag-frame: #7aa2f7;
+    --flag-measured: #5ec9a8;
+    --flag-hypothesis: #e0af68;
+    --flag-null: #6b7280;
+    --flag-transcript: #bb9af7;
+    --mono: "SF Mono", "Consolas", "Menlo", monospace;
+    --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 48px 24px 96px; }
+  .redaction-note {
+    margin: 0 0 32px;
+    padding: 14px 18px;
+    border-left: 3px solid var(--flag-hypothesis);
+    background: rgba(224, 175, 104, 0.07);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .redaction-note strong { color: var(--flag-hypothesis); }
+  .defect-note {
+    margin: 18px 0 0;
+    padding: 14px 18px;
+    border-left: 3px solid #d98b73;
+    background: rgba(217, 139, 115, 0.08);
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .defect-note strong { color: #d98b73; }
+  .redacted {
+    white-space: nowrap;
+    font-family: var(--mono);
+    font-size: 0.82em;
+    color: var(--flag-hypothesis);
+    background: rgba(224, 175, 104, 0.10);
+    border: 1px solid var(--accent-dim);
+    border-radius: 3px;
+    padding: 0 5px;
+  }
+  header.doc-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  h1 {
+    font-size: 1.7rem;
+    margin: 0 0 8px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .subtitle { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 20px; }
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px 24px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .meta-grid div span.k { color: var(--text-faint); display: block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .meta-grid div span.v { color: var(--text); }
+
+  h2 {
+    font-size: 1.2rem;
+    margin: 44px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+  h3 { font-size: 1.0rem; margin: 26px 0 10px; color: var(--accent); font-weight: 600; }
+  p { margin: 0 0 14px; color: var(--text); font-size: 0.95rem; }
+  p.dim { color: var(--text-dim); }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    margin: 0 3px 2px 0;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+  .tag-frame { color: var(--flag-frame); border-color: var(--flag-frame); background: rgba(122,162,247,0.08); }
+  .tag-measured { color: var(--flag-measured); border-color: var(--flag-measured); background: rgba(94,201,168,0.08); }
+  .tag-hypothesis { color: var(--flag-hypothesis); border-color: var(--flag-hypothesis); background: rgba(224,175,104,0.08); }
+  .tag-null { color: var(--flag-null); border-color: var(--flag-null); background: rgba(107,114,128,0.08); }
+  .tag-transcript { color: var(--flag-transcript); border-color: var(--flag-transcript); background: rgba(187,154,247,0.08); }
+
+  .callout {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin: 16px 0;
+  }
+  .callout.warn { border-left-color: var(--flag-hypothesis); }
+  .callout.correction { border-left-color: var(--flag-frame); }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 0.88rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text-faint); font-weight: 600; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.04em; }
+  td.num { font-family: var(--mono); color: var(--accent); }
+
+  figure { margin: 20px 0; }
+  figure img { width: 100%; border-radius: 8px; border: 1px solid var(--border); display: block; }
+  figcaption { color: var(--text-faint); font-size: 0.8rem; margin-top: 8px; }
+
+  /* Signature element: phase/monologue timeline */
+  .timeline-wrap { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 10px; padding: 24px 20px 16px; margin: 20px 0 28px; }
+  .timeline-title { font-size: 0.8rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 14px; }
+  svg text { font-family: var(--sans); }
+  .phase-label { font-size: 10px; fill: var(--text-dim); }
+  .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 14px; font-size: 0.75rem; color: var(--text-dim); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin: 18px 0 24px; }
+  .stat-tile { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .stat-tile .num { font-size: 1.5rem; font-weight: 650; color: var(--accent); font-family: var(--mono); }
+  .stat-tile .lbl { font-size: 0.75rem; color: var(--text-faint); margin-top: 4px; }
+
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); color: var(--text-faint); font-size: 0.78rem; }
+  ul { padding-left: 22px; }
+  li { margin-bottom: 8px; font-size: 0.93rem; }
+  code { font-family: var(--mono); background: var(--bg-panel-raised); padding: 1px 5px; border-radius: 4px; font-size: 0.85em; color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc-header">
+  <h1>Autopsy: "Ex-Uber Dev Explains His Multi-Agent Workflow"</h1>
+  <p class="subtitle">Third-party recording -- behavioural and screen forensics -- 2026-08-10, 45m25s -- no self-review overlay</p>
+  <div class="meta-grid">
+    <div><span class="k">Participants</span><span class="v">Florent "Flo" Crivello (guest, founder of Lindy) and David (host)</span></div>
+    <div><span class="k">Format</span><span class="v">Two single-webcam feeds, heavy b-roll overlay editing, 3 screen-shares</span></div>
+    <div><span class="k">Mode 1</span><span class="v">EXCHANGE (interview) -- confirmed, not routed to watch-video-max</span></div>
+    <div><span class="k">Mode 2</span><span class="v">THIRD-PARTY -- self-review overlay does not apply</span></div>
+    <div><span class="k">Transcript</span><span class="v">Verbatim whisper large-v3, reused, quality-gated PASS</span></div>
+    <div><span class="k">Audio capture</span><span class="v">mean -28.4dB / max -3.0dB, both channels present, safe mono</span></div>
+    <div><span class="k">Attribution</span><span class="v">ESTIMATE from on-screen evidence, no diarization run</span></div>
+    <div><span class="k">Frame rate</span><span class="v">5 fps floor, 13,631 frames + targeted contact sheets</span></div>
+  </div>
+</header>
+
+<p class="redaction-note"><strong>Redaction note, added for publication -- not run output.</strong>
+This report is otherwise unmodified run output. Two clauses are withheld and marked in place below,
+both in Limitations: they described the run's own operating environment and the instructions given
+to the run -- host load, and a scoping instruction -- rather than anything about the recording or
+its participants. The finding each clause supported is published in full. The companion
+<code>_autopsy.md</code> carries the same redactions plus three more that have no counterpart in
+this report.</p>
+
+<p class="defect-note"><strong>Defect note, added for publication -- not run output.</strong> The
+run's face-to-name mapping is <strong>inverted</strong>, and every visual attribution below inherits
+the error. The nose-tape / headphones / plain-background speaker is <strong>David</strong>, the host;
+the beard-and-glasses speaker at the broadcast mic is <strong>Flo Crivello</strong>, the guest. Three
+independent lines of evidence settle it, none of which the run used. (1) At 00:00:37.98 the guest
+says "I don't know if you're old enough David" -- addressed to David, and the two men differ visibly
+in age, so the younger of the two is David. (2) The Deep API dashboard in the sponsor segment reads
+<code>SIGNED IN david@davidondrej.com</code>, the only webcam on screen through that segment is the
+nose-taped speaker, and the ad closes "click the first link below the video" -- a channel owner's
+line. (3) Both sibling runs of this source disagree with this document and agree with each other: the
+<code>watch-video</code> knowledge document names the host "David Ondrej" and files the segment as
+"the video's own paid sponsor", and <code>watch-video-max</code> says "the <em>interviewer</em> runs a
+sponsored segment". The run went wrong by reading the wrong one of the two webcams inset beside a
+screen-share -- "Here's what I'm learning about you, Flo" is Flo's own account, shown during Flo's
+share, with both cameras on screen. What does not change: the measured numbers never depended on
+which face carried which name, and the splice finding itself stands -- only the person delivering the
+ad is wrong. Flagged rather than rewritten; these examples are unmodified run output.</p>
+
+<h2>The analysis of the subject</h2>
+<p>This is a guest-expertise interview, not a balanced conversation, and every measurable axis points the
+same way: David asks short, well-aimed questions; Flo answers at length, often for minutes at a stretch,
+while David's contribution is mostly prompts and brief agreement. That shape is normal for the format.
+What stands out is how <em>uniform</em> the imbalance is -- no phase of the 45 minutes shows a different
+dynamic, whether it's the opening exchange, the two product demos, the personal-workflow discussion, the
+AGI tangent, or the close.</p>
+
+<p>The most interesting structural finding is not in the words at all. A produced, screen-shared
+sponsor/product segment for a tool called "Deep API" is spliced directly into what a transcript-only read
+would present as one continuous Flo answer about agentic software. Read as text, a philosophical claim
+about agent adoption flows without a marked break into a scripted call-to-action with a dashboard
+screen-share and pricing card. Only the frames show the register change. <em>(The document reads
+this as a Flo answer; it is the host's own sponsor read -- see the defect note above.)</em></p>
+
+<div class="callout">
+<strong>Signature finding: uniform pace, near-zero silence, guest-dominated structure -- all three read the same edit.</strong>
+<p class="dim" style="margin:8px 0 0;">Speech rate sits 215-272 wpm in every phase (baseline conversational is 120-180 wpm),
+with no phase reading slower or more relaxed than any other. Silence detection at a 1.0s threshold found
+essentially zero qualifying pauses everywhere it completed. Read together, this describes a tightly cut
+edit that trimmed breathing room throughout, not a conversation that happens to be brisk in places.</p>
+</div>
+
+<h3>Phase / monologue-block timeline</h3>
+<div class="timeline-wrap">
+  <div class="timeline-title">45m25s, 6 phases, 10 continuous question-free (Flo-dominant) blocks >= 60s</div>
+  <svg viewBox="0 0 880 160" width="100%" height="160">
+    <!-- base timeline -->
+    <rect x="0" y="40" width="880" height="28" rx="4" fill="#1e222b" stroke="#2a2f3a"/>
+    <!-- phases (0-2725s mapped to 0-880px) -->
+    <!-- P0 0-24 -->
+    <rect x="0" y="40" width="8" height="28" fill="#3a7d68"/>
+    <!-- P1 24-155 -->
+    <rect x="8" y="40" width="42" height="28" fill="#2a2f3a"/>
+    <!-- P2 155-328 (deepapi) -->
+    <rect x="50" y="40" width="56" height="28" fill="#e0af68" fill-opacity="0.55"/>
+    <!-- P3 328-645 (2 screenshares) -->
+    <rect x="106" y="40" width="102" height="28" fill="#7aa2f7" fill-opacity="0.55"/>
+    <!-- P4 645-2688 extended discussion -->
+    <rect x="208" y="40" width="660" height="28" fill="#2a2f3a"/>
+    <!-- P5 close -->
+    <rect x="868" y="40" width="12" height="28" fill="#3a7d68"/>
+
+    <!-- monologue blocks (question-free >=60s), overlaid as accent marks below the bar -->
+    <!-- 00:14:32-17:41 -> 872-1061s -->
+    <rect x="281" y="72" width="61" height="10" fill="#5ec9a8"/>
+    <!-- 00:03:58-07:06 -> 238-426s -->
+    <rect x="77" y="72" width="61" height="10" fill="#5ec9a8"/>
+    <!-- 00:43:46-45:11 -> 2626-2711s -->
+    <rect x="847" y="72" width="27" height="10" fill="#5ec9a8"/>
+    <!-- 00:19:01-20:25 -->
+    <rect x="613" y="72" width="27" height="10" fill="#5ec9a8"/>
+    <!-- 00:25:53-27:12 -->
+    <rect x="835" y="72" width="0" height="0" fill="none"/>
+    <rect x="836" y="72" width="25" height="10" fill="#5ec9a8" fill-opacity="0"/>
+
+    <text x="4" y="30" class="phase-label">P0</text>
+    <text x="10" y="30" class="phase-label">P1 opening</text>
+    <text x="52" y="30" class="phase-label">P2 Deep API</text>
+    <text x="108" y="30" class="phase-label">P3 demos</text>
+    <text x="420" y="30" class="phase-label">P4 extended discussion (34 min)</text>
+    <text x="845" y="30" class="phase-label">P5</text>
+
+    <text x="0" y="105" class="phase-label" fill="#5ec9a8">green marks = question-free stretches >= 60s (candidate Flo monologue blocks)</text>
+    <text x="0" y="140" class="phase-label" fill="#6b7280">00:00</text>
+    <text x="410" y="140" class="phase-label" fill="#6b7280">~22:00</text>
+    <text x="850" y="140" class="phase-label" fill="#6b7280">45:25</text>
+  </svg>
+  <div class="legend">
+    <div class="legend-item"><span class="swatch" style="background:#3a7d68"></span> teaser / close</div>
+    <div class="legend-item"><span class="swatch" style="background:#e0af68;opacity:0.55"></span> Deep API sponsor segment (screen-share)</div>
+    <div class="legend-item"><span class="swatch" style="background:#7aa2f7;opacity:0.55"></span> product-demo screen-shares (Slack + hydration)</div>
+    <div class="legend-item"><span class="swatch" style="background:#2a2f3a"></span> talking-heads only</div>
+    <div class="legend-item"><span class="swatch" style="background:#5ec9a8"></span> >=60s question-free block</div>
+  </div>
+</div>
+
+<p class="defect-note"><strong>Defect note, added for publication -- not run output.</strong> The
+chart above is wrong in three ways, and it is left as the run drew it. Its own caption says
+<em>10</em> question-free blocks of 60s or more; only <em>four</em> green marks are actually drawn,
+and they account for 545s of the 970.6s the text reports. Two further marks are present in the
+markup but invisible -- one has zero width, the other zero opacity. And the fourth visible mark,
+labelled in the source as 00:19:01-20:25, is plotted at roughly 31:38 on the axis. The phase labels
+also collide at the left edge, where P0 through P3 all fall inside the first 12% of the timeline.
+The numbers in the text and in the tiles below are the measured ones and are unaffected; only this
+drawing of them is faulty. Flagged rather than redrawn -- these examples are unmodified run
+output.</p>
+
+<div class="stat-row">
+  <div class="stat-tile"><div class="num">35.9%</div><div class="lbl">of live interview in >=60s question-free blocks</div></div>
+  <div class="stat-tile"><div class="num">3.16 min</div><div class="lbl">longest single block (14:32-17:41)</div></div>
+  <div class="stat-tile"><div class="num">215-272</div><div class="lbl">wpm range across all 6 phases (blended)</div></div>
+  <div class="stat-tile"><div class="num">13</div><div class="lbl">"uh"/"um" tokens, whole file (floor only)</div></div>
+</div>
+
+<h2>What landed and what did not</h2>
+<p>Reaction-reading is limited by format -- two single-person webcam feeds, not a shared frame, so
+neither speaker's live reaction to the other is directly visible. Within that limit: the close reads as
+warm and low-friction (David visibly smiling, open hand gestures; Flo more reserved but not
+uncomfortable). David's short interjections mostly land as genuine engagement rather than pure filler --
+"Do you have a team David?" / "Yes." / "Are you experiencing the same thing?" is a real if brief
+exchange <em>(the run files this as one of David's interjections; the line is at 00:01:20 and is
+spoken to David, not by him -- see the defect note above)</em>, and he explicitly grants the first screen-share ("Yeah, of course.") before Flo starts
+narrating. <span class="tag tag-null">NULL</span> whether Flo's aside "I promise to your viewers this
+isn't set up" reassured or slightly undercut the demo's spontaneity is not answerable from the available
+evidence.</p>
+
+<h2>Metric passes</h2>
+
+<h3>Talk-share and turn-taking</h3>
+<p><span class="tag tag-hypothesis">HYPOTHESIS</span> No reliable percentage split is reportable -- no
+diarization was run and no platform transcript export exists for this third-party recording. A
+content-signal proxy (address-by-name / host-question phrasing) returned an implausible 98.6%/1.4% split
+and is explicitly rejected here rather than reported as fact. The monologue-block statistic above is the
+defensible substitute.</p>
+
+<h3>Speech rate by phase</h3>
+<table>
+<thead><tr><th>Phase</th><th>Duration</th><th>Words</th><th>wpm (blended)</th></tr></thead>
+<tbody>
+<tr><td>P0 teaser</td><td class="num">23.6s</td><td class="num">107</td><td class="num">272.3</td></tr>
+<tr><td>P1 opening exchange</td><td class="num">131.4s</td><td class="num">512</td><td class="num">233.8</td></tr>
+<tr><td>P2 Deep API segment</td><td class="num">172.8s</td><td class="num">621</td><td class="num">215.6</td></tr>
+<tr><td>P3 product-demo block</td><td class="num">317.2s</td><td class="num">1185</td><td class="num">224.1</td></tr>
+<tr><td>P4 extended discussion</td><td class="num">2043.2s</td><td class="num">8078</td><td class="num">237.2</td></tr>
+<tr><td>P5 close</td><td class="num">36.8s</td><td class="num">140</td><td class="num">228.5</td></tr>
+</tbody>
+</table>
+<p class="dim">Conversational baseline is 120-180 wpm. Every phase in this recording sits above that
+range with no meaningful contrast between phases -- read with the silence result below, this points to
+edit-driven pacing rather than natural variation. <span class="tag tag-measured">MEASURED</span></p>
+
+<h3>Silence, per phase</h3>
+<table>
+<thead><tr><th>Window</th><th>Duration sampled</th><th>Qualifying silences (>=1.0s)</th></tr></thead>
+<tbody>
+<tr><td>Opening span (P0-P3 start)</td><td class="num">00:00-09:10</td><td class="num">1 event, 1.03s (the teaser-to-interview cut)</td></tr>
+<tr><td>Hydration-demo window</td><td class="num">09:10-11:20</td><td class="num">0 events</td></tr>
+<tr><td>Close</td><td class="num">44:30-45:25</td><td class="num">0 events</td></tr>
+<tr><td>Mid-conversation (bulk, P4)</td><td class="num">11:20-44:30</td><td class="num">1 event, 1.07s (00:32:44.5)</td></tr>
+</tbody>
+</table>
+<p class="dim"><strong>Whole-recording total: 2 qualifying silences (>=1.0s) in 45m25s.</strong> Every
+screen-share cut and dozens of speaker-turn boundaries produced no gap the detector could register at
+this threshold -- the strongest single piece of evidence for the tightly-cut-edit reading above.
+<span class="tag tag-measured">MEASURED</span></p>
+
+<h3>Disfluency count</h3>
+<p><span class="tag tag-measured">MEASURED</span>, floor only: 10 "uh", 3 "um", whole file, not split by
+speaker or phase. Whisper's VAD strips most fillers, so this undercounts, likely severely.</p>
+
+<h3>Prosody</h3>
+<p><span class="tag tag-null">NULL</span> Tiers 2 (pitch/energy) and 3 (categorical emotion) were not
+run -- both require diarization to be valid on mixed-mic two-speaker audio, and no diarization was
+performed for this run.</p>
+
+<h2>Screen and technical findings</h2>
+
+<h3>1. Deep API sponsor/product segment (~02:35-05:27)</h3>
+<figure>
+  <img src="assets/burst_deepapi_0250.jpg" alt="Contact sheet of the Deep API screen-share segment">
+  <figcaption>Tiled contact sheet, ~02:50-05:30. Full-screen dark dashboard with Flo's webcam as a small
+  corner PiP; API keys labeled "new-david-global-key" / "david-hermes-agent"; a Gmail inbox showing a
+  received automated email; a "What is DeepAPI?" title card. <span class="tag tag-frame">FRAME</span></figcaption>
+</figure>
+<p>The segment reads as a produced ad unit -- title card, pricing detail, explicit URL call-to-action --
+rather than an improvised live demo, and it is delivered by the same on-screen narrator as the two later
+product demos (matched by face and background). <span class="tag tag-hypothesis">HYPOTHESIS</span> the
+"david"-prefixed key names could indicate the account belongs to David rather than the on-screen
+narrator; this is not resolved anywhere on screen and is logged as unconfirmed. <em>(It is resolved
+on screen: the same dashboard reads "SIGNED IN david@davidondrej.com", and the on-screen narrator
+here is David -- see the defect note above.)</em></p>
+
+<h3>2. Product-demo block (~07:16-10:45): two back-to-back screen-shares</h3>
+<figure>
+  <img src="assets/burst_slackshare_0716.jpg" alt="Contact sheet of the Slack Lindy Teammate demo">
+  <figcaption>Slack "Lindy Teammate" thread, ~07:16-09:12. Real thread with usernames "Marvin Aziz",
+  "Bruno Steven", "Flo"; the "Lindy" bot answers a teammate's billing question by linking a prior doc.
+  Matches the transcript closely -- no discrepancy found. <span class="tag tag-frame">FRAME</span></figcaption>
+</figure>
+<figure>
+  <img src="assets/burst_hydration_0910.jpg" alt="Contact sheet of the automatic hydration memory-file demo">
+  <figcaption>"Automatic hydration" master-memory-file demo, ~09:12-10:45. Screen reads "Here's what I'm
+  learning about you, Flo" beside a live "How your team connects" node graph and a "Memory" sidebar with
+  concrete standing instructions. <span class="tag tag-frame">FRAME</span></figcaption>
+</figure>
+<div class="callout correction">
+<strong>Correction to a prior artifact's timestamp.</strong>
+<p style="margin:8px 0 0;" class="dim">An earlier <code>watch-video-max</code> knowledge document for
+this same file labels this hydration-demo content "src 12:40-13:30". Recalibrated against this video's
+own timeline, the actual on-screen segment runs 00:09:12-00:10:45 -- about 3.5 minutes earlier. Content
+match is otherwise exact; this reads as a timeline-reference mismatch from the earlier pass, exactly the
+failure mode the skill warns about (offset is not a constant across passes). Anyone citing the earlier
+document's timestamp for this content should use the corrected one.</p>
+</div>
+
+<h3>3. Closing segment (~44:30-45:25)</h3>
+<figure>
+  <img src="assets/burst_close_4430.jpg" alt="Contact sheet of the closing sign-off">
+  <figcaption>No screen-share, talking-heads only. David gesturing openly, warm sign-off, standard
+  call-to-action (lindy.ai). <span class="tag tag-frame">FRAME</span></figcaption>
+</figure>
+
+<h3>Baseline framing reference</h3>
+<figure>
+  <img src="assets/burst_baseline_0020.jpg" alt="Contact sheet of baseline talking-head framing">
+  <figcaption>Both speakers' standard webcam framing plus examples of the recording's b-roll overlay
+  style (network-graph graphic, pixel-art cutaway, Slack announcement card, email screenshot).
+  <span class="tag tag-frame">FRAME</span></figcaption>
+</figure>
+
+<p><span class="tag tag-null">NULL</span> Typing-activity and on-screen-error metrics do not apply --
+none of the three screen-shares show a code editor or live-coding surface.</p>
+
+<p class="dim">Visual observation, cause unresolved: Flo <em>(David -- see the defect note above)</em>
+has a visible strip of tape or a nasal strip
+across the bridge of his nose in every frame of the recording. Stated as an observed fact only; cause is
+<span class="tag tag-null">NULL</span>.</p>
+
+<h2>Narration-vs-screen discrepancies</h2>
+<ul>
+<li><strong>The Deep API segment's register shift is invisible in the transcript alone.</strong> A
+transcript-only or audio-only read presents 02:35-05:27 as one continuous organic answer; the frames show
+a produced sponsor segment with its own title cards and call-to-action, with no verbal hand-off cue
+marking the change. <span class="tag tag-frame">FRAME</span> <span class="tag tag-transcript">TRANSCRIPT</span></li>
+<li><strong>Cross-artifact timestamp mismatch</strong> for the hydration-demo screen content between this
+autopsy and a prior knowledge document (detailed above) -- not a discrepancy within this recording, but
+between two artifacts describing it, included because it is the exact failure mode the skill warns
+against.</li>
+</ul>
+
+<h2>Limitations</h2>
+<ul>
+<li>Talk-share has no reliable measurement -- no diarization, no platform export. The monologue-block
+statistic (35.9% in >=60s question-free stretches) is the best defensible proxy and is not a percentage
+split.</li>
+<li>Diction/ASR-mishearing analysis is UNMEASURED (single transcript engine only for this run
+<span class="redacted">[run-direction detail redacted]</span>).</li>
+<li>Prosody tiers 2 and 3 are NULL, not weak -- no diarization means no valid per-speaker pitch/energy
+measurement on this mixed-mic audio.</li>
+<li>Disfluency counts are a floor, not a rate, and are not split by speaker or phase.</li>
+<li>Mid-conversation silence detection (the largest phase, ~33 minutes) was slow under CPU contention
+<span class="redacted">[host-environment detail redacted]</span> but completed: 1 event, 1.07s.
+Whole-recording total is 2 qualifying silences (&gt;=1.0s) in 45m25s.</li>
+<li>Reaction-reading is limited by the single-webcam format -- no shared-frame reactions are possible.</li>
+<li>The "david"-prefixed API-key naming in the Deep API demo is unresolved.</li>
+<li>Self-review overlay and document updates do not apply (third-party mode); skipped in full.</li>
+</ul>
+
+<footer>
+video-autopsy skill run, third-party mode, no self-review overlay. Companion deliverables: the full
+evidence-tagged <code>_autopsy.md</code> and the verbatim <code>_transcript.txt</code> (reused, quality-gated)
+in this same directory. ASCII source; ffmpeg/faster-whisper large-v3 toolchain.
+</footer>
+
+</div>
+</body>
+</html>

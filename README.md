@@ -44,6 +44,21 @@ run them:
   does. `watch-video` refuses to improvise forensics; `video-autopsy` will not summarize a
   tutorial. The boundaries are enforced in the preflight scripts, not just described in prose.
 
+## Examples -- real run outputs
+
+[`examples/`](examples/) holds actual deliverables from real runs of all three skills, including
+the same source processed by two different skills (so the depth difference is inspectable), a
+full behavioural autopsy of a published two-person interview, an anonymized self-review autopsy
+of a real screening interview, and one deliberate scope-gate refusal -- included because a skill
+that knows what it is *not* for is half the engineering. See [examples/README.md](examples/README.md)
+for what each demonstrates and the sanitization rules applied.
+
+These are unmodified run outputs, and they contain six errors across four documents. Rather than
+quietly fixing them, each error carries a defect note beside it explaining what the run got wrong
+and, where it applies, how a sibling run of the same source caught it. That is most of what the examples are there to show: a second
+evidence pass on the same material is what finds these, and every one of them needed a human reading
+rather than a check that could be automated.
+
 ## Install
 
 Clone into your Claude Code skills directory:

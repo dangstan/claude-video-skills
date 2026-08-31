@@ -1,0 +1,1278 @@
+[source: faster-whisper large-v3, verbatim] language=en
+[00:00:00.08 -> 00:00:03.40] Fuck your calendar, fuck your meetings, like this thing is going to eat your lunch.
+[00:00:03.54 -> 00:00:05.98] You have to reinvent your company from scratch right now.
+[00:00:06.10 -> 00:00:08.48] Like we don't know what's going to be on the other side of AGI,
+[00:00:08.70 -> 00:00:12.78] but like what we do know is that your company is going to be nothing like what it was.
+[00:00:12.94 -> 00:00:16.30] The bottleneck at this point is no longer the technology, it's you, it's your own adoption.
+[00:00:16.48 -> 00:00:19.48] I think at some point it's also just a decision people have to make for themselves,
+[00:00:19.60 -> 00:00:22.32] like do you want to be a business of the future or a business of the past?
+[00:00:23.58 -> 00:00:26.66] All right Flo, so far AI has been more single player.
+[00:00:26.66 -> 00:00:30.68] How is it going to change as we work with AI more closely and agents in everything?
+[00:00:31.06 -> 00:00:37.74] I think like literally right now, like we are starting to see the advent of much more multiplayer AI products.
+[00:00:37.98 -> 00:00:41.08] I compare it all the time to like, you know, I don't know if you're old enough David,
+[00:00:41.20 -> 00:00:44.96] but like we used to send each other like weird documents back and forth by email.
+[00:00:45.08 -> 00:00:47.78] Like you still do it sometimes when you have like a legal deal, it's really annoying.
+[00:00:47.90 -> 00:00:48.84] I don't know why you don't do that.
+[00:00:48.96 -> 00:00:52.42] You know, it's the same difference as between like sending each other weird documents by email
+[00:00:52.42 -> 00:00:54.30] or like sending each other like a Google Doc link.
+[00:00:54.30 -> 00:00:56.64] And then you can collaborate together on the same.
+[00:00:56.66 -> 00:00:59.18] I think it's the exact same thing.
+[00:00:59.28 -> 00:01:04.24] I think like 2025, 2026 was about like, okay, agents are really working now.
+[00:01:04.30 -> 00:01:05.08] It's really impressive.
+[00:01:05.30 -> 00:01:08.40] They can do like long time horizon tasks and all of that stuff.
+[00:01:08.58 -> 00:01:14.44] But it's still like everyone's got like their own little like cloud code or like co-work or codex
+[00:01:14.44 -> 00:01:15.64] or like whatever you use.
+[00:01:15.98 -> 00:01:17.20] I'm more of a cloud code guy myself.
+[00:01:17.40 -> 00:01:20.20] Like everyone's got their own agent set up on their own computer.
+[00:01:20.64 -> 00:01:21.84] Do you have a team David?
+[00:01:22.22 -> 00:01:22.52] Yes.
+[00:01:22.70 -> 00:01:24.38] Are you experiencing the same thing?
+[00:01:24.38 -> 00:01:26.44] Like now like people send each other like that.
+[00:01:26.66 -> 00:01:29.96] The files and that HTML files are back and forth all the time on Slack.
+[00:01:30.10 -> 00:01:31.10] Like it's a mess.
+[00:01:31.50 -> 00:01:32.08] Yeah, it's a mess.
+[00:01:32.24 -> 00:01:34.80] The best solution like we have right now is just GitHub repos.
+[00:01:35.00 -> 00:01:35.90] And it's not optimal, you know?
+[00:01:36.24 -> 00:01:36.76] A hundred percent.
+[00:01:36.92 -> 00:01:39.42] I think everyone is just hacking something together.
+[00:01:39.58 -> 00:01:43.46] And none of those tools were designed for the new use case we have now,
+[00:01:43.58 -> 00:01:44.96] which is like, hey, we have a new teammate.
+[00:01:45.24 -> 00:01:47.54] You know, it's fundamentally that's what it is, is we have a new teammate.
+[00:01:47.68 -> 00:01:48.52] That teammate is AI.
+[00:01:48.68 -> 00:01:53.38] And we must make that teammate work with us in exactly the same way as any other human teammate.
+[00:01:53.58 -> 00:01:56.44] So that's, I think, the huge transition that's happening now.
+[00:01:56.74 -> 00:02:00.44] Yeah, I think like that stems from the fact that like basically all the softwares that we use
+[00:02:00.44 -> 00:02:02.36] has been created pre-agents, right?
+[00:02:02.38 -> 00:02:06.64] It's been created for humans only, which means it's probably not optimal for agents, right?
+[00:02:06.70 -> 00:02:08.68] Like they're completely different entity than humans.
+[00:02:08.68 -> 00:02:10.40] They have different strengths and different weaknesses.
+[00:02:10.62 -> 00:02:13.20] Maybe I should ask you, but like I hold the belief that soon enough,
+[00:02:13.36 -> 00:02:17.10] 99% of all software usage and tools will be done by agents.
+[00:02:17.50 -> 00:02:20.62] Like it's just more convenient for me to ask my personal agent,
+[00:02:20.74 -> 00:02:24.72] whether it's Pi, OpenClaw, Hermes, just like, hey, track my calories
+[00:02:24.72 -> 00:02:26.44] and like figure out how much I have.
+[00:02:26.66 -> 00:02:30.26] Let's rest for the day and just order something, you know, something healthy, high protein.
+[00:02:30.64 -> 00:02:31.76] I don't want to think about it, right?
+[00:02:31.92 -> 00:02:33.40] And now DoorDash released their CLI.
+[00:02:33.74 -> 00:02:34.82] So it's going there.
+[00:02:34.96 -> 00:02:35.74] 1,000%.
+[00:02:35.74 -> 00:02:38.66] So given that the future is agentic and that soon enough,
+[00:02:38.86 -> 00:02:41.50] 99% of tasks will be done by our agents.
+[00:02:41.96 -> 00:02:45.58] We need to make sure that whatever agent you're running is as powerful as possible.
+[00:02:46.02 -> 00:02:49.36] And this is exactly what I spent the last two months building with Deep API.
+[00:02:49.98 -> 00:02:53.36] This is the first API key I give to any agent I create
+[00:02:53.36 -> 00:02:56.36] because it instantly gives it world class scraping for anyone.
+[00:02:56.66 -> 00:03:00.90] It gives it deep research that's better than perplexity,
+[00:03:01.42 -> 00:03:04.34] ability to use browser use, its own email address, and so much more.
+[00:03:04.58 -> 00:03:05.24] Let me just show you.
+[00:03:05.24 -> 00:03:09.02] So let's jump into Codex right here, where I have three completely different tasks
+[00:03:09.12 -> 00:03:10.94] that showcase the power of Deep API.
+[00:03:11.54 -> 00:03:15.94] First one is to get me a hundred active licensed general contractors in Austin, Texas
+[00:03:16.16 -> 00:03:19.94] from the state licensing records, name, website, phone, email, and table, right?
+[00:03:20.00 -> 00:03:21.04] So it ran for 30 minutes.
+[00:03:21.22 -> 00:03:22.74] It used Deep API to research that.
+[00:03:22.78 -> 00:03:26.48] These are the things that Anthropic doesn't give you into Cloud Code.
+[00:03:26.66 -> 00:03:29.36] Or OpenAI doesn't give you into Codex, but with Deep API,
+[00:03:29.70 -> 00:03:33.28] it's a single API key that allows the agent to basically do anything
+[00:03:33.28 -> 00:03:35.04] that a competent human can do on the web.
+[00:03:35.28 -> 00:03:38.74] So in this case, after 30 minutes, it created a hundred unique contractors.
+[00:03:39.24 -> 00:03:40.42] It outputted a markdown table.
+[00:03:40.42 -> 00:03:43.16] You can see very clearly, boom, all hundred contractors.
+[00:03:43.24 -> 00:03:45.58] The amount of use cases is literally thousands.
+[00:03:45.66 -> 00:03:46.42] Let me show you a different test.
+[00:03:46.58 -> 00:03:48.86] This one is eight different stock tickers.
+[00:03:49.12 -> 00:03:51.92] So check the last 24 hours of news and sentiment of these eight tickers,
+[00:03:51.92 -> 00:03:53.32] Nvidia, Tesla, AMD, blah, blah, blah.
+[00:03:54.08 -> 00:03:55.28] Ran for four minutes.
+[00:03:55.42 -> 00:03:56.28] It was faster.
+[00:03:56.66 -> 00:03:58.16] And then also email it to me, right?
+[00:03:58.36 -> 00:03:59.42] So this is the crazy part.
+[00:03:59.50 -> 00:04:04.16] The agent can send emails without you doing any authentication or any config.
+[00:04:04.46 -> 00:04:08.74] The agent can scrape some addresses, find contacts for you and email them
+[00:04:08.96 -> 00:04:12.42] themselves, all with a single Deep API API key.
+[00:04:12.74 -> 00:04:14.16] And let me check my email address actually.
+[00:04:14.24 -> 00:04:17.16] So we can see right here, we got the email from Deep API and yeah,
+[00:04:17.16 -> 00:04:21.46] the agent sent me everything that he promised as a single email without me
+[00:04:21.46 -> 00:04:23.70] having to configure him, set him up.
+[00:04:23.82 -> 00:04:26.54] Again, it comes inside of Deep API.
+[00:04:26.66 -> 00:04:30.96] All of these capabilities, your agent instantly unlocks the moment he has a
+[00:04:30.96 -> 00:04:33.04] single API key from Deep API.
+[00:04:33.12 -> 00:04:35.00] And by the way, our pricing is fully transparent.
+[00:04:35.16 -> 00:04:38.90] If we go to docs and pricing, you can see that even if you buy just $30,
+[00:04:38.96 -> 00:04:43.00] you can get thousands and thousands of different API calls for your agent.
+[00:04:43.00 -> 00:04:48.04] So go ahead and go to deepapi.co or click the first link below the video and try it yourself.
+[00:04:48.08 -> 00:04:52.00] Even the laptop, even like the computer is going to disappear.
+[00:04:52.24 -> 00:04:56.46] And I say that as like, I'm the guy with like a 49 inch, like Samsung monitor and all of that.
+[00:04:56.46 -> 00:05:02.46] But I really think increasingly as like a keyboard and a mouse or just tools you use
+[00:05:02.46 -> 00:05:04.72] to micromanage your computer because it's too fast.
+[00:05:05.16 -> 00:05:05.84] Output tokens.
+[00:05:06.08 -> 00:05:07.10] You're outputting tokens through them.
+[00:05:07.12 -> 00:05:08.00] That's all I care about.
+[00:05:08.18 -> 00:05:11.92] And so if my computer was smart enough, I would just be able to give it a goal.
+[00:05:12.04 -> 00:05:15.24] And that doesn't take a massive keyboard and a mouse and a 49 inch monitor.
+[00:05:15.40 -> 00:05:16.92] It just takes whisper flow like a keyboard.
+[00:05:17.30 -> 00:05:20.86] And I can just like dictate and be like, hey, computer, I want you to do X, Y, and Z.
+[00:05:20.92 -> 00:05:21.62] And you figure it out.
+[00:05:21.70 -> 00:05:23.02] I don't know what you use under the hood.
+[00:05:23.10 -> 00:05:24.42] I don't know how you chain it together.
+[00:05:24.42 -> 00:05:26.30] Like you figure out how to achieve.
+[00:05:26.46 -> 00:05:26.80] My goal.
+[00:05:27.80 -> 00:05:33.98] So 100%, I think like the software we have and the workflows and even the hardware we have,
+[00:05:34.04 -> 00:05:36.64] computers, has been built for like a pre-agent era.
+[00:05:37.34 -> 00:05:43.04] That said, like even the software we have right now is, you know, we have collaboration tools.
+[00:05:43.22 -> 00:05:44.80] It's not like multiplayer is a new thing.
+[00:05:44.90 -> 00:05:46.92] It's not like no one was working together before.
+[00:05:47.08 -> 00:05:49.08] Like we are used to working in teams.
+[00:05:49.28 -> 00:05:52.66] Even that today, like agents are not currently plugged into that.
+[00:05:52.66 -> 00:05:55.84] Like so, for example, we're releasing this new product in a week.
+[00:05:56.08 -> 00:05:56.42] It's called.
+[00:05:56.46 -> 00:05:59.20] It's basically, again, it's a multiplayer agent.
+[00:05:59.50 -> 00:05:59.62] Okay.
+[00:05:59.70 -> 00:06:05.54] So it's like you have an agent, you have integrations like tools and actions that are like shared with the teams.
+[00:06:05.60 -> 00:06:09.44] You have like a team computer, like a team file system and like a team memory.
+[00:06:09.56 -> 00:06:10.58] You have team skills.
+[00:06:11.04 -> 00:06:11.14] Okay.
+[00:06:11.24 -> 00:06:19.06] And then you have a team surface, which is just Slack, you know, but like it's just a team surface where you collaborate with your agent.
+[00:06:19.20 -> 00:06:19.88] Right now, it's so weird.
+[00:06:19.88 -> 00:06:24.78] It's like we have this like common room where we all get to talk and AI is not in the room somehow.
+[00:06:25.00 -> 00:06:26.34] And like we all have to like talk to.
+[00:06:26.46 -> 00:06:28.46] We go on AI outside the room and then go back into the room.
+[00:06:28.58 -> 00:06:34.72] So the moment you can like invoke your agent in a collaborative environment, it changes everything.
+[00:06:34.88 -> 00:06:39.72] Like, for example, right now, shocking that I still cannot at mention an agent on Google Doc.
+[00:06:40.02 -> 00:06:40.18] Right.
+[00:06:40.80 -> 00:06:44.14] It's shocking that most agents still don't have an email address.
+[00:06:44.26 -> 00:06:46.70] Like just imagine like something as simple as an email address.
+[00:06:46.82 -> 00:06:46.94] Right.
+[00:06:47.02 -> 00:06:47.14] So.
+[00:06:47.42 -> 00:06:47.64] Yes.
+[00:06:47.64 -> 00:06:50.14] Your AI teammate should have a Slack account.
+[00:06:50.58 -> 00:06:52.40] You should be able to at mention it on Google Docs.
+[00:06:52.42 -> 00:06:56.12] You should be able to send it emails and it should just be like a normal member of the team.
+[00:06:56.46 -> 00:06:57.02] Yes, absolutely.
+[00:06:57.36 -> 00:06:59.18] I mean, yesterday, I literally realized this in the evening.
+[00:06:59.36 -> 00:07:03.10] We had like a pretty intense discussion about go to market and, you know, different opinions flying around.
+[00:07:03.38 -> 00:07:06.88] And I was like, why didn't we like involve GBD 5.6 Pro?
+[00:07:07.26 -> 00:07:08.60] Why didn't we involve Fable 5?
+[00:07:08.68 -> 00:07:13.16] Like this should have been like a central participant in the conversation.
+[00:07:13.48 -> 00:07:13.74] Yes.
+[00:07:13.96 -> 00:07:15.74] It happened to me literally last night.
+[00:07:15.82 -> 00:07:16.70] Can I share my screen real quick?
+[00:07:16.96 -> 00:07:17.68] Yeah, of course.
+[00:07:17.96 -> 00:07:19.36] Teammate was asking me, this is on Slack.
+[00:07:19.46 -> 00:07:22.52] It's like, oh, do we allow free users to use Lindy Teammate via Slack?
+[00:07:22.68 -> 00:07:25.98] And then I was like, oh, add Lindy, you know, which is the Lindy Teammate we're releasing.
+[00:07:26.22 -> 00:07:26.44] I see.
+[00:07:26.46 -> 00:07:27.84] I think we wrote a doc about billing recently.
+[00:07:28.00 -> 00:07:28.98] She's like, yep, I found it.
+[00:07:29.06 -> 00:07:30.10] It wasn't Lindy, it was Jeremy.
+[00:07:30.94 -> 00:07:32.80] This is how it works, right?
+[00:07:32.90 -> 00:07:39.84] And so you'll notice I didn't have to retype the entire prompt because the prompt exists in context, right?
+[00:07:39.90 -> 00:07:46.86] That is the ability to invoke your agent in a context where like a lot of information and queries already exist makes a huge difference.
+[00:07:47.08 -> 00:07:47.30] Yes.
+[00:07:47.42 -> 00:07:54.90] I think with the skills, like that alone is huge because, you know, if you have people on the team, whoever is best at something, that should be the person creating the skills for that, right?
+[00:07:54.90 -> 00:07:55.90] And also, like, it's...
+[00:07:56.46 -> 00:07:57.92] It's not even about the expertise.
+[00:07:58.08 -> 00:08:13.60] Like, if somebody is working on something, like, literally, I'm like, like, can we just have, like, some either, like, voice transcription, record a loom, have some note taker, like, document this into tokens, then tell Fable 5 to, like, create it into structured markdown files and push it to a shared GitHub repo.
+[00:08:13.74 -> 00:08:16.76] We have a specific, you know, David internal GitHub org.
+[00:08:16.82 -> 00:08:18.64] It's like all these different areas of the business.
+[00:08:18.78 -> 00:08:20.08] We need to have a GitHub repo on it.
+[00:08:20.14 -> 00:08:21.46] That needs to be, like, all the knowledge.
+[00:08:21.46 -> 00:08:25.66] Because before, it was like, okay, we had to do a task, you know, like, create an SOP, create a playbook.
+[00:08:25.66 -> 00:08:29.38] And, like, nobody wants to, like, take their time and, like, teach, you know, more junior people on the team.
+[00:08:29.60 -> 00:08:40.06] But, like, if you're already on a Google Meet or already on a, you know, Zoom call and, like, there's, like, a note taker, suddenly you're, like, developing training materials not only for new humans on the team but for the Asians but, like, all the time.
+[00:08:40.18 -> 00:08:42.42] I promise to your viewers this isn't set up.
+[00:08:42.50 -> 00:08:47.86] But this is, again, exactly what I am obsessing about these days is, like, multiplayer experience.
+[00:08:48.44 -> 00:08:55.34] And I totally agree with you that, like, the bedrock of a multiplayer experience is, like, shared context, right?
+[00:08:55.66 -> 00:08:59.50] I see people underestimate how hard it is to build that shared context, right?
+[00:08:59.56 -> 00:09:04.18] And the first thing people think about when they think shared context is, like, the wiki, you know?
+[00:09:04.22 -> 00:09:06.72] But, like, most companies, like, they don't even have a wiki.
+[00:09:06.92 -> 00:09:08.34] And, like, wikis suck.
+[00:09:08.50 -> 00:09:10.60] Like, the moment you write a wiki, it's out of date.
+[00:09:10.74 -> 00:09:13.42] The way we've resolved this here internally, let me show you.
+[00:09:13.46 -> 00:09:14.42] I'm obsessed about this idea.
+[00:09:14.56 -> 00:09:16.38] We call it, like, automatic hydration, okay?
+[00:09:16.40 -> 00:09:17.44] So we have this file system.
+[00:09:17.44 -> 00:09:20.98] And if I go to my file system, I can see my master memory file.
+[00:09:21.32 -> 00:09:23.42] This was not brought together by me.
+[00:09:23.52 -> 00:09:25.30] This was brought together by my agent.
+[00:09:25.66 -> 00:09:31.22] And my agent keeps it up to date continuously as I have meetings, as I receive emails, as I do all of that.
+[00:09:31.42 -> 00:09:36.84] You can see here, Lindy looked at months and months of history of our Slack workspace.
+[00:09:37.04 -> 00:09:39.80] So it ingested something like 20,000 messages here.
+[00:09:39.96 -> 00:09:42.16] And you can see it's updating its learnings live.
+[00:09:42.26 -> 00:09:45.06] So at this point of the video, it's only looked at, like, 1,200 messages.
+[00:09:45.34 -> 00:09:47.32] And it's telling us what's going on in the company.
+[00:09:47.32 -> 00:09:49.26] So you're focused on the teammate experience.
+[00:09:49.54 -> 00:09:54.04] And then you can see on the right, it's building this graph of what's going on in the company.
+[00:09:54.44 -> 00:09:55.62] It's keeping up to date.
+[00:09:55.66 -> 00:09:57.70] It's this team repository of knowledge.
+[00:09:57.94 -> 00:10:02.54] Two big data sources that it's using to do that are Slack and meetings.
+[00:10:02.84 -> 00:10:07.56] I was asking Lindy, catch me up on the highlights from Lindy teammate onboardings this week.
+[00:10:07.82 -> 00:10:12.50] You know, or people sometimes say, like, hey, like, what did we decide about this project again?
+[00:10:12.54 -> 00:10:13.98] Or, like, what's the latest shipping date?
+[00:10:13.98 -> 00:10:15.48] And Lindy was in the meeting.
+[00:10:15.82 -> 00:10:21.38] And she can basically, oh, like, during the latest project sync, Flo said that we were pushing the launch date by a week.
+[00:10:21.60 -> 00:10:25.56] So it becomes almost just, like, it's like a teammate that's been in, like, every meeting in the company.
+[00:10:25.66 -> 00:10:26.54] It becomes irreplaceable.
+[00:10:26.66 -> 00:10:27.92] So I do agree.
+[00:10:27.98 -> 00:10:35.08] Like, if you take that multiplayer experience seriously, half the job is just making sure you have this self-building.
+[00:10:35.30 -> 00:10:37.98] You know, Kapasi was talking about this, like, self-building wiki.
+[00:10:38.38 -> 00:10:39.28] That's basically what it is.
+[00:10:39.32 -> 00:10:40.90] It's like a self-building company wiki.
+[00:10:41.24 -> 00:10:42.16] I have so many thoughts on this.
+[00:10:42.32 -> 00:10:45.84] First, I would say, like, humans, like, are great at some things.
+[00:10:45.92 -> 00:10:46.98] Agents are great at others, right?
+[00:10:47.02 -> 00:10:49.56] And, like, so many humans, they try to, like, remember things.
+[00:10:49.76 -> 00:10:51.80] They try to be like, okay, what did we say in the last meeting?
+[00:10:52.14 -> 00:10:54.46] What was the thing that we said we were going to do?
+[00:10:54.64 -> 00:10:55.50] But, like, we are terrible.
+[00:10:55.50 -> 00:10:56.00] We are terrible at memory.
+[00:10:56.26 -> 00:11:00.72] This is literally, like, in court, you know, like, eyewitnesses are, like, the least credible source of information.
+[00:11:01.10 -> 00:11:02.30] Our memory is, like, so easy.
+[00:11:02.58 -> 00:11:05.18] Like, a lot of our childhood memories are fake or either heavily distilled.
+[00:11:05.40 -> 00:11:06.38] There have been many studies on this.
+[00:11:06.50 -> 00:11:08.68] So instead of, like, that, just, like, use a task list.
+[00:11:08.94 -> 00:11:10.78] You know, like, it's the same thing with the context.
+[00:11:10.88 -> 00:11:13.64] Instead of trying to remember all the context, like, what did that person say?
+[00:11:13.70 -> 00:11:16.06] What did we chat on this last Thursday meeting?
+[00:11:16.36 -> 00:11:18.10] It's just, like, let agents handle this, okay?
+[00:11:18.28 -> 00:11:21.10] Some things, agents are clearly better at humans.
+[00:11:21.42 -> 00:11:22.56] And, like, some things are worse.
+[00:11:22.56 -> 00:11:25.18] Like, I believe, like, genuine creative thoughts.
+[00:11:25.18 -> 00:11:26.52] Humans are much better, you know?
+[00:11:26.76 -> 00:11:29.18] Like, seeing, having that intuition, humans are better.
+[00:11:29.52 -> 00:11:34.06] But, like, distilling, you know, 50-plus meetings, you would have to spend, like, half of your day doing that.
+[00:11:34.20 -> 00:11:39.84] For example, for me, I had a similar experience where I track every 15 minutes, which is, like, a productivity technique.
+[00:11:39.94 -> 00:11:40.84] It sounds crazy for people.
+[00:11:40.92 -> 00:11:43.48] But, like, after doing it for two weeks, it's normal.
+[00:11:43.72 -> 00:11:48.04] And basically, I have, like, you know, every day tracked every waking hour 15-minute blocks.
+[00:11:48.46 -> 00:11:51.52] And then I was, like, yo, I'm just getting overwhelmed, you know?
+[00:11:51.78 -> 00:11:54.24] Like, I need to delegate better to my team and stuff like that.
+[00:11:54.24 -> 00:11:55.10] So I took Fable.
+[00:11:55.44 -> 00:11:57.14] I just gave it access to my Google Calendar.
+[00:11:57.48 -> 00:11:58.96] It analyzed, like, the last week or two.
+[00:11:59.34 -> 00:12:00.20] And it produced insight.
+[00:12:00.26 -> 00:12:02.00] I was, like, wow, this is, like, so true.
+[00:12:02.22 -> 00:12:05.76] And, like, it was so clear because it was, like, 250 or 300 different events.
+[00:12:05.92 -> 00:12:07.24] You know, I would never do that manually.
+[00:12:07.34 -> 00:12:09.34] I would never spend those hours, like, going through it.
+[00:12:09.56 -> 00:12:10.38] But the data was there.
+[00:12:10.52 -> 00:12:13.00] And, like, it's the same concept, as you said, with the 50 meetings, you know?
+[00:12:13.20 -> 00:12:15.00] Nobody would, like, go through these transcripts.
+[00:12:15.02 -> 00:12:22.20] But when you chat with 50-plus meetings, there's, like, something magical just having that loads of context and a frontier model and just produces the insights.
+[00:12:22.44 -> 00:12:23.02] A hundred percent.
+[00:12:23.02 -> 00:12:25.02] And, like, the agents surprise you.
+[00:12:25.18 -> 00:12:26.70] When you give them so much context.
+[00:12:26.86 -> 00:12:37.54] And I am so happy we have basically infinite context windows now because, like, right now, like, the base context, when we ask a question to Lindy on Slack, we can look in, like, the debug logs.
+[00:12:37.70 -> 00:12:41.18] Like, the base context, just like you say, hello, world, that's 100,000 tokens.
+[00:12:41.84 -> 00:12:44.76] Like, we just right off the bat feed 100,000 tokens to the model.
+[00:12:44.94 -> 00:12:52.30] And so sometimes, like, one thing that surprised me is the way we use multiplayer agents is, like, let's not forget, like, you can also just, like, talk to agents.
+[00:12:52.36 -> 00:12:54.04] Just, like, tokens in and out, right?
+[00:12:54.04 -> 00:12:55.04] Like, all of us, like, we use.
+[00:12:55.18 -> 00:12:59.26] We use cloud all day to just brainstorm and ask for its opinion and all of that stuff.
+[00:12:59.46 -> 00:13:01.26] And so we do the same with our Lindy teammate.
+[00:13:01.52 -> 00:13:04.44] Now, more and more, we're actually asking Lindy for her opinion.
+[00:13:04.68 -> 00:13:05.98] You know, so under the hood, it's Opus.
+[00:13:06.26 -> 00:13:06.92] It's a really good model.
+[00:13:07.00 -> 00:13:07.46] It's really smart.
+[00:13:07.80 -> 00:13:13.40] But most importantly, I think, like, I actually think intelligence is slightly overrated.
+[00:13:13.50 -> 00:13:15.38] I think intelligence, sure, it matters.
+[00:13:15.50 -> 00:13:21.36] But, like, imagine if you were inviting Albert Einstein, you know, like, the smartest guy in the world, like John von Neumann.
+[00:13:21.36 -> 00:13:23.98] You know, you invite John von Neumann to your office.
+[00:13:24.10 -> 00:13:24.94] And he sits next to you.
+[00:13:24.94 -> 00:13:26.00] And he has zero context.
+[00:13:26.48 -> 00:13:27.48] He's kind of useless.
+[00:13:27.70 -> 00:13:29.16] Like, he's not going to do a lot for you.
+[00:13:29.26 -> 00:13:33.72] You know, like, if you have, like, a quick thing you really need done, John von Neumann is not your guy.
+[00:13:34.14 -> 00:13:41.12] Like, your guy, actually, like, your average, like, normal coworker who's not John von Neumann is actually a lot more useful in that moment than John von Neumann.
+[00:13:41.20 -> 00:13:42.84] Because he has all of the context about the company.
+[00:13:42.96 -> 00:13:46.20] And so very often, like, we're, like, at Lindy, like, in Australia.
+[00:13:46.32 -> 00:13:47.68] Like, ah, what do you think we should do here?
+[00:13:48.18 -> 00:13:54.78] And sometimes it shocks us because because it has all of this context, it doesn't just chime in, like, oh.
+[00:13:54.94 -> 00:13:56.08] I think this is a good decision.
+[00:13:56.40 -> 00:13:57.10] It says, guys.
+[00:13:57.20 -> 00:14:00.56] Sometimes it literally tells us, like, hey, guys, I don't think this matters, actually.
+[00:14:00.64 -> 00:14:02.88] I think, like, none of the whole decision matters at all.
+[00:14:03.12 -> 00:14:07.52] Because from the context I have, I know that what you actually care about is this other thing over there.
+[00:14:07.64 -> 00:14:10.34] And, like, why are you spending so much time talking about this right now?
+[00:14:10.76 -> 00:14:14.74] Like, that is not something that cloud can do if you just ask it a question in a vacuum.
+[00:14:14.98 -> 00:14:16.32] It's never going to tell you it doesn't matter.
+[00:14:16.52 -> 00:14:20.52] You know, but if you have the context about, hey, guys, like, this other thing is on fire right now.
+[00:14:20.58 -> 00:14:21.46] I think this is a distraction.
+[00:14:21.96 -> 00:14:23.70] That's the kind of thing an agent can do for you.
+[00:14:24.02 -> 00:14:24.12] Yeah.
+[00:14:24.94 -> 00:14:30.44] There is going to be, like, a big moment similar to, you know, January, February when OpenCloud blew up massively.
+[00:14:30.64 -> 00:14:32.54] That was basically that, but single player, right?
+[00:14:32.78 -> 00:14:39.04] It's like, okay, suddenly this one agent can connect to WhatsApp, to Slack, to Discord, to Calendar or whatever, email.
+[00:14:39.36 -> 00:14:42.60] And, like, it can have all these contexts and I can interact from the apps I already use.
+[00:14:43.14 -> 00:14:49.94] The question is, like, who's going to crack that on the team layer and on the company's layer efficiently, but really in a way that's, like, smooth.
+[00:14:49.94 -> 00:14:54.08] Because nobody wants to, like, my belief is that, like, the web UI is dying.
+[00:14:54.44 -> 00:14:54.92] Nobody wants to, like.
+[00:14:54.96 -> 00:14:55.88] Learn a new app.
+[00:14:56.14 -> 00:14:57.80] Nobody wants to, like, adopt a new tool.
+[00:14:58.22 -> 00:14:59.26] You know, it's already, like, friction.
+[00:14:59.48 -> 00:15:00.30] Like, it's just friction.
+[00:15:00.46 -> 00:15:01.06] Switching things.
+[00:15:01.28 -> 00:15:04.02] Even, like, high power humans, they have their own tech stack.
+[00:15:04.16 -> 00:15:06.58] They like to work from their own familiar interfaces.
+[00:15:06.88 -> 00:15:08.22] So, like, it needs to be a smooth way.
+[00:15:08.46 -> 00:15:09.74] It needs to be non-intrusive.
+[00:15:09.96 -> 00:15:13.24] And, yeah, like you said, it needs to, like, be efficient when it surprises you.
+[00:15:13.40 -> 00:15:13.82] It's like, wow.
+[00:15:14.16 -> 00:15:18.20] You know, I said, like, I'm going to focus on not overthinking and not adding any more features.
+[00:15:18.34 -> 00:15:24.82] And now I, like, I caught myself, you know, being stuck on, like, adding this fifth feature where we still are in the early.
+[00:15:24.82 -> 00:15:25.18] Stages.
+[00:15:25.28 -> 00:15:25.96] Stuff like that.
+[00:15:26.48 -> 00:15:26.84] 100%.
+[00:15:26.84 -> 00:15:30.82] Which, again, I think this is why I am so bullish on Slack.
+[00:15:31.16 -> 00:15:34.84] In a way, it breaks my heart because I actually don't love Slack as a product too much.
+[00:15:34.86 -> 00:15:36.90] But I think at this point it's, like, undislogable.
+[00:15:37.34 -> 00:15:39.02] But I am so bullish on Slack.
+[00:15:39.08 -> 00:15:43.76] I really do think, like, Slack is going to be the place where AI agents collaborate together.
+[00:15:43.92 -> 00:15:44.60] Because I agree.
+[00:15:44.68 -> 00:15:46.20] I think at the end of the day, it's got to be magical.
+[00:15:46.80 -> 00:15:48.14] And, you know, we went through this phase.
+[00:15:48.26 -> 00:15:52.30] And you had some videos as well, like, NA10, you know, was, like, all the rage last year.
+[00:15:52.30 -> 00:15:54.80] You know, like, we don't hear, like, too much about NA10 anymore.
+[00:15:54.82 -> 00:15:57.56] And I think one reason is, like, it's just too hard to use.
+[00:15:57.64 -> 00:15:58.32] It's just too complex.
+[00:15:58.58 -> 00:15:59.42] Nothing against them.
+[00:15:59.46 -> 00:16:00.92] I think it's, like, an awesome company, you know.
+[00:16:01.24 -> 00:16:05.48] But I think people really crave something that is just so, so, so easy to use.
+[00:16:06.04 -> 00:16:11.86] And, like, they don't even have the time to connect their tools and to give it the context and to give it the instructions.
+[00:16:12.08 -> 00:16:14.08] Like, they just want it to work, you know.
+[00:16:14.18 -> 00:16:18.20] And so, again, I think this is why if you have a multiplayer scaffold, you don't need, you can join a company.
+[00:16:18.32 -> 00:16:20.96] You don't need to connect the tools because, like, the team already did it for you.
+[00:16:21.02 -> 00:16:23.82] You don't need to, like, worry about the context because it just builds itself.
+[00:16:23.82 -> 00:16:24.78] You don't need to worry about the.
+[00:16:24.92 -> 00:16:27.88] Because same, like, the team created all of those skills for you.
+[00:16:28.06 -> 00:16:29.80] And then you can just go ahead and ask it stuff.
+[00:16:30.02 -> 00:16:30.94] You shared a great point.
+[00:16:30.98 -> 00:16:32.70] It's, like, people just want things that work, you know.
+[00:16:33.00 -> 00:16:36.78] Nobody wants to, like, configure 20 different things, 10 different API keys.
+[00:16:37.04 -> 00:16:44.36] It was, like you said, you know, with the NA10s, the make.coms, really the competing, like, who has really, like, the raw number of connectors.
+[00:16:44.84 -> 00:16:49.04] But now that agents can do all of this, like, people just want efficiency.
+[00:16:49.30 -> 00:16:50.20] They want something that works.
+[00:16:50.32 -> 00:16:54.70] People want, like, zero setup things, reliability, high uptime, predictable.
+[00:16:54.82 -> 00:16:56.24] User interface, all these things.
+[00:16:56.54 -> 00:16:59.36] It's actually shocking because, yes, like, agents can do all those things.
+[00:16:59.48 -> 00:17:00.24] I do agree.
+[00:17:00.38 -> 00:17:03.56] Like, the mode of Zapier is, like, for the longest time, it was the integrations.
+[00:17:03.92 -> 00:17:05.22] I'm sorry, but it's worth nothing.
+[00:17:05.42 -> 00:17:08.54] Like, agents can just figure it all out on their own, like, on the fly.
+[00:17:08.70 -> 00:17:09.88] Something interesting happened.
+[00:17:10.22 -> 00:17:11.58] It was, I think, two days ago.
+[00:17:11.72 -> 00:17:17.60] A teammate on Slack mentioned Lindy and was, like, hey, I want to create, like, an audio ad.
+[00:17:17.90 -> 00:17:19.08] I don't even know why he was doing that.
+[00:17:19.12 -> 00:17:21.28] But he wanted to create, like, an audio ad about Lindy.
+[00:17:21.28 -> 00:17:23.60] And so he was, like, connect with, like, the 11 Labs API.
+[00:17:24.06 -> 00:17:24.50] Like, come up.
+[00:17:24.52 -> 00:17:24.78] Come up.
+[00:17:24.82 -> 00:17:29.28] Come up with, like, the script and then create a web page that I can use to, like, play all
+[00:17:29.28 -> 00:17:30.66] of those files you've created all of those.
+[00:17:30.76 -> 00:17:35.66] We actually have an 11 Labs integration that the agent can invoke via a tool call.
+[00:17:35.80 -> 00:17:37.34] But we hadn't added it to the agent.
+[00:17:37.52 -> 00:17:39.60] The agent can also, like, request integrations.
+[00:17:39.70 -> 00:17:41.74] It's got to invoke another tool to search integrations.
+[00:17:41.80 -> 00:17:41.92] Okay?
+[00:17:42.28 -> 00:17:43.44] It didn't bother doing that.
+[00:17:43.54 -> 00:17:47.20] It was just like, hey, I'm just going to play with, like, the 11 Labs API and I'm going
+[00:17:47.20 -> 00:17:48.72] to create my own integration.
+[00:17:49.38 -> 00:17:50.46] Again, it's got a computer.
+[00:17:50.46 -> 00:17:51.30] It's got a file system.
+[00:17:51.40 -> 00:17:54.52] So it literally wrote a Python script that it saved.
+[00:17:54.52 -> 00:17:56.14] It's in its file system for future use.
+[00:17:56.40 -> 00:17:58.44] It asks us for, like, the 11 Labs API keys.
+[00:17:58.52 -> 00:18:01.00] It's got, like, a secrets manager that it uses to store that.
+[00:18:01.74 -> 00:18:03.04] And I was like, oh, fuck.
+[00:18:03.08 -> 00:18:05.62] You didn't even bother to use the 11 Labs integration we created.
+[00:18:05.80 -> 00:18:07.22] Like, you're just, like, building it yourself.
+[00:18:07.46 -> 00:18:08.54] So I agree.
+[00:18:08.64 -> 00:18:11.42] I think, like, basically, right now, there is a race.
+[00:18:11.58 -> 00:18:17.90] Like, whoever becomes this nexus that accumulates all of the context and all the skills and
+[00:18:17.90 -> 00:18:24.46] all the integrations of a team can build this ultimate AI teammate that you can just, like,
+[00:18:24.68 -> 00:18:26.04] offload work to all day.
+[00:18:26.32 -> 00:18:30.86] And I think another reason why it matters, being first mover, is for the training data.
+[00:18:31.46 -> 00:18:34.64] Like, whoever is really established as the first player gets baked into the training
+[00:18:34.64 -> 00:18:36.10] data of the next generation of models.
+[00:18:36.52 -> 00:18:38.20] And then they're going to default to that.
+[00:18:38.32 -> 00:18:38.44] Right?
+[00:18:38.50 -> 00:18:40.42] Like, we can see it with building, with AI.
+[00:18:40.80 -> 00:18:41.94] Like, there's a certain tech stack.
+[00:18:42.02 -> 00:18:42.72] Everybody knows it.
+[00:18:43.00 -> 00:18:46.76] We're just, like, you just start building with AI and they recommend certain tools because,
+[00:18:46.92 -> 00:18:48.64] you know, people have been building on top of them so much.
+[00:18:48.98 -> 00:18:51.18] And I think it's going to be the same for, like, all aspects.
+[00:18:51.78 -> 00:18:52.18] 100%.
+[00:18:52.18 -> 00:18:54.48] You mentioned, like, you're a cloud.
+[00:18:54.48 -> 00:18:54.50] Yeah.
+[00:18:54.52 -> 00:18:56.62] You're a cloud code, more of a cloud code person than Codex.
+[00:18:56.94 -> 00:18:59.24] Can you, like, describe or share, like, your current setup?
+[00:18:59.52 -> 00:19:00.06] How do you work?
+[00:19:00.12 -> 00:19:01.26] How many agents are you running usually?
+[00:19:01.62 -> 00:19:05.32] I mean, on cloud code, I'm always, I don't know about you, like, I'm always a bit confused
+[00:19:05.32 -> 00:19:07.98] to see everyone who is those, like, super complex setups.
+[00:19:08.18 -> 00:19:10.72] I find, like, cloud code just works out of the box for me.
+[00:19:11.02 -> 00:19:12.32] And I've tried all the things.
+[00:19:12.68 -> 00:19:15.80] I've added a bunch of MCPs, obviously, like, that you do have to do.
+[00:19:15.88 -> 00:19:20.30] But I've removed, like, my cloud.md file is now basically empty.
+[00:19:20.42 -> 00:19:21.30] Like, there's nothing in here.
+[00:19:21.30 -> 00:19:24.48] All I do is I just have, like, one main, like,
+[00:19:24.48 -> 00:19:28.56] massive agent folder on my computer that I use for, like, all of my agent projects
+[00:19:28.56 -> 00:19:30.00] and, like, all of my agent Codex.
+[00:19:30.08 -> 00:19:32.42] But otherwise, it's basically vanilla cloud code.
+[00:19:32.94 -> 00:19:38.32] I think, like, the bulk of my agent usage these days, it's going to sound like I'm playing
+[00:19:38.32 -> 00:19:42.82] my book, but it truly is Lindy, you know, because I do find, I find it easier to use.
+[00:19:43.28 -> 00:19:44.04] It's in the cloud.
+[00:19:44.26 -> 00:19:45.56] You know, I do like that.
+[00:19:45.64 -> 00:19:47.18] It's connected to all of my integrations.
+[00:19:47.18 -> 00:19:52.38] And so I, you know, and I can have those, I think, routines is a thing we've not talked about.
+[00:19:52.66 -> 00:19:54.38] It's basically those recurring.
+[00:19:54.48 -> 00:19:57.50] workflows that happen and that tap into all of my integrations.
+[00:19:57.72 -> 00:20:01.50] And again, because we have, like, 3,000 integrations, and even if we don't have one, like,
+[00:20:01.54 -> 00:20:02.96] Lindy will just build it itself anyway.
+[00:20:03.54 -> 00:20:04.68] This is how I use agents now.
+[00:20:04.96 -> 00:20:09.44] This is every morning I have an agent send me a daily brief by text, you know.
+[00:20:09.98 -> 00:20:12.46] I have an agent draft replies to my emails.
+[00:20:12.56 -> 00:20:14.54] I have an agent label the emails that they receive.
+[00:20:14.62 -> 00:20:17.24] I have an agent take notes for my meetings, prepare me for my meetings.
+[00:20:17.32 -> 00:20:20.44] It sends me a message right before this podcast right now.
+[00:20:20.48 -> 00:20:21.62] It's like, oh, you're meeting with David.
+[00:20:21.62 -> 00:20:24.14] Like, this is what's been on his mind and so forth.
+[00:20:24.48 -> 00:20:25.64] I, what do I have here?
+[00:20:25.64 -> 00:20:26.86] I have, maybe it's TMI.
+[00:20:26.86 -> 00:20:33.30] I have like an agent that, uh, my agents got like, uh, an iMessage number so I can just like text it all day.
+[00:20:33.66 -> 00:20:35.70] Every time I eat something, I send you the picture.
+[00:20:36.10 -> 00:20:36.32] Yeah.
+[00:20:36.32 -> 00:20:36.74] Same.
+[00:20:36.92 -> 00:20:38.36] You, do you have like an iMessage as well?
+[00:20:38.56 -> 00:20:39.74] No, not for iMessage.
+[00:20:39.74 -> 00:20:42.54] I have to do it for Discord, but I, yeah, I track all my calories for agent.
+[00:20:42.72 -> 00:20:43.22] Yeah.
+[00:20:43.24 -> 00:20:46.00] Uh, and then I have these agents just like log that somewhere.
+[00:20:46.00 -> 00:20:48.00] And then at the end of the week, it's like shaming me.
+[00:20:48.04 -> 00:20:51.74] It sends me a text with, uh, you know, this is your school for the, for the week.
+[00:20:51.80 -> 00:20:52.90] Oh, this agent I love.
+[00:20:52.90 -> 00:20:54.48] We, we are recruiting engineers.
+[00:20:54.88 -> 00:20:55.98] Um, where is it?
+[00:20:56.24 -> 00:20:57.60] Weekly AI authors.
+[00:20:57.96 -> 00:21:05.34] And so it's, it's finding, I find like a really good source to recruit engineers is to find people who've written really good blog posts.
+[00:21:05.44 -> 00:21:12.54] Like if you, if you have a blog and, and if you write it, it means, I think right here, you're like in the top 5% most passionate, uh, engineers.
+[00:21:12.66 -> 00:21:24.04] And so I have an agent every week, uh, research new blog posts, like indie blog posts that were written by, by engineers and then send me a list and then offer me like, Hey, which ones should I reach out to?
+[00:21:24.30 -> 00:21:24.46] I have.
+[00:21:24.54 -> 00:21:28.48] I have this one that, uh, finds like identifies like interesting signups.
+[00:21:28.48 -> 00:21:34.50] Like, Oh my God, like the CEO, I can't say who, but like, this is the CEO of like a pretty big company that signed up to us recently.
+[00:21:34.78 -> 00:21:36.30] Uh, it intercepted it immediately.
+[00:21:36.30 -> 00:21:38.24] It was like, Hey, like this guy just signed up.
+[00:21:38.24 -> 00:21:39.16] Do you want me to reach out?
+[00:21:39.16 -> 00:21:39.66] I'm like, Oh, fuck.
+[00:21:39.66 -> 00:21:39.90] Yeah.
+[00:21:39.96 -> 00:21:40.30] You know?
+[00:21:40.34 -> 00:21:41.70] So right here, I'm like super reactive.
+[00:21:41.70 -> 00:21:46.08] It's like within like 20 minutes of signing up, the CEO is receiving like a personal outreach for me.
+[00:21:46.10 -> 00:21:47.22] That's like actually real.
+[00:21:47.22 -> 00:21:48.44] It's not like completely automated.
+[00:21:48.52 -> 00:21:51.14] I mean, at this point, like my entire life is powered by agents.
+[00:21:51.14 -> 00:21:52.46] I'm like, that's, that's what I use for it.
+[00:21:52.78 -> 00:21:54.44] Like right now, you know, just using.
+[00:21:54.44 -> 00:21:55.02] It for coding.
+[00:21:55.02 -> 00:21:55.62] It's almost shame.
+[00:21:55.62 -> 00:22:01.28] Like Claude code and codex have the word code baked into them because people don't think about other things.
+[00:22:01.28 -> 00:22:01.50] Right?
+[00:22:01.50 -> 00:22:04.20] Like you mentioned someone on your team using it for marketing.
+[00:22:04.34 -> 00:22:12.02] You yourself mentioned the use case that you did like before this podcast, there's so many different ways to like use these agents that like, we still need to figure out.
+[00:22:12.22 -> 00:22:21.44] And also like, this is both on the personal side, like trying to give it more and more ambitious prompts, more and more ambitious tasks to see like what it really can do, but also on the company side.
+[00:22:21.46 -> 00:22:22.28] I mean, that's my belief.
+[00:22:22.28 -> 00:22:23.78] Like as a startup, you have to be.
+[00:22:24.32 -> 00:22:24.42] Yeah.
+[00:22:24.44 -> 00:22:29.24] Willing to completely reinvent yourself like every couple of months, because like things are changing so fast.
+[00:22:29.44 -> 00:22:38.66] And if you're like, no, we're this type of company that does things this way, it's like, okay, but maybe, you know, the next generation of models, maybe it can do it, or maybe people don't want to use it that way anymore.
+[00:22:38.68 -> 00:22:41.16] You know, maybe they just want to use it through WhatsApp or iMessage.
+[00:22:41.18 -> 00:22:42.38] So can you speak more about this?
+[00:22:42.38 -> 00:22:47.24] Like needs to just reinvent whether it's on the personal, you know, how you work with AI or as a company.
+[00:22:47.62 -> 00:22:48.42] 100%.
+[00:22:48.52 -> 00:22:53.86] I often think of the experience that a kid has learning and adopting new technologies.
+[00:22:53.96 -> 00:22:54.26] You know?
+[00:22:54.26 -> 00:22:55.98] Like it's kind of strange, isn't it?
+[00:22:55.98 -> 00:23:01.34] That like as a kid, you can learn faster than as an adult, like you adopt new technologies faster.
+[00:23:01.34 -> 00:23:07.10] Like what's going on here, you know, and there is something about the brain and all of that stuff, but I think there's something else at play here.
+[00:23:07.10 -> 00:23:10.02] I think there's a couple of forces, like you get busy.
+[00:23:10.50 -> 00:23:18.76] And so even if the innovation over the long term has ROI, over the short term, it's less effective than the status quo because you're going to have to learn and experiment.
+[00:23:18.76 -> 00:23:18.98] Okay.
+[00:23:18.98 -> 00:23:19.94] So you're busy.
+[00:23:20.00 -> 00:23:20.30] Okay.
+[00:23:20.54 -> 00:23:24.14] You're kind of afraid, honestly, that it's going to break.
+[00:23:24.14 -> 00:23:32.24] You're going to have to do something, you know, so there's the comfort, there's the fear, and I think it is more important than ever to just fuck around.
+[00:23:32.90 -> 00:23:34.52] I think, you know, that's what kids do.
+[00:23:34.52 -> 00:23:36.70] Like they just fuck around, they play, right?
+[00:23:36.70 -> 00:23:44.02] I think it is more important than ever to just play with this technology, and that's another thing that kids do is like they break that stuff all the time, you know?
+[00:23:44.02 -> 00:23:46.06] Like I was coding when I was 11.
+[00:23:46.06 -> 00:23:53.78] I've been steeped in computers my entire life, and one thing I've done, as many kids like me who were like playing with computers my entire life, is I have broken.
+[00:23:54.14 -> 00:23:55.52] So many computers.
+[00:23:55.52 -> 00:23:58.38] Every time I would go to a friend's place, I was like, oh, my God, you have a computer.
+[00:23:58.38 -> 00:24:02.00] Let me go to the computer and play with it all the time, and I would break everything.
+[00:24:02.00 -> 00:24:05.52] You know, you go to like program files on Windows, like this is useless.
+[00:24:05.52 -> 00:24:06.80] Delete, delete, delete, delete.
+[00:24:06.80 -> 00:24:09.26] Next thing you know, nothing works.
+[00:24:09.26 -> 00:24:12.80] And look, it sucks to break stuff, but that's how you learn.
+[00:24:12.80 -> 00:24:18.68] I always urge people, I'm like, you've got to right now, you've got to break stuff.
+[00:24:18.68 -> 00:24:19.38] You've got to play.
+[00:24:19.38 -> 00:24:21.54] You've got to waste time.
+[00:24:21.54 -> 00:24:23.38] You know, you've got to clear your calendar.
+[00:24:23.38 -> 00:24:23.80] And you can't let it go.
+[00:24:23.80 -> 00:24:23.90] You've got to play.
+[00:24:23.90 -> 00:24:24.04] You've got to waste time.
+[00:24:24.04 -> 00:24:24.10] You've got to play.
+[00:24:24.10 -> 00:24:26.98] You've got to let the urgent crowd out the important.
+[00:24:26.98 -> 00:24:27.78] Fuck your calendar.
+[00:24:27.78 -> 00:24:28.60] Fuck your meetings.
+[00:24:28.60 -> 00:24:30.80] Like, this thing is going to eat your lunch.
+[00:24:30.80 -> 00:24:33.72] Like, you have to reinvent your company from scratch right now.
+[00:24:33.72 -> 00:24:37.38] Like, we don't know what's going to be on the other side of AGI, but like what we do know is
+[00:24:37.38 -> 00:24:42.68] that your company is going to be nothing like what it was, like two years from now.
+[00:24:42.68 -> 00:24:45.74] My father had a, he had a magazine company.
+[00:24:45.74 -> 00:24:47.60] He was like a magazine publisher, you know?
+[00:24:47.60 -> 00:24:52.06] And when the internet came about in like the early 2000s, it was sort of similar to what's
+[00:24:52.06 -> 00:24:53.28] happening right now in AI.
+[00:24:53.28 -> 00:24:54.00] It was kind of scary.
+[00:24:54.00 -> 00:24:55.00] It was kind of exciting.
+[00:24:55.00 -> 00:24:56.00] And it was very confusing.
+[00:24:56.00 -> 00:24:57.36] It was like, what's going to happen?
+[00:24:57.36 -> 00:24:59.60] Like no one quite knows how it's going to shake out.
+[00:24:59.60 -> 00:25:03.58] What he did know is that his company would completely change.
+[00:25:03.58 -> 00:25:07.16] And so, I mean, he basically rebooted his entire company, you know, and like he made
+[00:25:07.16 -> 00:25:08.16] a ton of mistakes.
+[00:25:08.16 -> 00:25:09.16] He fired a ton of people.
+[00:25:09.16 -> 00:25:13.48] He, like the company almost died multiple times, but now, now the company is actually
+[00:25:13.48 -> 00:25:14.48] doing well.
+[00:25:14.48 -> 00:25:19.06] He transformed his business for like the internet era and all his competitors who didn't do
+[00:25:19.06 -> 00:25:23.90] that and they didn't take the risk and they didn't make the mistakes is just a slow death.
+[00:25:23.90 -> 00:25:26.48] You just descend into death little by little.
+[00:25:26.48 -> 00:25:27.78] So how do you think about that?
+[00:25:27.78 -> 00:25:31.18] Like running a company on a practical, what are some practical things you guys are doing
+[00:25:31.18 -> 00:25:32.18] or not doing?
+[00:25:32.18 -> 00:25:33.18] Oh boy.
+[00:25:33.18 -> 00:25:38.10] I think right now we're very much in like the let a thousand flowers bloom phase.
+[00:25:38.10 -> 00:25:40.12] You have to embrace chaos right now.
+[00:25:40.12 -> 00:25:41.34] It's super chaotic right now.
+[00:25:41.34 -> 00:25:45.30] Because again, like I think the very fact that right now, unfortunately, AI tools are
+[00:25:45.30 -> 00:25:49.06] single player means that everyone's doing their own thing.
+[00:25:49.06 -> 00:25:51.90] So right now, for example, we have a problem where it's like engineers.
+[00:25:51.90 -> 00:25:52.90] Each engineer has a problem.
+[00:25:52.90 -> 00:25:53.90] Right?
+[00:25:53.90 -> 00:25:57.90] Each engineer has basically created their own PR review workflow, their own AI agent
+[00:25:57.90 -> 00:25:58.90] PR review workflow.
+[00:25:58.90 -> 00:26:02.52] So we also have like a PR review agent for the company and then like engineers have like
+[00:26:02.52 -> 00:26:04.22] their own agents, like add stuff to it.
+[00:26:04.22 -> 00:26:05.22] It's a total mess.
+[00:26:05.22 -> 00:26:06.26] It's a total mess.
+[00:26:06.26 -> 00:26:08.02] And I love it and I totally welcome it.
+[00:26:08.02 -> 00:26:11.00] I think right now is the time to lay, to let chaos reign.
+[00:26:11.00 -> 00:26:15.76] And I think once like out of that chaos, patterns are going to emerge.
+[00:26:15.76 -> 00:26:17.24] It's just, it's, it's natural selection.
+[00:26:17.24 -> 00:26:22.18] You know, like the jungle is a chaotic system, but like there's beautiful, uh, very complicated,
+[00:26:22.18 -> 00:26:23.78] uh, organisms that emerge.
+[00:26:23.78 -> 00:26:29.48] Um, so I, I, I think right now that's just the mood we're in, in 2026 is like, you've
+[00:26:29.48 -> 00:26:33.66] got to let chaos reign and you've got to embrace just breaking stuff.
+[00:26:33.66 -> 00:26:39.22] So as a founder, just run experiments, observe, talk to the users, see what resonates, see
+[00:26:39.22 -> 00:26:43.60] like you really try to be like the finger spitting a feel, you know, try to get the
+[00:26:43.60 -> 00:26:47.56] feel of like where people are turning away, you know, like this agent is no longer popular
+[00:26:47.56 -> 00:26:50.34] or like this family of models is becoming popular.
+[00:26:50.34 -> 00:26:51.34] People are using it that way.
+[00:26:51.34 -> 00:26:53.58] You know, people are using more and more tokens.
+[00:26:53.58 -> 00:26:56.44] People are becoming more aware of their token spend that they want to see what they get
+[00:26:56.44 -> 00:26:59.92] before buying, you know, maybe six months ago where it was like spending as much as
+[00:26:59.92 -> 00:27:00.92] possible on subscriptions.
+[00:27:00.92 -> 00:27:03.20] Now people are like, okay, this plan gives me that much.
+[00:27:03.20 -> 00:27:07.40] This company does resets, you know, this company requires your backend enterprise data.
+[00:27:07.40 -> 00:27:08.40] This company doesn't.
+[00:27:08.40 -> 00:27:10.86] So I think there are a lot of different trends.
+[00:27:10.86 -> 00:27:12.20] How are you like doing this?
+[00:27:12.20 -> 00:27:15.68] You know, you mentioned like clearing your calendar, experimenting with new tools.
+[00:27:15.68 -> 00:27:18.82] Like when you see a new, interesting tool, do you just like block out some time to test
+[00:27:18.82 -> 00:27:19.82] it?
+[00:27:19.82 -> 00:27:22.58] Like personally, what are some of your ways you try to be on the cutting edge?
+[00:27:22.58 -> 00:27:23.58] Yeah.
+[00:27:23.58 -> 00:27:29.34] My best days are like my no meeting days and like I basically spend them like building
+[00:27:29.34 -> 00:27:30.34] with AI at this point.
+[00:27:30.34 -> 00:27:31.70] I'm with AI all the time.
+[00:27:31.70 -> 00:27:35.66] Like any waking minute I have, like again, I was at the office last night at 2 a.m. and
+[00:27:35.66 -> 00:27:36.66] that's what I was doing.
+[00:27:36.66 -> 00:27:41.22] I was just like, I was working, but I was working with like that playful intention because
+[00:27:41.22 -> 00:27:44.74] I had the space and I had the time and I'm just going to spend more time to actually
+[00:27:44.74 -> 00:27:46.34] do new things with AI.
+[00:27:46.34 -> 00:27:52.08] I spend all of my weekends with AI and like all day at work, I'm telling the team, again,
+[00:27:52.08 -> 00:27:53.08] I'm urging the team.
+[00:27:53.08 -> 00:27:56.32] I'm like, agent, agent, agent, this has got to be an agent, you know?
+[00:27:56.32 -> 00:28:01.18] I think the team, especially if you're like a leader, I think the team feeds off like
+[00:28:01.18 -> 00:28:04.12] the attention that you give to different initiatives.
+[00:28:04.12 -> 00:28:07.30] And so I think like it's very simple, it's like you've got to ask all the time people
+[00:28:07.30 -> 00:28:10.48] about their AI workflows and you've got to reward people.
+[00:28:10.48 -> 00:28:13.58] Like you've got to notice people on Slack and during meetings like, oh my God, this
+[00:28:13.58 -> 00:28:14.58] is so cool.
+[00:28:14.58 -> 00:28:15.58] And then you've got to uplift them.
+[00:28:15.58 -> 00:28:17.86] It's like, oh my God, look at what Ali did.
+[00:28:17.86 -> 00:28:19.34] Like fuck yeah, like show us Ali, right?
+[00:28:19.34 -> 00:28:22.88] Like if you reward that, if you shine a light on that, that's what people are going to do
+[00:28:22.88 -> 00:28:23.88] as well.
+[00:28:23.88 -> 00:28:27.18] I think of it almost as like this invention of electricity.
+[00:28:27.18 -> 00:28:28.64] Like imagine you're like a factory, right?
+[00:28:28.64 -> 00:28:33.22] You're like a shoemaker before the electricity or whatever, or before even the industrial
+[00:28:33.22 -> 00:28:34.22] revolution, okay?
+[00:28:34.22 -> 00:28:37.88] And like you're making shoes by hand and it's a mess and it's just like two dudes
+[00:28:37.88 -> 00:28:40.64] in a small workshop making shoes by hand, okay?
+[00:28:40.64 -> 00:28:42.66] Now the factory comes in, right?
+[00:28:42.66 -> 00:28:47.40] And maybe it's not even the electricity, maybe it's like a coal engine or whatever, right?
+[00:28:47.40 -> 00:28:51.88] The ultimate shape of this new business is like the Nike factory, right?
+[00:28:51.88 -> 00:28:52.88] Right?
+[00:28:52.88 -> 00:28:55.82] It's like four floors, like a lot of machines and all of that stuff, okay?
+[00:28:55.82 -> 00:28:57.16] You've got two choices.
+[00:28:57.16 -> 00:29:00.96] You can keep doing what you were doing and it's going to be very tidy and you're going
+[00:29:00.96 -> 00:29:07.26] to die, or you can move on to the new way and it's going to be an absolute mess, right?
+[00:29:07.26 -> 00:29:12.44] Like this factory that's transforming itself from this like 1700s like workshop to like
+[00:29:12.44 -> 00:29:16.94] the modern like factory flow with machines, like the transition isn't pretty.
+[00:29:16.94 -> 00:29:19.16] Like it's going to be an absolute mess, you know?
+[00:29:19.16 -> 00:29:21.88] And so I think right now if your company isn't a shit show, you're falling behind.
+[00:29:21.88 -> 00:29:24.58] And you're not really adapting this.
+[00:29:24.58 -> 00:29:29.36] And I think right now if you're not spending, I want to say at least 20 hours a week directly
+[00:29:29.36 -> 00:29:35.60] hands on keyboard using those AI systems and breaking stuff and making a mess, you're going
+[00:29:35.60 -> 00:29:36.60] to die.
+[00:29:36.60 -> 00:29:37.60] Like I don't think your company is going to make it.
+[00:29:37.60 -> 00:29:38.60] Yeah.
+[00:29:38.60 -> 00:29:42.60] I would say even more than that because like it's just, there is so much, I think like
+[00:29:42.60 -> 00:29:46.88] to distill it for people, like I think about it a lot and I think it's two things, right?
+[00:29:46.88 -> 00:29:50.34] The AI agents, they're just going to be like a lot smarter and a lot of things and way
+[00:29:50.34 -> 00:29:51.34] more efficient.
+[00:29:51.34 -> 00:29:55.58] Like ultimately it's like, how well can you use the agents and do you have the money to
+[00:29:55.58 -> 00:29:56.58] use them?
+[00:29:56.58 -> 00:29:58.72] Bigger models are more expensive and people are burning more tokens.
+[00:29:58.72 -> 00:29:59.72] So like, do you have the skillset?
+[00:29:59.72 -> 00:30:00.72] Do you have the setup?
+[00:30:00.72 -> 00:30:06.34] Do you have the technical ability, the knowledge, the vocabulary to command these agents well?
+[00:30:06.34 -> 00:30:09.38] And can you actually afford to burn billions of tokens per day?
+[00:30:09.38 -> 00:30:10.38] That's exactly right.
+[00:30:10.38 -> 00:30:11.38] That's exactly right.
+[00:30:11.38 -> 00:30:12.56] And by the way, it's not rocket science.
+[00:30:12.56 -> 00:30:16.40] And I think a lot of people, they're afraid of like dipping their toes in and like once
+[00:30:16.40 -> 00:30:18.06] you do it, it's fun.
+[00:30:18.06 -> 00:30:19.06] It's just so much fun.
+[00:30:19.06 -> 00:30:20.26] These systems are so awesome.
+[00:30:20.26 -> 00:30:21.26] Yeah.
+[00:30:21.34 -> 00:30:24.98] And you know, the shoe factory where like people are stitching everything by hand.
+[00:30:24.98 -> 00:30:28.80] Now in retrospect, it looks like middle ages, but I think like the current way of working
+[00:30:28.80 -> 00:30:31.92] where like humans have to be involved with everything and like human is the bottleneck
+[00:30:31.92 -> 00:30:32.92] and everything.
+[00:30:32.92 -> 00:30:37.84] I think even in 10 to 15 years from now, that will look even more like the middle ages compared
+[00:30:37.84 -> 00:30:42.86] to like the agentic future where we have super intelligent models commanding everything and
+[00:30:42.86 -> 00:30:46.28] the humans are doing the things that are truly great at, but like all the other things, whether
+[00:30:46.28 -> 00:30:49.38] it's like robotics or, you know, parsing thousands of documents, reading like a big list of things.
+[00:30:49.38 -> 00:30:50.38] Yeah.
+[00:30:50.38 -> 00:30:51.30] Yeah.
+[00:30:51.34 -> 00:30:54.04] The legal case, whatever does will be done by AI.
+[00:30:54.04 -> 00:30:55.04] And I think, oh yeah.
+[00:30:55.04 -> 00:30:58.76] Soon enough, we'll look back and see like, it's crazy how slow everything was moving.
+[00:30:58.76 -> 00:31:02.72] It's crazy that people used to read meeting transcripts or those, like this, this is still
+[00:31:02.72 -> 00:31:03.72] a paid position.
+[00:31:03.72 -> 00:31:08.18] Like, you know, like you obviously has one of the most cutting edge transcription tools
+[00:31:08.18 -> 00:31:12.70] out there when it comes to AI, but like, there's still a physical job where somebody like sits
+[00:31:12.70 -> 00:31:15.32] in a courtroom or whatever, and I tried to transcribe.
+[00:31:15.32 -> 00:31:20.18] You know, like translators as well, there's people like literally my age, I speak like,
+[00:31:20.18 -> 00:31:21.22] both men and women.
+[00:31:21.22 -> 00:31:23.04] meant I'd like go to school to become a translator.
+[00:31:23.32 -> 00:31:26.38] I'm like, guys, have you not spoken to Chair GBD voice?
+[00:31:26.62 -> 00:31:27.72] Like, what are you doing?
+[00:31:28.28 -> 00:31:29.32] Well, for what it's worth,
+[00:31:29.42 -> 00:31:30.86] I have this friend, Zach Hoggett.
+[00:31:31.04 -> 00:31:32.40] He said this thing I love.
+[00:31:32.74 -> 00:31:35.52] He said, yesterday lasts a long time.
+[00:31:35.78 -> 00:31:38.10] I don't know if you know, like Lotus Notes,
+[00:31:38.60 -> 00:31:39.94] which is like, for people who don't know,
+[00:31:40.00 -> 00:31:42.68] it was just like, I think 80s, maybe 90s era,
+[00:31:43.00 -> 00:31:44.38] like wheeled predecessor.
+[00:31:45.70 -> 00:31:48.60] And Lotus Notes is a $1 billion a year business
+[00:31:48.60 -> 00:31:49.72] for IBM right now.
+[00:31:49.72 -> 00:31:52.16] So it's just, I actually think, unfortunately,
+[00:31:52.34 -> 00:31:54.70] the diffusion of innovation is really slow.
+[00:31:54.78 -> 00:31:55.96] But I think at some point,
+[00:31:56.00 -> 00:31:58.22] it's also just a decision people have to make for themselves.
+[00:31:58.38 -> 00:31:59.94] Like, do you want to be a business of the future
+[00:31:59.94 -> 00:32:01.06] or a business of the past?
+[00:32:01.22 -> 00:32:03.18] Right now, you mentioned in 10 or 15 years,
+[00:32:03.22 -> 00:32:06.42] we're going to have those like supercharged AI organizations.
+[00:32:06.68 -> 00:32:08.22] Like, it's happening right now.
+[00:32:08.46 -> 00:32:09.26] You know, like if you're just,
+[00:32:09.46 -> 00:32:11.26] if you're starting a business from scratch right now,
+[00:32:11.26 -> 00:32:13.76] it's actually really easy to just hire zero people
+[00:32:13.76 -> 00:32:14.88] and sell everything.
+[00:32:15.34 -> 00:32:17.02] And it's harder, the bigger you are
+[00:32:17.02 -> 00:32:18.82] and the more transformation you have to do,
+[00:32:18.82 -> 00:32:19.62] the harder it is.
+[00:32:19.74 -> 00:32:19.84] Right?
+[00:32:19.94 -> 00:32:21.72] But the bottleneck at this point
+[00:32:21.72 -> 00:32:22.86] is no longer the technology.
+[00:32:23.04 -> 00:32:23.42] It's you.
+[00:32:23.72 -> 00:32:24.56] It's your own adoption.
+[00:32:24.78 -> 00:32:25.94] Yeah, I literally spoke about this
+[00:32:25.94 -> 00:32:26.76] with people on my team today.
+[00:32:26.84 -> 00:32:29.04] It's like anybody has an engineering team right now.
+[00:32:29.14 -> 00:32:31.06] Like your codecs, your cloud code, your cursor,
+[00:32:31.44 -> 00:32:33.08] you have a world-class engineering team.
+[00:32:33.26 -> 00:32:34.88] The question is, do you know how to use it?
+[00:32:35.36 -> 00:32:36.38] You know, do you have the right idea?
+[00:32:37.00 -> 00:32:37.68] Can you build it?
+[00:32:37.76 -> 00:32:38.36] Do you have the initiative?
+[00:32:38.48 -> 00:32:39.14] Do you have the work ethic?
+[00:32:39.42 -> 00:32:40.50] All these other variables, you know?
+[00:32:40.76 -> 00:32:41.84] Do you know how to take this to market,
+[00:32:41.98 -> 00:32:42.76] go to market marketing?
+[00:32:43.32 -> 00:32:44.28] People don't want to talk about it,
+[00:32:44.32 -> 00:32:46.58] but like, this is a huge unlock.
+[00:32:46.86 -> 00:32:48.22] And it's just like so many people,
+[00:32:48.22 -> 00:32:49.70] and again, I have this controversial belief,
+[00:32:49.72 -> 00:32:52.56] that like 99% of slop comes from humans.
+[00:32:52.84 -> 00:32:54.70] Because like people say like AI slop, this and that.
+[00:32:54.98 -> 00:32:56.84] But like, if you have the bad input,
+[00:32:56.88 -> 00:32:58.20] if you tell it to build a shitty product,
+[00:32:58.38 -> 00:32:59.72] it will gladly build a shitty product.
+[00:33:00.06 -> 00:33:01.84] The hard part is knowing what's a great product.
+[00:33:02.36 -> 00:33:03.42] Yes, 100%.
+[00:33:03.42 -> 00:33:04.78] But look, I think honestly,
+[00:33:04.88 -> 00:33:07.60] even that is going to go away soon.
+[00:33:07.70 -> 00:33:10.70] I think like the job is just going to set up the agent.
+[00:33:10.80 -> 00:33:14.24] Right now, the job is just to set up the agentic machine.
+[00:33:14.56 -> 00:33:16.20] If you've read, you know, Ray Dalio,
+[00:33:16.42 -> 00:33:17.80] like he wrote the book Principles.
+[00:33:18.10 -> 00:33:19.66] One thing I love in that book,
+[00:33:19.72 -> 00:33:20.98] that idea that they love,
+[00:33:21.04 -> 00:33:21.80] you know, they always say like,
+[00:33:22.06 -> 00:33:24.36] don't work in your company, work on your company.
+[00:33:24.46 -> 00:33:26.06] You're not supposed to operate the machine.
+[00:33:26.14 -> 00:33:27.42] You're supposed to work on the machine.
+[00:33:27.94 -> 00:33:29.02] You know, and every so often,
+[00:33:29.14 -> 00:33:31.26] you go into the machine to see what's going wrong,
+[00:33:31.36 -> 00:33:33.80] but then your objective is to get out of the machine to fix it.
+[00:33:34.04 -> 00:33:36.36] And I think it's the same thing with the agents right now.
+[00:33:36.40 -> 00:33:39.58] I think you want to work on the machine that does the things.
+[00:33:40.32 -> 00:33:41.96] Listen Labs, I don't know if you saw recently,
+[00:33:42.04 -> 00:33:42.84] had this awesome tweet.
+[00:33:42.94 -> 00:33:45.54] They had an intern build like an app.
+[00:33:45.88 -> 00:33:46.60] And they had like, well,
+[00:33:46.60 -> 00:33:48.30] obviously you have a coding agent build the app,
+[00:33:48.58 -> 00:33:49.70] but then you have a user resource,
+[00:33:49.72 -> 00:33:53.18] agent that continuously gathers feedback from users about the app
+[00:33:53.18 -> 00:33:56.12] and then talks to the coding agent to ask it what to change.
+[00:33:56.30 -> 00:33:57.38] And like the app is basically
+[00:33:57.38 -> 00:33:59.22] completely self-improving right now, you know?
+[00:33:59.30 -> 00:34:01.84] So I think that's the current job, I think,
+[00:34:01.88 -> 00:34:03.38] is just to set up this machine.
+[00:34:03.56 -> 00:34:04.82] And then like, you know,
+[00:34:04.94 -> 00:34:07.46] insofar as humans have a job in the future
+[00:34:07.46 -> 00:34:08.62] and like their knowledge work,
+[00:34:08.78 -> 00:34:10.04] like I don't think they will,
+[00:34:10.10 -> 00:34:12.78] but like I think the last job we're going to have
+[00:34:12.78 -> 00:34:15.28] is going to be like to just look at this machine
+[00:34:15.28 -> 00:34:17.34] and like, and scratch off things and ask ourselves,
+[00:34:17.44 -> 00:34:18.90] like how can we keep optimizing the machines?
+[00:34:18.90 -> 00:34:19.70] And that's obviously,
+[00:34:19.72 -> 00:34:22.54] until like the machine optimizes itself.
+[00:34:22.66 -> 00:34:23.72] Like I actually think soon,
+[00:34:24.56 -> 00:34:26.82] I don't think it's a distant future thing.
+[00:34:26.88 -> 00:34:27.94] I think like in a year or two,
+[00:34:28.02 -> 00:34:30.82] I think like the agents are going to be more than capable enough
+[00:34:30.82 -> 00:34:32.12] to like look at the machine themselves
+[00:34:32.12 -> 00:34:33.60] and just keep growing it themselves.
+[00:34:33.82 -> 00:34:34.58] And I think at this point,
+[00:34:34.62 -> 00:34:37.40] all you become is you become like a passive shareholder.
+[00:34:37.78 -> 00:34:39.42] I think you own shares in the company
+[00:34:39.42 -> 00:34:40.96] and maybe you pay yourself dividends,
+[00:34:41.28 -> 00:34:43.46] but you're not really doing anything as a business anymore.
+[00:34:43.70 -> 00:34:45.24] I mean, when you break it down to first principles,
+[00:34:45.42 -> 00:34:48.22] like it's not that hard to figure out what we need, right?
+[00:34:48.30 -> 00:34:48.98] Like you said,
+[00:34:48.98 -> 00:34:50.10] contact with the customer.
+[00:34:50.58 -> 00:34:52.64] It needs to do some marketing to get more customers.
+[00:34:52.78 -> 00:34:54.52] If you want to figure out like best principles,
+[00:34:54.52 -> 00:34:56.46] like, okay, there's successful startup stories.
+[00:34:56.56 -> 00:34:58.06] You do some deep research to get that.
+[00:34:58.48 -> 00:35:00.70] Like all of these are just like different tools
+[00:35:00.70 -> 00:35:02.96] connected to a smart model, smart brain.
+[00:35:02.96 -> 00:35:05.72] And again, question is, can the current models do that?
+[00:35:06.34 -> 00:35:09.20] Maybe, probably, maybe the next generation
+[00:35:09.20 -> 00:35:11.08] or the generation after that will probably can.
+[00:35:11.50 -> 00:35:13.88] You know, it's all about like the term harness,
+[00:35:14.04 -> 00:35:17.16] the term environment, like the right tools.
+[00:35:17.62 -> 00:35:18.02] A lot of people,
+[00:35:18.16 -> 00:35:18.96] we don't even know what,
+[00:35:18.98 -> 00:35:20.00] what these models can do, right?
+[00:35:20.02 -> 00:35:21.90] Like people start still figuring out every month,
+[00:35:21.94 -> 00:35:23.44] every other month, how to use them.
+[00:35:23.84 -> 00:35:26.04] Like with the right APIs, with the right tools,
+[00:35:26.18 -> 00:35:28.04] you can have the same model be completely different.
+[00:35:28.46 -> 00:35:30.56] And as you said, context is another huge variable.
+[00:35:30.82 -> 00:35:31.68] You can have the same model.
+[00:35:31.96 -> 00:35:34.00] Opus, if somebody creates a new Clore account,
+[00:35:34.64 -> 00:35:36.76] could be like a, you know, okay-ish assistant.
+[00:35:36.96 -> 00:35:38.52] But if you give it all your company context,
+[00:35:39.06 -> 00:35:40.48] then suddenly it could be superhuman.
+[00:35:41.50 -> 00:35:41.86] 100%.
+[00:35:41.86 -> 00:35:43.88] So how are you thinking about like, you know,
+[00:35:44.00 -> 00:35:45.16] AGI, AI improving?
+[00:35:45.38 -> 00:35:46.30] How much are you worried about that?
+[00:35:46.34 -> 00:35:47.58] Do you think it's outside of our control?
+[00:35:47.86 -> 00:35:48.84] How are you preparing for that?
+[00:35:48.98 -> 00:35:50.86] Both as a personally and like as a company?
+[00:35:51.28 -> 00:35:53.52] I almost try to not think about it too much anymore
+[00:35:53.52 -> 00:35:55.82] because I, you know, I live in San Francisco
+[00:35:55.82 -> 00:35:57.18] and I'm tired.
+[00:35:58.32 -> 00:35:59.60] I am so tired.
+[00:35:59.78 -> 00:36:02.66] You know, it's like, I've been the AGI guy since 2015.
+[00:36:02.96 -> 00:36:03.10] Okay.
+[00:36:03.14 -> 00:36:05.50] I write like Ray Keltzweil in 2015
+[00:36:05.50 -> 00:36:07.80] and he's the guy who like AI killed me at the time,
+[00:36:07.86 -> 00:36:09.52] which was like, it was very early, you know?
+[00:36:10.08 -> 00:36:12.74] And now I'm like, this is all everyone I know
+[00:36:12.74 -> 00:36:13.48] is talking about.
+[00:36:13.56 -> 00:36:14.20] And for good reason.
+[00:36:14.26 -> 00:36:16.76] This is like, I think the biggest topic in human history.
+[00:36:16.94 -> 00:36:17.02] Yes.
+[00:36:17.02 -> 00:36:17.24] You know?
+[00:36:17.60 -> 00:36:17.76] Yes.
+[00:36:17.76 -> 00:36:18.96] But I think on some level,
+[00:36:18.98 -> 00:36:20.64] I'm like, look, it's coming.
+[00:36:20.88 -> 00:36:22.74] I am worried about existential risk.
+[00:36:23.06 -> 00:36:25.52] You know, I think there's only two potential outcomes
+[00:36:25.52 -> 00:36:26.88] in the end.
+[00:36:26.98 -> 00:36:28.54] And I call them like death or house cat.
+[00:36:29.26 -> 00:36:29.62] Right?
+[00:36:29.70 -> 00:36:31.52] So death is we all die, you know, man.
+[00:36:31.64 -> 00:36:33.36] And house cat is like, well, just, you know,
+[00:36:33.42 -> 00:36:35.40] if you have a cat, like they don't do much all day.
+[00:36:36.62 -> 00:36:38.94] And so I think those are the,
+[00:36:39.04 -> 00:36:42.10] and even the upside,
+[00:36:42.40 -> 00:36:44.12] like even the best case scenario,
+[00:36:44.26 -> 00:36:45.32] which is the house cat,
+[00:36:45.86 -> 00:36:48.38] even that upside is,
+[00:36:48.38 -> 00:36:48.60] is,
+[00:36:48.60 -> 00:36:50.48] is going to be a shithole on the way there.
+[00:36:50.78 -> 00:36:51.10] It's,
+[00:36:51.16 -> 00:36:52.76] it's not going to be a smooth transition,
+[00:36:53.24 -> 00:36:53.54] you know?
+[00:36:54.96 -> 00:36:55.28] That's,
+[00:36:55.34 -> 00:36:56.22] that's my take on AGI.
+[00:36:56.48 -> 00:36:58.04] I think it's going to take a while,
+[00:36:58.10 -> 00:36:58.34] but like,
+[00:36:58.46 -> 00:36:59.04] does it matter?
+[00:36:59.14 -> 00:36:59.78] I feel like at this point,
+[00:36:59.80 -> 00:37:00.90] people are bickering about like,
+[00:37:01.12 -> 00:37:02.98] is it going to be two years or 20 years?
+[00:37:03.00 -> 00:37:03.56] I'm like, I don't care.
+[00:37:03.66 -> 00:37:04.48] 20 years is nothing.
+[00:37:04.78 -> 00:37:05.72] Even if it's 20 years,
+[00:37:05.74 -> 00:37:07.46] like I think 20 years at this point is like,
+[00:37:07.50 -> 00:37:09.48] it's like the maximum that anyone can,
+[00:37:09.54 -> 00:37:09.98] can agree.
+[00:37:10.10 -> 00:37:11.70] Like it's not going to be more than 20 years.
+[00:37:12.12 -> 00:37:13.12] And so I'm like, okay,
+[00:37:13.44 -> 00:37:14.14] even if it's 20 years,
+[00:37:14.16 -> 00:37:14.56] I don't care.
+[00:37:14.62 -> 00:37:15.30] It's just happening.
+[00:37:15.40 -> 00:37:15.58] Right?
+[00:37:15.58 -> 00:37:15.82] It's like,
+[00:37:15.82 -> 00:37:17.32] this is like such an insane transformation.
+[00:37:17.76 -> 00:37:18.58] That said,
+[00:37:19.08 -> 00:37:19.30] I,
+[00:37:19.34 -> 00:37:21.34] I try to focus on what I can control.
+[00:37:21.34 -> 00:37:21.88] And I,
+[00:37:21.88 -> 00:37:23.04] I don't know about you,
+[00:37:23.10 -> 00:37:23.62] like maybe again,
+[00:37:23.64 -> 00:37:24.48] it's because I'm so,
+[00:37:24.64 -> 00:37:24.82] I've,
+[00:37:24.82 -> 00:37:25.06] I've,
+[00:37:25.06 -> 00:37:26.32] I've talked so much about this.
+[00:37:26.36 -> 00:37:26.66] Like I,
+[00:37:27.10 -> 00:37:27.60] more and more,
+[00:37:27.66 -> 00:37:30.64] I find joy in the present.
+[00:37:31.04 -> 00:37:31.68] And in like,
+[00:37:31.74 -> 00:37:31.88] okay,
+[00:37:31.88 -> 00:37:32.12] well,
+[00:37:32.24 -> 00:37:32.60] you know what?
+[00:37:32.66 -> 00:37:33.26] In for the ride.
+[00:37:33.36 -> 00:37:33.66] Let's,
+[00:37:33.66 -> 00:37:34.26] let's do it.
+[00:37:34.50 -> 00:37:34.80] You know,
+[00:37:34.82 -> 00:37:35.50] let's fucking do it.
+[00:37:35.78 -> 00:37:36.14] And I,
+[00:37:36.14 -> 00:37:37.02] I think like right now,
+[00:37:37.06 -> 00:37:37.92] the transformation is happening.
+[00:37:37.92 -> 00:37:38.28] Like this,
+[00:37:38.38 -> 00:37:39.46] everything we've just talked about,
+[00:37:39.56 -> 00:37:39.66] right?
+[00:37:39.70 -> 00:37:42.12] Like we are going through that AGI transformation right now.
+[00:37:42.18 -> 00:37:42.30] It's like,
+[00:37:42.34 -> 00:37:42.48] okay,
+[00:37:42.84 -> 00:37:43.90] your company can ride itself.
+[00:37:45.82 -> 00:37:46.68] Let yourself be run over.
+[00:37:46.80 -> 00:37:48.32] Or are you going to transform your own company?
+[00:37:48.80 -> 00:37:50.70] Like those tools exist right now.
+[00:37:50.78 -> 00:37:50.96] Well,
+[00:37:50.98 -> 00:37:53.34] they're starting to like the multiplayer ones are starting to like,
+[00:37:53.68 -> 00:37:54.36] what you're going to do,
+[00:37:54.44 -> 00:37:54.64] you know,
+[00:37:54.64 -> 00:37:54.86] let's,
+[00:37:54.90 -> 00:37:55.40] let's use them.
+[00:37:55.46 -> 00:37:56.50] Let's just ride this way,
+[00:37:56.58 -> 00:37:56.78] baby.
+[00:37:57.78 -> 00:38:00.52] So I think that that's how I adapt right now is like,
+[00:38:00.56 -> 00:38:01.82] I'm trying to ride the wave.
+[00:38:01.82 -> 00:38:03.16] I'm trying to have fun along the way.
+[00:38:03.62 -> 00:38:05.50] And I try not to think too much about,
+[00:38:05.72 -> 00:38:06.18] you know,
+[00:38:06.22 -> 00:38:07.96] the other scenarios because they are,
+[00:38:08.02 -> 00:38:08.52] they are scary.
+[00:38:09.06 -> 00:38:09.18] Yeah.
+[00:38:09.20 -> 00:38:09.86] I think that like,
+[00:38:10.10 -> 00:38:10.38] personally,
+[00:38:10.50 -> 00:38:13.08] I absolutely despise the kind of like wait people.
+[00:38:13.14 -> 00:38:13.48] It's like,
+[00:38:13.56 -> 00:38:14.84] wait until AGI or like,
+[00:38:14.88 -> 00:38:14.98] Oh,
+[00:38:15.00 -> 00:38:15.80] I'm going to wait until,
+[00:38:15.84 -> 00:38:17.00] until the next generation of models.
+[00:38:17.36 -> 00:38:18.80] What kind of a mindset is that?
+[00:38:18.86 -> 00:38:19.06] You know,
+[00:38:19.34 -> 00:38:19.80] this is like,
+[00:38:20.06 -> 00:38:22.80] we're living in the greatest technological time in the world.
+[00:38:23.12 -> 00:38:24.78] Like so many arguments.
+[00:38:24.90 -> 00:38:25.86] This is the greatest time ever.
+[00:38:26.14 -> 00:38:26.38] It's like,
+[00:38:26.40 -> 00:38:27.40] what do you mean you're going to wait?
+[00:38:27.54 -> 00:38:27.76] You know,
+[00:38:27.76 -> 00:38:28.12] it's like,
+[00:38:28.18 -> 00:38:28.36] no,
+[00:38:28.40 -> 00:38:29.24] you just do something.
+[00:38:29.24 -> 00:38:29.84] Like you said,
+[00:38:29.90 -> 00:38:30.28] experiment,
+[00:38:30.62 -> 00:38:31.16] try stuff.
+[00:38:31.60 -> 00:38:31.76] I mean,
+[00:38:32.02 -> 00:38:32.66] a lot of people,
+[00:38:32.86 -> 00:38:33.82] maybe that's a good question,
+[00:38:33.90 -> 00:38:35.40] but like a lot of people want to try,
+[00:38:35.78 -> 00:38:36.00] you know,
+[00:38:36.04 -> 00:38:36.56] starting a business,
+[00:38:36.68 -> 00:38:37.22] starting a startup,
+[00:38:37.48 -> 00:38:39.10] but they don't know like how to think about it.
+[00:38:39.18 -> 00:38:40.56] So if you had no business,
+[00:38:40.72 -> 00:38:41.08] no team,
+[00:38:41.14 -> 00:38:41.66] no connections,
+[00:38:42.30 -> 00:38:45.28] what type of company would you build in Q3 of 2026?
+[00:38:45.60 -> 00:38:45.80] Any,
+[00:38:45.84 -> 00:38:46.24] it's fun.
+[00:38:46.32 -> 00:38:47.40] I think what people miss is like,
+[00:38:47.46 -> 00:38:50.32] it's a lot more fun to be riding the wave than to be crushed by it.
+[00:38:50.56 -> 00:38:51.00] Like if you,
+[00:38:51.02 -> 00:38:51.56] if you wait,
+[00:38:51.62 -> 00:38:51.80] you're like,
+[00:38:51.84 -> 00:38:52.20] oh my God,
+[00:38:52.20 -> 00:38:52.70] it's coming.
+[00:38:52.80 -> 00:38:53.36] What am I going to do?
+[00:38:53.58 -> 00:38:53.98] If you're,
+[00:38:53.98 -> 00:38:55.26] if you're surfing it,
+[00:38:55.26 -> 00:38:55.58] it's like,
+[00:38:55.62 -> 00:38:55.76] you know,
+[00:38:55.80 -> 00:38:57.14] you may fall once or twice,
+[00:38:57.24 -> 00:38:58.02] but it's fun.
+[00:38:58.26 -> 00:38:58.40] You know,
+[00:38:58.42 -> 00:39:00.02] it's a lot of fun to build with the system.
+[00:39:00.22 -> 00:39:00.64] So I,
+[00:39:00.72 -> 00:39:00.90] I,
+[00:39:01.08 -> 00:39:01.40] at this point,
+[00:39:01.40 -> 00:39:01.76] I'm like,
+[00:39:02.02 -> 00:39:04.80] when is the conversation comes at dinner parties?
+[00:39:04.96 -> 00:39:05.00] Like,
+[00:39:05.04 -> 00:39:05.20] ah,
+[00:39:05.28 -> 00:39:06.58] AGI risk and all that stuff.
+[00:39:06.60 -> 00:39:06.76] I'm like,
+[00:39:06.78 -> 00:39:07.08] Hey guys,
+[00:39:07.12 -> 00:39:07.38] can we,
+[00:39:07.90 -> 00:39:08.34] sure.
+[00:39:08.46 -> 00:39:08.74] You know,
+[00:39:08.74 -> 00:39:09.30] let's talk about that.
+[00:39:09.30 -> 00:39:09.76] But honestly,
+[00:39:09.76 -> 00:39:10.28] at this point,
+[00:39:10.68 -> 00:39:12.76] unless anyone has something original to say,
+[00:39:13.28 -> 00:39:15.08] like basically what I said is the conclusion.
+[00:39:15.20 -> 00:39:16.24] It's like death or house cat.
+[00:39:16.30 -> 00:39:20.04] And then there's like misuse and terrorism and open source,
+[00:39:20.08 -> 00:39:20.94] like all of that stuff.
+[00:39:21.04 -> 00:39:21.22] Sure.
+[00:39:21.24 -> 00:39:21.50] But like,
+[00:39:21.50 -> 00:39:24.62] it's just like a painting along the way of like those two end outcomes.
+[00:39:25.02 -> 00:39:25.52] And like,
+[00:39:25.54 -> 00:39:27.26] unless anyone has anything original to say,
+[00:39:27.28 -> 00:39:27.46] like,
+[00:39:27.48 -> 00:39:28.22] let's talk about,
+[00:39:28.56 -> 00:39:28.78] you know,
+[00:39:28.78 -> 00:39:29.64] that saying it's like,
+[00:39:29.68 -> 00:39:29.88] um,
+[00:39:29.90 -> 00:39:31.54] when art critics meet,
+[00:39:31.54 -> 00:39:33.64] they talk about like history,
+[00:39:33.96 -> 00:39:35.28] the history of art or something.
+[00:39:35.60 -> 00:39:36.70] And when artists meets,
+[00:39:36.80 -> 00:39:39.18] they talk about where to find a cheap top and pine.
+[00:39:39.30 -> 00:39:39.98] Like cheap paint.
+[00:39:40.34 -> 00:39:40.50] You know,
+[00:39:40.54 -> 00:39:40.74] I'm like,
+[00:39:40.76 -> 00:39:42.12] can we talk about top and pine for a minute?
+[00:39:42.28 -> 00:39:43.08] Let's talk about the paint.
+[00:39:43.18 -> 00:39:43.44] Like what,
+[00:39:43.44 -> 00:39:44.58] what are you guys doing all day at work?
+[00:39:44.62 -> 00:39:45.62] Like what tools are you using?
+[00:39:45.70 -> 00:39:45.84] Like,
+[00:39:45.88 -> 00:39:46.76] how are you doing this stuff?
+[00:39:46.98 -> 00:39:47.10] Yeah.
+[00:39:47.30 -> 00:39:47.58] I mean,
+[00:39:47.70 -> 00:39:49.54] you can definitely drive yourself crazy.
+[00:39:49.72 -> 00:39:50.68] Think about it's too much,
+[00:39:50.88 -> 00:39:52.50] but it's saying like ignorance is bliss,
+[00:39:52.56 -> 00:39:52.76] you know,
+[00:39:53.04 -> 00:39:56.28] like in some ways that the people who don't really know what's happening and,
+[00:39:56.40 -> 00:39:56.48] you know,
+[00:39:56.48 -> 00:39:57.78] who still have their job and like,
+[00:39:57.92 -> 00:40:01.64] aren't paying attention to the cutting edge AI in some ways that they are like happier,
+[00:40:01.64 -> 00:40:02.08] you know,
+[00:40:02.18 -> 00:40:03.62] they don't have to worry about these things.
+[00:40:04.36 -> 00:40:05.02] That comes with like,
+[00:40:05.08 -> 00:40:05.68] I guess like,
+[00:40:06.00 -> 00:40:06.20] you know,
+[00:40:06.38 -> 00:40:07.92] intelligence and like insight and,
+[00:40:07.92 -> 00:40:10.78] and being on the cutting edge where you see like these potential risks,
+[00:40:10.90 -> 00:40:11.48] potential worries.
+[00:40:11.48 -> 00:40:11.80] And like,
+[00:40:12.10 -> 00:40:12.32] you know,
+[00:40:12.38 -> 00:40:14.50] then we feel like as some part of responsibility,
+[00:40:14.50 -> 00:40:17.88] either like trying to remedy that or like educate people about that.
+[00:40:18.10 -> 00:40:18.54] But as you said,
+[00:40:18.58 -> 00:40:20.02] like if you go too hard on that,
+[00:40:20.06 -> 00:40:21.30] you can definitely drive yourself crazy.
+[00:40:21.62 -> 00:40:21.84] Yes.
+[00:40:22.18 -> 00:40:22.52] I,
+[00:40:22.52 -> 00:40:24.14] I sometimes compare it to like cosmology.
+[00:40:24.40 -> 00:40:24.64] You know,
+[00:40:24.66 -> 00:40:24.88] if you,
+[00:40:24.92 -> 00:40:27.38] if you study like the evolution of the universe,
+[00:40:27.46 -> 00:40:27.70] it's like,
+[00:40:27.74 -> 00:40:28.86] there's only two possible outcomes.
+[00:40:28.86 -> 00:40:29.48] Like the great,
+[00:40:29.48 -> 00:40:29.94] the big,
+[00:40:29.94 -> 00:40:32.00] the big rip or the big crunch,
+[00:40:32.60 -> 00:40:35.26] like either the universe completely expands so much that like,
+[00:40:35.30 -> 00:40:35.80] there's no,
+[00:40:35.84 -> 00:40:37.82] there's no potential energy anymore or the universe collapses,
+[00:40:37.92 -> 00:40:38.58] goes back onto itself.
+[00:40:38.84 -> 00:40:39.46] And so it's like,
+[00:40:39.50 -> 00:40:39.68] okay,
+[00:40:39.68 -> 00:40:41.06] we know that that's a pretty big deal.
+[00:40:41.14 -> 00:40:42.36] That's literally the biggest deal ever.
+[00:40:42.54 -> 00:40:42.66] You know,
+[00:40:42.66 -> 00:40:44.34] it's going to happen over trillions and trillions of years.
+[00:40:44.38 -> 00:40:47.46] Like there's not that much like point talking about that.
+[00:40:47.58 -> 00:40:47.78] You know,
+[00:40:47.78 -> 00:40:49.52] you can just like come up at dinner parties and be like,
+[00:40:49.56 -> 00:40:49.66] Oh,
+[00:40:49.72 -> 00:40:50.72] big rich or big crunch.
+[00:40:50.82 -> 00:40:50.98] You know,
+[00:40:51.00 -> 00:40:51.30] I don't know.
+[00:40:51.64 -> 00:40:52.08] Or I can be like,
+[00:40:52.10 -> 00:40:52.22] Hey,
+[00:40:52.24 -> 00:40:54.20] do you want to just join us and play video games with us?
+[00:40:54.24 -> 00:40:54.62] Like let's,
+[00:40:54.68 -> 00:40:55.46] let's have fun until,
+[00:40:55.46 -> 00:40:55.98] until then.
+[00:40:56.30 -> 00:40:57.44] In terms of like the starting a startup,
+[00:40:57.56 -> 00:40:57.64] right?
+[00:40:57.70 -> 00:40:59.74] Like for the people who actually want to ride the wave,
+[00:40:59.84 -> 00:41:00.26] serve the wave,
+[00:41:00.50 -> 00:41:03.46] how would you advise them about like what not to build and what to build in
+[00:41:03.46 -> 00:41:05.42] the third quarter of this year?
+[00:41:05.86 -> 00:41:06.42] Oh boy.
+[00:41:06.90 -> 00:41:09.42] I think it depends if you're like building a lifestyle business,
+[00:41:09.60 -> 00:41:10.60] like an indie business,
+[00:41:10.68 -> 00:41:10.98] it depends.
+[00:41:11.06 -> 00:41:13.28] Or if you want to build like a VC backed business,
+[00:41:13.44 -> 00:41:13.64] you know,
+[00:41:13.68 -> 00:41:14.86] if you want to build an indie business,
+[00:41:14.94 -> 00:41:19.02] I actually think like what you build doesn't matter as much as like how you
+[00:41:19.02 -> 00:41:19.42] build it.
+[00:41:19.82 -> 00:41:21.58] Obviously you don't want to build nonsensical stuff,
+[00:41:21.58 -> 00:41:25.20] but if you build sensical stuff and you build it in like an AI native way
+[00:41:25.20 -> 00:41:26.04] using like this,
+[00:41:26.14 -> 00:41:28.12] like autonomous self-improvement loop and all of that,
+[00:41:28.18 -> 00:41:28.78] that I just mentioned,
+[00:41:28.88 -> 00:41:28.98] like,
+[00:41:29.56 -> 00:41:29.90] you know,
+[00:41:30.24 -> 00:41:30.62] yes,
+[00:41:30.70 -> 00:41:31.38] all things equal.
+[00:41:31.48 -> 00:41:32.78] You don't want to be building a commodity,
+[00:41:32.96 -> 00:41:33.30] but like,
+[00:41:33.34 -> 00:41:33.44] look,
+[00:41:33.46 -> 00:41:35.40] commodity businesses exist and they're huge.
+[00:41:35.56 -> 00:41:36.90] And as long as they're well operated,
+[00:41:37.10 -> 00:41:38.24] like Nike does make money,
+[00:41:38.84 -> 00:41:39.04] you know,
+[00:41:39.16 -> 00:41:41.72] like shipyards do make money,
+[00:41:41.82 -> 00:41:41.98] right?
+[00:41:42.04 -> 00:41:43.22] Like you can build these businesses.
+[00:41:43.40 -> 00:41:45.96] And as long as you're building them in a modern way and you're operating,
+[00:41:46.16 -> 00:41:47.38] you're running your ship well,
+[00:41:47.84 -> 00:41:48.18] you're going to,
+[00:41:48.18 -> 00:41:48.98] you're going to make a lot of money,
+[00:41:49.42 -> 00:41:49.66] you know?
+[00:41:49.72 -> 00:41:52.72] So you're always seeing those indie hackers like make money with like,
+[00:41:52.92 -> 00:41:53.98] the ideas are kind of dumb,
+[00:41:54.18 -> 00:41:54.34] right?
+[00:41:54.36 -> 00:41:54.98] They're very simple.
+[00:41:55.06 -> 00:41:55.98] It's not a crazy idea.
+[00:41:56.08 -> 00:41:57.76] I think what really matters is how they do it.
+[00:41:57.86 -> 00:41:58.30] And it's basically,
+[00:41:58.36 -> 00:41:59.22] there's no fact.
+[00:41:59.36 -> 00:42:00.36] They just build super fast,
+[00:42:00.38 -> 00:42:00.94] like levels,
+[00:42:01.08 -> 00:42:01.26] right?
+[00:42:01.42 -> 00:42:03.26] It's just like every time he presses command,
+[00:42:03.26 -> 00:42:05.30] and as he saves a file on his computer,
+[00:42:05.88 -> 00:42:07.56] it literally commits,
+[00:42:08.10 -> 00:42:08.34] pushes,
+[00:42:08.58 -> 00:42:09.16] and so deploys.
+[00:42:10.42 -> 00:42:12.00] And so that's,
+[00:42:12.00 -> 00:42:12.52] that's awesome.
+[00:42:12.96 -> 00:42:13.12] You know,
+[00:42:13.22 -> 00:42:14.06] like the how,
+[00:42:14.40 -> 00:42:14.78] you know,
+[00:42:14.80 -> 00:42:15.38] as a result,
+[00:42:15.48 -> 00:42:18.32] he basically is like as productive as like a startup of 20 people.
+[00:42:18.70 -> 00:42:19.10] And,
+[00:42:19.20 -> 00:42:19.38] you know,
+[00:42:20.00 -> 00:42:22.02] he's making like seven or eight million ARR.
+[00:42:22.08 -> 00:42:23.48] Like if he was a startup of 20 people,
+[00:42:23.54 -> 00:42:24.66] it'd be kind of not great.
+[00:42:25.02 -> 00:42:26.26] As a one person operation,
+[00:42:26.92 -> 00:42:27.46] it's freaking awesome,
+[00:42:27.80 -> 00:42:28.00] you know?
+[00:42:28.92 -> 00:42:29.32] So,
+[00:42:29.58 -> 00:42:30.26] yeah,
+[00:42:30.86 -> 00:42:31.16] I think,
+[00:42:31.16 -> 00:42:33.14] I think the how matters more than the what.
+[00:42:33.14 -> 00:42:34.72] And the how is everything we've talked about.
+[00:42:34.82 -> 00:42:35.90] It's just use AI all day,
+[00:42:36.02 -> 00:42:38.76] and try to remove yourself from the machine day after day.
+[00:42:39.20 -> 00:42:39.26] So,
+[00:42:39.60 -> 00:42:40.46] what is the second part?
+[00:42:40.56 -> 00:42:40.66] You know,
+[00:42:40.68 -> 00:42:42.06] if you want to build like a hyperscaling,
+[00:42:42.18 -> 00:42:43.36] VC-backed,
+[00:42:43.36 -> 00:42:43.76] unique,
+[00:42:44.18 -> 00:42:44.90] generational business?
+[00:42:45.14 -> 00:42:47.94] Ask yourself about that AI future,
+[00:42:48.14 -> 00:42:50.48] where humans don't operate businesses anymore.
+[00:42:50.66 -> 00:42:51.90] I love what you said earlier.
+[00:42:52.06 -> 00:42:52.14] Like,
+[00:42:52.14 -> 00:42:52.52] it is true.
+[00:42:52.60 -> 00:42:54.22] I think like web front-end is disappearing,
+[00:42:54.42 -> 00:42:57.00] because obviously web front-ends are meant to be used by humans.
+[00:42:57.04 -> 00:43:00.06] And I think humans might not even have a role to play in that,
+[00:43:00.12 -> 00:43:00.48] like,
+[00:43:00.62 -> 00:43:01.72] knowledge economy of the future.
+[00:43:02.16 -> 00:43:02.56] So,
+[00:43:02.56 -> 00:43:03.52] ask yourself like,
+[00:43:03.78 -> 00:43:06.94] in that extreme scenario where humans aren't doing anything anymore,
+[00:43:07.14 -> 00:43:08.82] is your business still valuable?
+[00:43:08.86 -> 00:43:10.26] Does the economy still need your business?
+[00:43:10.26 -> 00:43:10.36] So,
+[00:43:10.36 -> 00:43:10.86] for example,
+[00:43:11.80 -> 00:43:12.28] in France,
+[00:43:12.28 -> 00:43:15.68] businesses like BayStan and Fireworks and all together,
+[00:43:15.68 -> 00:43:16.38] and all of that,
+[00:43:16.56 -> 00:43:17.30] all of these folks,
+[00:43:17.30 -> 00:43:18.66] like the answer is yes.
+[00:43:19.24 -> 00:43:19.46] You know,
+[00:43:19.46 -> 00:43:21.00] we're going to need data centers.
+[00:43:21.00 -> 00:43:23.50] We're going to need like more GPUs than we could possibly imagine.
+[00:43:23.70 -> 00:43:24.94] ATS is like,
+[00:43:24.94 -> 00:43:25.08] you know,
+[00:43:25.08 -> 00:43:26.46] applicants tracking systems.
+[00:43:27.46 -> 00:43:29.36] It's like a CRM to like track your tickets.
+[00:43:29.36 -> 00:43:29.48] Like,
+[00:43:29.48 -> 00:43:30.10] I don't think so.
+[00:43:30.10 -> 00:43:31.12] I think those guys are in trouble.
+[00:43:31.58 -> 00:43:31.72] I,
+[00:43:31.72 -> 00:43:32.12] that,
+[00:43:32.12 -> 00:43:32.14] that,
+[00:43:32.14 -> 00:43:32.48] that's the,
+[00:43:32.48 -> 00:43:33.68] the frame I would apply to the thing.
+[00:43:33.68 -> 00:43:34.12] And so I think,
+[00:43:34.12 -> 00:43:37.20] I think this is why the infrastructure layer is,
+[00:43:37.20 -> 00:43:40.40] is going to be much healthier for a long time than the application layer.
+[00:43:40.70 -> 00:43:41.72] And when you say infrastructure,
+[00:43:41.72 -> 00:43:43.76] do you mean like both the software and hardware side?
+[00:43:43.76 -> 00:43:44.36] Like what is,
+[00:43:44.60 -> 00:43:46.90] what are all the things included in the term infrastructure layer?
+[00:43:47.00 -> 00:43:48.62] I do mean both software and hardware.
+[00:43:48.62 -> 00:43:51.80] I do believe like hardware is becoming more and more defensible because software,
+[00:43:51.80 -> 00:43:53.00] you can just build like that right now.
+[00:43:53.00 -> 00:43:55.94] So I think there's going to be a great rotation of capital and it's happening
+[00:43:55.94 -> 00:43:56.60] right now,
+[00:43:56.64 -> 00:43:59.50] actually away from software and two wheels hardware.
+[00:43:59.54 -> 00:44:01.00] Some of that is also just the labs,
+[00:44:01.00 -> 00:44:02.42] like sucking the oxygen out of the room.
+[00:44:02.48 -> 00:44:04.82] Like if you're like a growth guy or like a hedge fund guy,
+[00:44:04.82 -> 00:44:05.84] if you're like an investor,
+[00:44:06.14 -> 00:44:10.70] people underestimate the extent to which it is hard for an investor to invest all
+[00:44:10.70 -> 00:44:11.30] of their money.
+[00:44:11.30 -> 00:44:12.38] It's their job.
+[00:44:12.38 -> 00:44:14.06] Like it's like when they give you money,
+[00:44:14.06 -> 00:44:14.36] it's not,
+[00:44:14.36 -> 00:44:16.04] they don't do it out of the goodness of their heart.
+[00:44:16.04 -> 00:44:16.92] Like they want to return.
+[00:44:17.24 -> 00:44:22.00] It's really hard to invest capital at scale and get returns from it.
+[00:44:22.00 -> 00:44:22.70] So in a way,
+[00:44:22.94 -> 00:44:24.74] when they stumbled upon an operation,
+[00:44:24.74 -> 00:44:28.82] a business that is very capital intensive and is reasonably risk-free,
+[00:44:28.82 -> 00:44:30.74] they're actually quite grateful because they can go home.
+[00:44:30.76 -> 00:44:31.04] They're like,
+[00:44:31.04 -> 00:44:31.34] ah,
+[00:44:31.34 -> 00:44:32.00] that's how big,
+[00:44:32.18 -> 00:44:32.46] you know,
+[00:44:32.48 -> 00:44:33.02] thank you.
+[00:44:33.02 -> 00:44:37.10] They take my $5 billion and I'm going to take a break for the next six months,
+[00:44:37.40 -> 00:44:37.60] you know,
+[00:44:37.60 -> 00:44:39.38] because now my $5 billion are taken care of.
+[00:44:39.44 -> 00:44:40.04] So I think,
+[00:44:40.04 -> 00:44:41.48] I think hardware has likes that,
+[00:44:41.58 -> 00:44:42.74] that nice property of like,
+[00:44:42.74 -> 00:44:43.88] it can be capital intensive.
+[00:44:43.92 -> 00:44:44.60] I think in a good way.
+[00:44:44.60 -> 00:44:46.46] I think we do need capital intensive businesses.
+[00:44:46.48 -> 00:44:47.30] And I think anyway,
+[00:44:47.30 -> 00:44:48.26] software right now,
+[00:44:48.26 -> 00:44:52.16] like anyone who used to invest in software has parked their $5 billion in,
+[00:44:52.16 -> 00:44:53.66] in anthropic and open AI anyway.
+[00:44:53.70 -> 00:44:54.56] So I think,
+[00:44:54.56 -> 00:44:56.60] I think a hardware and bio,
+[00:44:56.60 -> 00:45:01.24] I think is going to be a huge and is right now a huge,
+[00:45:01.24 -> 00:45:01.48] huge,
+[00:45:01.48 -> 00:45:02.48] huge domain.
+[00:45:02.48 -> 00:45:07.16] And I think it's going to grow even relatively speaking as a share of the economy is going to keep growing.
+[00:45:07.40 -> 00:45:07.82] All right.
+[00:45:08.24 -> 00:45:09.50] So I want to be respectful of your time.
+[00:45:09.50 -> 00:45:10.34] We have two minutes left.
+[00:45:10.70 -> 00:45:11.84] Where should people go?
+[00:45:12.04 -> 00:45:13.20] Go to lindy.ai,
+[00:45:13.52 -> 00:45:14.66] sign up to a,
+[00:45:14.72 -> 00:45:15.56] I think right now,
+[00:45:15.56 -> 00:45:17.54] like the best multiplayer agentic scaffold.
+[00:45:17.96 -> 00:45:18.26] All right.
+[00:45:18.26 -> 00:45:20.96] And we're also going to include your Twitter and socialist below.
+[00:45:21.08 -> 00:45:22.64] Anything else you want to say for the viewers?
+[00:45:22.82 -> 00:45:23.12] No.
+[00:45:23.12 -> 00:45:23.96] Thank you so much for having me,
+[00:45:23.96 -> 00:45:24.26] David.
+[00:45:24.42 -> 00:45:24.98] Thank you as well.

@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two Caption Tracks, One Call -- Tech Company Screening, 2026-08-25</title>
+<style>
+  :root {
+    --paper: #f4efe4;
+    --paper-raised: #ece4d2;
+    --ink: #211d16;
+    --ink-soft: #55503f;
+    --rule: #cabc9e;
+    --english: #2b6f6f;
+    --english-soft: #cfe3e0;
+    --portuguese: #a9762c;
+    --portuguese-soft: #ecdcc0;
+    --flag: #a3311f;
+    --flag-soft: #f0d9d0;
+    --amber: #b8860b;
+    --amber-soft: #f2e3bd;
+    --serif: Charter, "Bitstream Charter", Georgia, "Iowan Old Style", serif;
+    --mono: "Courier New", Courier, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    line-height: 1.6;
+    font-size: 18px;
+  }
+
+  .sanitized-banner {
+    background: #a3311f;
+    color: #f4efe4;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px 20px;
+    text-align: center;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 4rem 1.75rem 6rem;
+  }
+
+  header.masthead {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.9rem;
+  }
+
+  .kicker .cc-badge {
+    display: inline-block;
+    border: 1px solid var(--ink-soft);
+    padding: 0.05rem 0.4rem;
+    border-radius: 3px;
+    margin-right: 0.5rem;
+    font-weight: bold;
+  }
+
+  h1 {
+    font-size: 2.6rem;
+    line-height: 1.12;
+    margin: 0 0 0.9rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    max-width: 18ch;
+  }
+
+  .subhead {
+    font-size: 1.15rem;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 0 0 1.3rem;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.6rem;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  .meta-row strong { color: var(--ink); }
+
+  .provenance {
+    margin-top: 1.1rem;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--rule);
+    padding: 0.5rem 0 0.5rem 0.9rem;
+    max-width: 68ch;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin: 3.2rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--rule);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    margin: 1.8rem 0 0.6rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  p { max-width: 68ch; margin: 0 0 1.05rem; }
+  ul, ol { max-width: 66ch; padding-left: 1.4rem; }
+  li { margin-bottom: 0.5rem; }
+
+  .defect-note {
+    max-width: 72ch;
+    margin: 1.1rem 0 1.6rem;
+    padding: 0.7rem 1rem;
+    border-left: 3px solid var(--amber);
+    background: var(--amber-soft);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .defect-flag {
+    font-family: var(--mono);
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--amber);
+    border: 1px solid var(--amber);
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  .redaction-note {
+    max-width: 72ch;
+    margin: 1.1rem 0 1.6rem;
+    padding: 0.7rem 1rem;
+    border-left: 3px solid var(--flag);
+    background: var(--flag-soft);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .redacted {
+    font-family: var(--mono);
+    font-size: 0.76em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--flag);
+    border: 1px solid var(--flag);
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  .lede {
+    font-size: 1.18rem;
+    max-width: 66ch;
+  }
+
+  .lede strong { color: var(--ink); }
+
+  /* ---- signature element: the dual caption track ---- */
+  .trackblock {
+    margin: 2rem 0 1.2rem;
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.6rem 1.6rem 1.3rem;
+  }
+
+  .trackblock h3 { margin-top: 0; }
+
+  .track-caption {
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+    max-width: 68ch;
+    margin-bottom: 1.3rem;
+  }
+
+  .timeline {
+    position: relative;
+    width: 100%;
+  }
+
+  .time-axis {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.35rem;
+  }
+
+  .track {
+    position: relative;
+    height: 34px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ddd3ba;
+    margin-bottom: 0.55rem;
+  }
+
+  .track .seg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+  }
+
+  .track-label {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.15rem;
+  }
+
+  .seg.eng { background: var(--english); }
+  .seg.por { background: var(--portuguese); }
+  .seg.garbled {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--paper-raised),
+      var(--paper-raised) 4px,
+      var(--ink-soft) 4px,
+      var(--ink-soft) 5px
+    );
+    opacity: 0.55;
+  }
+  .seg.unsampled {
+    background: var(--paper-raised);
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+  }
+
+  .markers { position: relative; height: 26px; margin-bottom: 0.2rem; }
+  .marker {
+    position: absolute;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    transform: translateX(-50%) rotate(45deg);
+    border: 2px solid var(--paper);
+  }
+  .marker.confirmed { background: var(--flag); }
+  .marker.uncertain { background: var(--amber); }
+  .marker.checkpoint {
+    width: 3px;
+    height: 20px;
+    transform: translateX(-50%) rotate(0deg);
+    border: none;
+    border-radius: 2px;
+    background: var(--ink);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem 1.6rem;
+    margin-top: 1.1rem;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+  }
+
+  .legend .item { display: flex; align-items: center; gap: 0.45rem; }
+  .legend .swatch { width: 13px; height: 13px; border-radius: 3px; flex-shrink: 0; }
+  .legend .swatch.eng { background: var(--english); }
+  .legend .swatch.por { background: var(--portuguese); }
+  .legend .swatch.garbled {
+    background: repeating-linear-gradient(135deg, var(--paper-raised), var(--paper-raised) 3px, var(--ink-soft) 3px, var(--ink-soft) 4px);
+  }
+  .legend .diamond { width: 9px; height: 9px; transform: rotate(45deg); flex-shrink: 0; }
+  .legend .diamond.confirmed { background: var(--flag); }
+  .legend .diamond.uncertain { background: var(--amber); }
+  .legend .tick { width: 3px; height: 13px; background: var(--ink); flex-shrink: 0; }
+
+  /* walkthrough */
+  .segment {
+    border-left: 3px solid var(--rule);
+    padding-left: 1.1rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .segment .ts {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    padding: 0.08rem 0.4rem;
+    border-radius: 3px;
+    margin-right: 0.4rem;
+  }
+
+  .tag.stated { background: var(--english-soft); color: var(--english); }
+  .tag.onscreen { background: var(--portuguese-soft); color: var(--portuguese); }
+  .tag.weak { background: var(--amber-soft); color: var(--amber); }
+  .tag.inferred { background: #ddd6c6; color: var(--ink-soft); }
+
+  /* correction cards */
+  .correction {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--flag);
+    border-radius: 4px;
+    padding: 1.1rem 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .correction.uncertain { border-left-color: var(--amber); }
+
+  .correction .label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--flag);
+    margin-bottom: 0.5rem;
+  }
+
+  .correction.uncertain .label { color: var(--amber); }
+
+  .correction .quote {
+    font-family: var(--mono);
+    font-size: 0.86rem;
+    background: var(--paper);
+    padding: 0.6rem 0.8rem;
+    border-radius: 3px;
+    margin: 0.5rem 0;
+    color: var(--ink-soft);
+  }
+
+  table.facts {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.6rem;
+    font-size: 0.95rem;
+  }
+  table.facts th, table.facts td {
+    text-align: left;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.facts th {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink-soft);
+    font-weight: normal;
+  }
+
+  .callout {
+    background: var(--flag-soft);
+    border-radius: 4px;
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    font-size: 0.98rem;
+  }
+
+  .verdict {
+    background: var(--paper-raised);
+    border-radius: 6px;
+    padding: 1.5rem 1.7rem;
+    margin-top: 1rem;
+  }
+
+  footer {
+    margin-top: 4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+  }
+
+  a { color: var(--english); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .marker { transition: transform 0.15s ease; }
+    .marker:hover { transform: translateX(-50%) rotate(45deg) scale(1.3); }
+  }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 2rem; }
+    body { font-size: 16px; }
+    .wrap { padding: 2.5rem 1.1rem 4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="sanitized-banner">
+  SANITIZED EXAMPLE: real output of a real run, with personal names, employers, company identifiers,
+  compensation figures and private file references replaced or redacted. The source recording and
+  transcript are withheld.
+</div>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker"><span class="cc-badge">CC</span>watch-video knowledge report -- transcript tier: reused prior run (faster-whisper large-v3, verbatim; no whisper re-run this pass)</div>
+    <h1>Two Caption Tracks, One Call</h1>
+    <p class="subhead">A tech-company screening interview ran two independent transcription systems at once -- Google Meet's live burned-in captions, and an offline whisper decode -- and neither one alone was trustworthy. Comparing them is what caught the difference between a candidate pausing and a model hallucinating.</p>
+    <div class="meta-row">
+      <span><strong>Participants:</strong> the recruiter (the company) &amp; the candidate</span>
+      <span><strong>Role:</strong> Lead AI Engineer</span>
+      <span><strong>Date:</strong> 2026-08-25</span>
+      <span><strong>Duration:</strong> 31m 33s (1892.7s)</span>
+      <span><strong>Source:</strong> local recording, Google Meet</span>
+    </div>
+    <div class="provenance">
+      Ingest for this report: 1 fps frame extraction (1893 frames), 12 individual frames read at
+      flagged timestamps to cross-check the burned-in Meet caption against the whisper decode; no
+      whisper re-run (transcript reused from a prior run against the same source); no frame bursts
+      needed. Independent pass: written without reading the prior run's own knowledge document
+      first.
+    </div>
+  </header>
+
+  <p class="lede">This is a first-round recruiter screening call, not a technical interview. Its
+  content is a straightforward hiring conversation. What makes the material worth a design pass is
+  a verification problem that the transcript itself created: the source decode contains several
+  runs of an identical short phrase repeated far more times than a human could physically say them
+  in the time allotted. Those are whisper hallucinations. But the video also carries Google Meet's
+  own live captions burned into the picture, in a separate language track that itself gets
+  confused whenever the conversation switches into Portuguese. <strong>Neither track is reliable
+  on its own -- one hallucinates repeats, the other garbles words it cannot parse -- but where they
+  disagree, that disagreement is diagnostic.</strong> The chart below is that comparison.</p>
+
+  <h2>The dual caption track</h2>
+  <div class="trackblock">
+    <h3>What each system got wrong, and where</h3>
+    <p class="track-caption">Top track: Google Meet's own burned-in live captions (English, with
+    auto-translate active once the call turns to Portuguese) as read directly from video frames.
+    Bottom track: the whisper large-v3 decode this report is built on, colored by which language
+    was actually spoken. Diamond markers show where the two tracks were checked against each other
+    and disagreed enough to matter.</p>
+    <div class="timeline">
+      <div class="time-axis"><span>0:00</span><span>7:53</span><span>15:47</span><span>23:40</span><span>31:33</span></div>
+      <div class="track-label">Meet burned-in captions (sampled)</div>
+      <div class="track">
+        <div class="seg eng" style="left:0%; width:91.8%;"></div>
+        <div class="seg garbled" style="left:91.8%; width:7.5%;" title="Live auto-translate garbles into nonsense here (Namaste problem / Palestination / Legion videos)"></div>
+        <div class="seg unsampled" style="left:99.3%; width:0.7%;"></div>
+      </div>
+      <div class="track-label">Whisper decode, by language actually spoken</div>
+      <div class="track">
+        <div class="seg eng" style="left:0%; width:81.7%;"></div>
+        <div class="seg por" style="left:81.7%; width:12.3%;"></div>
+        <div class="seg eng" style="left:94.0%; width:6.0%;"></div>
+      </div>
+      <div class="markers">
+        <div class="marker confirmed" style="left:18.8%;" title="356s -- confirmed hallucination: 'and to the next level' x6"></div>
+        <div class="marker checkpoint" style="left:81.7%;" title="1547s -- verified checkpoint: language switch to Portuguese confirmed by caption"></div>
+        <div class="marker confirmed" style="left:73.3%;" title="1378-1397s -- confirmed hallucination: 'Yeah.' x18"></div>
+        <div class="marker uncertain" style="left:92.2%;" title="1738-1754s -- unconfirmed: 'E...' x15, partially corroborated only"></div>
+      </div>
+    </div>
+    <div class="legend">
+      <div class="item"><span class="swatch eng"></span>English (spoken / captioned)</div>
+      <div class="item"><span class="swatch por"></span>Portuguese (spoken)</div>
+      <div class="item"><span class="swatch garbled"></span>caption garbled (auto-translate failing)</div>
+      <div class="item"><span class="diamond confirmed"></span>hallucination, confirmed &amp; corrected</div>
+      <div class="item"><span class="diamond uncertain"></span>flagged, corroborated but NOT confirmed</div>
+      <div class="item"><span class="tick"></span>verified checkpoint</div>
+    </div>
+  </div>
+
+  <p>Read the chart as a triangulation exercise. The whisper track is the one anyone would read if
+  they only had a transcript. It is wrong twice, in a way that is easy to miss on a casual read
+  because each wrong run still looks like plausible transcript text -- until you notice the
+  timestamps span barely two seconds for six repeats of a four-word phrase. The Meet track is
+  wrong differently: it does not repeat, it degrades into nonsense the moment the underlying
+  speech leaves English, which is exactly what a live translator under load does. Where they
+  agree, that agreement is confirmation. Where the whisper track shows something impossible
+  (six repeats in two seconds), the Meet track resolving cleanly at that same moment is what
+  proves the hallucination. Where the Meet track is nonsense and the whisper track is a genuine
+  Portuguese sentence, that is the opposite kind of evidence -- the Meet track failing is
+  consistent with real non-English speech, not proof against it.</p>
+
+  <h2>Who, what, and why this call happened</h2>
+  <div class="segment">
+    <div class="ts">0:00 -- 5:26 (0s-326s)</div>
+    <span class="tag stated">STATED</span>The recruiter opens, confirms the conversation will run in
+    English, and gives a company overview: the company is a bootstrapped AI engineering studio
+    and startup incubator founded 2021, 25 people across Brazil and the US, fully remote with one
+    annual in-person offsite, no venture capital. Two business lines -- a five-person dedicated AI
+    team and a larger generalist full-stack team -- plus a staffing/headhunting service connecting
+    clients to Brazilian engineers, plus an Entrepreneurial Residency Program open to outside
+    applicants and employees alike (two active incubator projects at the time of the call, one
+    launching to market the following month, born out of a prior-year internal hackathon).
+  </div>
+  <div class="segment">
+    <div class="ts">5:26 -- 5:38 (326s-338s)</div>
+    <span class="tag stated">STATED</span>The recruiter frames the open role -- Lead AI Engineer,
+    needed because the AI team expects a growing project pipeline and needs people who can absorb
+    both technical delivery and client-facing responsibility. She first states the split as roughly
+    40% hands-on / 60% leadership.
+  </div>
+  <div class="segment">
+    <div class="ts">6:26 (386s) onward</div>
+    <span class="tag stated">STATED</span>The candidate gives his background: six-plus years across
+    Employer A (car rental, Brazil), Employer B (fraud detection/security for Brazilian banks), and
+    Employer C (3+ years, IC to team lead to project lead, supplying RL training work to frontier AI
+    labs -- SFT trajectory-building followed by RLHF evaluation cycles). He then describes a
+    year-long personal project: a crypto price-prediction ML pipeline, now approaching a two-week
+    paper trading phase before he is willing to risk live capital.
+  </div>
+  <div class="segment">
+    <div class="ts">12:12 (732s) onward</div>
+    <span class="tag stated">STATED</span>Asked for his most challenging LLM-related project,
+    the candidate describes a retrieval-augmented system built for his crypto project (the
+    transcript renders this "REC project" -- read as RAG <span class="tag inferred">INFERRED</span>),
+    citing embedding-model choice and top-K retrieval tuning as the levers that most affected
+    downstream accuracy and recall, and framing it as the hands-on production-LLM experience
+    Employer C's work never gave him.
+  </div>
+  <div class="segment">
+    <div class="ts">16:06 (966s) onward</div>
+    <span class="tag stated">STATED</span>Asked how he stays current, the candidate describes a
+    daily cron job pulling from trusted sources, and his own multi-agent orchestration setup: an
+    Opus/Fable orchestrator directing Sonnet sub-agents, an Opus review pass on their output, and a
+    further orchestrator-level review -- with an empirical ceiling where the orchestration session
+    starts to diverge past roughly 300K tokens of context. He also describes having built a Claude
+    Code skill he calls "watch video," specifically so that he does not have to watch videos
+    himself -- extract audio, transcribe, and pull a frame from the source whenever the transcript
+    references something visual.
+  </div>
+  <div class="segment">
+    <div class="ts">21:02 (1262s) onward</div>
+    <span class="tag stated">STATED</span>Behavioral questions: formative feedback (an Employer C
+    superior calling him a good leader, and separately noting he grew less motivated once his role
+    lost its hands-on component -- which the candidate names as the reason he left), and ideal
+    culture (being heard and understood; he searches for and cannot find an English equivalent for
+    the Portuguese word "borbulha" to describe his own creative-idea-generation habit). The
+    recruiter self-corrects the hands-on split mid-answer: <em>"Actually, it's 60% hands-on."</em>
+    <span class="defect-flag">[misattributed -- see defect note]</span>
+  </div>
+  <div class="segment">
+    <div class="ts">25:47 (1547s) -- language switch, verified</div>
+    <span class="tag onscreen">ON-SCREEN</span>The recruiter thanks the candidate for speaking
+    English (matching the burned-in caption at this exact frame) and immediately switches to
+    Portuguese with "Obrigada." From here the call covers contractor terms (PJ, matching the
+    candidate's Employer C arrangement), compensation (the candidate states a standing ask of
+    [figure redacted]), availability (flexible, near-immediate), a competing process close to a
+    final stage (contract would start in about two weeks if it converts), and the five-stage
+    process ahead: take-home reflection (no from-scratch coding; includes a critical-analysis
+    exercise on existing agent code) -> a ~30-minute technical screening -> pair coding -> system
+    design -> an executive interview with the founder.
+  </div>
+  <div class="segment">
+    <div class="ts">29:40 (1780s) -- English resumes</div>
+    <span class="tag stated">STATED</span>A final substantive English exchange: whether the
+    candidate would have a fixed client (not yet decided -- depends on timing and which of his
+    strengths get identified in the process) and what "Lead" means day to day (every AI-team member
+    effectively leads something; the company wants someone positioned toward the client who can
+    also make decisions and lead other engineers). The recruiter closes the call.
+  </div>
+
+  <h2>Corrections</h2>
+  <p>Three anomalies in the source transcript were checked against the burned-in caption track.
+  Two are confirmed hallucinations and have been corrected in the accompanying transcript file; one
+  is corroborated but not confirmed, and has been left in place with a flag rather than silently
+  fixed or silently trusted.</p>
+
+  <div class="correction">
+    <div class="label">Confirmed hallucination -- 5:56 (356s)</div>
+    <p>The source transcript reads <span class="tag inferred">"and to the next level"</span> repeated
+    six times inside a two-second window -- not physically sayable. The Meet caption for this exact
+    moment shows a single continuous sentence instead:</p>
+    <div class="quote">"...and and how it can help us bring our ideas because I, I see myself as a
+    very creative person..."</div>
+    <p>The candidate was connecting "how it can" to "help us bring our ideas," not repeating a
+    phrase about a "next level" at all.</p>
+  </div>
+
+  <div class="correction">
+    <div class="label">Confirmed hallucination -- 22:58-23:17 (1378s-1397s)</div>
+    <p>The source transcript reads the single word <span class="tag inferred">"Yeah."</span>
+    repeated eighteen times across this window. The Meet caption for the same window shows one
+    natural sentence from the recruiter, running straight into the candidate's real answer with no
+    repeat at all:</p>
+    <div class="quote">"...I'm happy to know that as well and. And when you think about an ideal
+    company culture environment(s) that helps to bring out the best of you as a professional, what
+    type of company culture comes to your mind?" -&gt; "I think it resonates specifically with that
+    culture because as I said, I am someone who is..."</div>
+  </div>
+
+  <div class="correction uncertain">
+    <div class="label">Flagged, corroborated but unconfirmed -- 28:59-29:14 (1738s-1754s)</div>
+    <p>The source transcript reads the Portuguese hesitation filler <span class="tag inferred">"E..."</span>
+    (roughly "and...") repeated fifteen times. Unlike the two cases above, the Meet caption for this
+    window does not resolve cleanly -- it renders as nonsense ("Namaste problem," "Palestination.
+    Atlas, California."), which is consistent with the live auto-translator failing on genuine,
+    sustained Portuguese speech. That corroborates a real hesitation-filled pause happening here,
+    but it does not confirm the specific word or the exact fifteen-times count. This one was left
+    in the transcript as-is, flagged rather than corrected -- the evidence available only bounds
+    what happened, it does not pin it down.</p>
+  </div>
+
+  <h2>Company and role, at a glance</h2>
+  <table class="facts">
+    <tr><th>Company</th><td>the company -- AI engineering studio + startup incubator, founded 2021, bootstrapped, 25 people (Brazil + US, remote)</td></tr>
+    <tr><th>Clients</th><td>US and Europe, mostly startups building new products</td></tr>
+    <tr><th>Role</th><td>Lead AI Engineer, AI team (5 people at time of call)</td></tr>
+    <tr><th>Split</th><td>60% hands-on / 40% leadership &amp; client management (corrected mid-call from an initial 40/60) <span class="defect-flag">[see defect note]</span></td></tr>
+    <tr><th>Contract</th><td>PJ / independent contractor</td></tr>
+    <tr><th>Compensation ask stated</th><td>[figure redacted]</td></tr>
+    <tr><th>Process ahead</th><td>Take-home reflection -&gt; technical screening (~30 min) -&gt; pair coding -&gt; system design -&gt; executive interview with the founder</td></tr>
+  </table>
+
+  <p class="defect-note"><strong>Defect note, added for publication -- not run output.</strong> Two
+  places in this report say the recruiter stated ~40% hands-on and then corrected herself. That is
+  wrong, and it is flagged rather than rewritten because these examples are unmodified run output.
+  The recording has the recruiter stating "60 percent of the time is hands-on" at 05:15; the
+  <em>candidate</em> paraphrasing it down to "at least 40%" at 22:24, seventeen minutes later; and
+  the recruiter correcting him back at 22:47. The 60/40 figure is right -- the attribution and the
+  ordering are not. The <code>video-autopsy</code> run of this same recording resolved the sequence
+  correctly, which is the reason all three runs of one source are published together.</p>
+
+  <h2>Applicability</h2>
+
+  <p class="redaction-note"><strong>Redaction note.</strong> This section is external to the
+  recording by construction -- it maps the video against the reader's own projects and tooling. It
+  is published line by line rather than as a shell: the half of each item that came from the call is
+  kept, and the half that describes private systems is redacted in place and marked
+  <span class="redacted">like this</span>. The shape is the point -- each item is paired against one
+  surface and ends in a verdict, not a summary.</p>
+
+  <h3>Daily routine</h3>
+  <p>Nothing follows from this call beyond the interview record it feeds. It is a recorded
+  first-round screen, not a source of new working technique.</p>
+
+  <h3>Ongoing projects</h3>
+  <ul>
+    <li><strong>Crypto-trading ML pipeline</strong>
+    <span class="redacted">[operator-side project redacted]</span> -- the personal project described
+    on the call (a year-long price-prediction pipeline approaching a two-week paper-trading phase on
+    an hourly inference loop before live capital) carries no technique to adopt at this altitude.
+    Its durable value is the timestamped, externally-stated commitment: paper trade two weeks, then
+    reassess.</li>
+    <li><strong>Multi-agent orchestration / model routing</strong>
+    <span class="redacted">[operator-side convention redacted]</span> -- the on-call description of
+    an Opus/Fable orchestrator, Sonnet sub-agents, an Opus review pass and a ~300K-token divergence
+    ceiling is a description of a working pattern, not a new mechanism. Nothing to adopt.</li>
+    <li><strong>Agent-built video ingestion</strong>
+    <span class="redacted">[operator-side tooling redacted]</span> -- the "watch video" skill
+    described on the call folds tonal/emotional reading and content extraction into a single
+    package. Those are different jobs with different costs: a transcript-plus-frames comprehension
+    pass needs no audio analysis at all.</li>
+    <li><strong>RAG technique</strong>
+    <span class="redacted">[operator-side project redacted]</span> -- the embedding-model and top-K
+    sensitivity described on the call is a real, transferable lesson and still a no-adopt here,
+    because the target surface has no retrieval or generation component. Recorded rather than
+    dropped: a value map that lists only matches has stopped discriminating.</li>
+    <li><strong>Interview-process record</strong>
+    <span class="redacted">[operator-side records redacted]</span> -- the facts this call fixes: the
+    stated compensation figure, the corrected 60/40 hands-on split, the five stages ahead, and the
+    stated reason for leaving Employer C (the role became leadership-only with no hands-on
+    component).</li>
+  </ul>
+
+  <div class="verdict">
+    <h3 style="margin-top:0;">Verdict</h3>
+    <p>As a hiring signal, this call did its job cleanly: company context landed, role scope was
+    clarified (including a self-correction caught on tape), logistics were confirmed, and next
+    steps are unambiguous. As source material for this report, its real value is procedural rather
+    than substantive -- it is a clean demonstration that a transcript should not be trusted just
+    because it reads fluently, and that a second, independently-wrong signal (here, Google Meet's
+    own live captions) can do more to locate the truth than either source alone. The specific
+    correction method used here -- treat a repeated-phrase run as a red flag, then check it against
+    whatever second signal exists in the frames -- generalizes past this one call.</p>
+  </div>
+
+  <footer>
+    Report generated by the watch-video skill (lighter package: transcript + frame-check only, no
+    tone/pitch/emotion/behavioral analysis). Transcript tier: prior-run transcript reused, no
+    whisper invocation this pass. Full source transcript: withheld (not published with this
+    example). Companion knowledge document: tech-interview-screen_knowledge.md.
+  </footer>
+
+</div>
+</body>
+</html>

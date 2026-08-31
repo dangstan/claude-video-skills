@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case File: the company x the candidate -- First-Round Interview</title>
+<style>
+  :root {
+    --paper: #e9e0c9;
+    --paper-dark: #ded2ae;
+    --card: #f3ecd9;
+    --ink: #2b241a;
+    --ink-soft: #55492f;
+    --rule: #b6a877;
+    --stamp-red: #9c2b1f;
+    --stamp-red-ink: #7c2118;
+    --confirmed-green: #2f5233;
+    --redact: #1c1712;
+    --accent-blue: #2c4a63;
+    --serif: Charter, "Bitstream Charter", Georgia, "Iowan Old Style", serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, transparent 1px, transparent 3px),
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.25), transparent 60%);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent-blue); }
+
+  .sanitized-banner {
+    background: #7c2118;
+    color: #f0e9d2;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px 20px;
+    text-align: center;
+  }
+
+  .sheet {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+
+  /* ---- Header: file tab ---- */
+  .tab {
+    display: inline-block;
+    background: var(--redact);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 3px 3px 0 0;
+    margin-bottom: -1px;
+  }
+
+  header.case {
+    border: 2px solid var(--ink);
+    background: var(--card);
+    padding: 28px 32px 24px;
+    position: relative;
+  }
+
+  header.case::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid var(--rule);
+    pointer-events: none;
+  }
+
+  .case-title {
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 4px 0 6px;
+    line-height: 1.05;
+  }
+
+  .case-sub {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px 28px;
+    font-family: var(--mono);
+    font-size: 13px;
+    border-top: 1px dashed var(--rule);
+    padding-top: 16px;
+  }
+
+  .field-grid dt {
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10.5px;
+  }
+  .field-grid dd { margin: 2px 0 0; }
+
+  .provenance-strip {
+    margin-top: 18px;
+    padding: 12px 14px;
+    background: repeating-linear-gradient(135deg, #dccf9f, #dccf9f 6px, #d4c690 6px, #d4c690 12px);
+    border: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink);
+  }
+
+  /* ---- Section chrome ---- */
+  section { margin-top: 44px; }
+
+  h2.section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--stamp-red-ink);
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+  }
+  h2.section-head::before {
+    content: attr(data-num);
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin: 24px 0 8px;
+  }
+
+  p { max-width: 68ch; }
+  .full { max-width: none; }
+
+  .lede {
+    font-size: 1.15rem;
+    color: var(--ink);
+    border-left: 4px solid var(--stamp-red);
+    padding-left: 18px;
+    max-width: 66ch;
+  }
+
+  /* ---- Timeline / signature element ---- */
+  .timeline-wrap {
+    position: relative;
+    margin: 34px 0 8px;
+    padding-top: 8px;
+  }
+  .timeline-rule {
+    position: relative;
+    height: 3px;
+    background: var(--ink);
+    margin: 40px 6px 0;
+  }
+  .timeline-rule::before, .timeline-rule::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    width: 2px;
+    height: 11px;
+    background: var(--ink);
+  }
+  .timeline-rule::before { left: 0; }
+  .timeline-rule::after { right: 0; }
+  .timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin: 0 6px;
+  }
+  .incident-pin {
+    position: absolute;
+    top: -32px;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 35px;
+    background: var(--stamp-red);
+  }
+  .incident-pin::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    left: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--stamp-red);
+  }
+  .incident-pin[data-sev="unverified"] { background: var(--ink-soft); }
+  .incident-pin[data-sev="unverified"]::after { background: var(--ink-soft); }
+
+  .incident-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 18px;
+  }
+  @media (max-width: 720px) { .incident-cards { grid-template-columns: 1fr; } }
+
+  .incident {
+    background: var(--card);
+    border: 1px solid var(--ink);
+    padding: 14px 16px 16px;
+    position: relative;
+  }
+
+  .incident time {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  .wrong {
+    text-decoration: line-through;
+    color: #8a3b31;
+    display: block;
+    margin: 8px 0 4px;
+    font-size: 0.92rem;
+  }
+  .right {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .stamp {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 9px;
+    border: 2px solid currentColor;
+    border-radius: 3px;
+    transform: rotate(-3deg);
+    margin-top: 10px;
+  }
+  .stamp.confirmed { color: var(--confirmed-green); }
+  .stamp.unverified { color: var(--ink-soft); }
+
+  /* ---- Redaction ---- */
+  .redact-bar {
+    display: inline-block;
+    background: var(--redact);
+    color: var(--redact);
+    padding: 1px 8px;
+    border-radius: 2px;
+    user-select: none;
+  }
+
+  /* ---- Dossier cards for company / candidate ---- */
+  .dossier {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 4px 18px;
+    background: var(--card);
+    border: 1px solid var(--ink);
+    padding: 18px 20px;
+    font-size: 0.96rem;
+  }
+  .dossier dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    padding-top: 3px;
+  }
+  .dossier dd { margin: 0 0 10px; }
+
+  /* ---- Process stepper ---- */
+  ol.stepper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+  }
+  ol.stepper li {
+    counter-increment: step;
+    position: relative;
+    padding: 6px 0 18px 46px;
+    border-left: 2px solid var(--rule);
+    margin-left: 14px;
+  }
+  ol.stepper li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  ol.stepper li::before {
+    content: counter(step);
+    position: absolute;
+    left: -15px;
+    top: 3px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--mono);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ol.stepper li.done::before { background: var(--confirmed-green); }
+  ol.stepper li strong { display: block; margin-bottom: 2px; }
+  ol.stepper li .note { font-size: 0.88rem; color: var(--ink-soft); }
+
+  /* ---- Insight list ---- */
+  .insight {
+    border-bottom: 1px dashed var(--rule);
+    padding: 14px 0;
+  }
+  .insight:last-child { border-bottom: none; }
+  .insight .tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--stamp-red-ink);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .defect-note {
+    max-width: 100%;
+    margin: 1.1rem 0 1.6rem;
+    padding: 0.7rem 1rem;
+    border-left: 3px dashed var(--accent-blue);
+    background: rgba(44, 74, 99, 0.07);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .defect-flag {
+    font-family: var(--mono);
+    font-size: 0.72em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent-blue);
+    border: 1px solid var(--accent-blue);
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  .redaction-note {
+    max-width: 100%;
+    margin: 1.1rem 0 1.6rem;
+    padding: 0.7rem 1rem;
+    border-left: 3px solid var(--stamp-red);
+    background: rgba(156, 43, 31, 0.07);
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .redacted {
+    font-family: var(--mono);
+    font-size: 0.74em;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--stamp-red-ink);
+    border: 1px solid var(--stamp-red-ink);
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  /* ---- Applicability table ---- */
+  .apptable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+  }
+  .apptable th, .apptable td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .apptable th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  /* ---- Verdict ---- */
+  .verdict-box {
+    background: var(--redact);
+    color: var(--paper);
+    padding: 26px 28px;
+    position: relative;
+  }
+  .verdict-box .stamp-big {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #d6c48a;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 18px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  ::selection { background: var(--stamp-red); color: var(--paper); }
+
+  a:focus-visible, [tabindex]:focus-visible {
+    outline: 3px solid var(--accent-blue);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+<div class="sanitized-banner">
+  SANITIZED EXAMPLE: real output of a real run, with personal names, employers, company identifiers,
+  compensation figures and private file references replaced or redacted. The source recording and
+  transcript are withheld.
+</div>
+<div class="sheet">
+
+  <span class="tab">Candidate Pipeline / First Round</span>
+  <header class="case">
+    <div class="case-sub">Case File -- Hiring Interview Transcript &amp; Verification</div>
+    <h1 class="case-title">the company vs.<br>the candidate</h1>
+    <div class="case-sub">Lead AI Engineer &mdash; Recruiter / Hiring-Manager Screen</div>
+
+    <dl class="field-grid">
+      <div><dt>Interviewer</dt><dd>the recruiter -- Talent Acquisition &amp; People Ops Manager, the company</dd></div>
+      <div><dt>Candidate</dt><dd>the candidate</dd></div>
+      <div><dt>Recorded</dt><dd>2026-08-25, via OBS capture of Google Meet</dd></div>
+      <div><dt>Duration</dt><dd>1892.7s (31.5 min)</dd></div>
+      <div><dt>Source</dt><dd>Local file, no URL -- platform caption fetch not applicable</dd></div>
+      <div><dt>Resolution / fps</dt><dd>1280x1392 source, 5 fps frame extraction (9464 frames)</dd></div>
+    </dl>
+
+    <div class="provenance-strip">
+      TRANSCRIPT: faster-whisper large-v3, verbatim, 4803 words, 152.3 wpm, 259.4s wall time
+      (7.30x realtime) &nbsp;|&nbsp; CAPTION CROSS-CHECK: targeted, not systematic -- 4 spans
+      checked against on-screen Google Meet captions (3 resolved, 1 inconclusive) &nbsp;|&nbsp;
+      INGEST COST: 1 whisper pass, 1 blind visual sweep (32 frames), 4 targeted bursts (70 frames)
+    </div>
+  </header>
+
+  <section>
+    <h2 class="section-head" data-num="01">Summary of Findings</h2>
+    <p class="lede">
+      A 31.5-minute first-round screen for a Lead AI Engineer opening at the company, a
+      Rio de Janeiro-based, self-funded AI engineering studio and startup incubator. The call
+      is entirely webcam-to-webcam -- no screen share, slides, or code at any point -- and closes
+      with a Portuguese-language logistics exchange covering compensation and next steps before
+      returning to English for final role-scope questions.
+    </p>
+    <p>
+      Two artifacts drive this file beyond a plain summary: first, the verbatim transcript
+      contains three runs of implausible word repetition that whisper produced and Meet's own
+      captions did not -- a live demonstration of why a single ASR pass is not self-checking.
+      Second, a ~12-second window of the recording accidentally shows a browser tab with the
+      recruiter's professional-networking profile page instead of the call, which is what let
+      several facts below be confirmed from pixels rather than taken on trust from audio.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="02">The Employer</h2>
+    <dl class="dossier">
+      <dt>Identity</dt>
+      <dd>AI engineering studio and startup incubator. Identity confirmed on-screen via a
+        professional-networking job-ad snippet ("Hiring: Lead AI Engineer") -- this corrects a
+        whisper mishearing of the name as an unrelated-sounding phrase (src ~1385s).</dd>
+      <dt>Founded</dt>
+      <dd>2021, self-funded on its own profits -- no venture capital. (src 95-99s)</dd>
+      <dt>Headcount</dt>
+      <dd>25 people, Brazil and US, fully remote with one annual in-person offsite. (src 253-266s)</dd>
+      <dt>Clients</dt>
+      <dd>Startups and companies in the US and Europe, building products from scratch. (src 148-161s)</dd>
+      <dt>Structure</dt>
+      <dd>A dedicated AI team (5 people at interview time, actively growing) plus a larger
+        generalist full-stack team; also runs a staffing/headhunting line connecting clients with
+        Brazilian engineers. (src 161-296s)</dd>
+      <dt>Residency</dt>
+      <dd>Entrepreneurial Residency Program, open to staff and outsiders; two active projects, one
+        going to market the month after this interview; both trace back to last year's offsite
+        hackathon. (src 186-241s)</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="03">The Role -- Lead AI Engineer</h2>
+    <dl class="dossier">
+      <dt>Hands-on split</dt>
+      <dd>60% hands-on, 40% leadership/client management -- the candidate corrected this live after
+        the recruiter paraphrased it as "at least 40% hands-on" (src ~1353s and 1367s: "Actually, it's
+        60% hands-on"). <span class="defect-flag">[inverted -- see defect note]</span></dd>
+      <dt>Why now</dt>
+      <dd>The company states some current AI engineers are drifting toward people-development /
+        leadership work, leaving a gap for hands-on technical leadership -- the concrete "why this
+        role" behind the opening. (src 279-315s)</dd>
+      <dt>Client assignment</dt>
+      <dd>Not fixed to a specific client yet; some clients start Sept/early Oct 2026; assignment
+        depends on the skills identified in the hire. Likely a new project rather than an existing
+        one. (src 1791-1821s)</dd>
+      <dt>Team model</dt>
+      <dd>"Everyone is kind of a Lead" -- each AI-team member can be leading a different project;
+        some skew AI-specialist, some skew hands-on-lead, which is the profile being hired here.
+        (src 1828-1862s)</dd>
+    </dl>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="04">The Candidate -- Claims on Record</h2>
+    <p>The candidate states 6+ years as a data scientist / ML engineer across four employers:</p>
+    <table class="apptable">
+      <tr><th>Employer</th><th>What was claimed</th></tr>
+      <tr><td>Employer A</td><td>Top car-rental company in Brazil; first employer. (src 395-404s)</td></tr>
+      <tr><td>Employer B</td><td>Fraud detection / security; claims almost all Brazilian banks are
+        Employer B clients for this. (src 404-423s)</td></tr>
+      <tr><td>Employer C</td><td>~3 years, IC to team lead to project lead, on frontier-AI-lab data
+        work; built SFT-to-RLHF trajectory pipelines and evaluation loops with client teams. Left
+        when the role became 100% leadership with no hands-on component. (src 423-1335s)</td></tr>
+      <tr><td>Personal project</td><td>~1 year, crypto price-prediction ML pipeline; built a RAG
+        layer over project docs (whisper: "REC project") using a Qwen 3.5 embedding model (whisper:
+        "QAN 3.5"); not yet live-trading, next step is ~2 weeks of paper trading. (src 622-940s)</td></tr>
+    </table>
+    <h3>Working style, as described on camera</h3>
+    <p>
+      Daily cron job pulling AI news from trusted sources; a Claude-based orchestration setup
+      ("Opus 5" or "Fable 5" orchestrator, "Sonder 5" -- i.e. Sonnet 5 -- sub-agents, a separate
+      Opus reviewer) with a stated practical ceiling of about 300K tokens before quality
+      degrades. Notably, the candidate describes on-camera the exact extract-audio /
+      whisper-transcribe / pull-a-frame-at-the-relevant-timestamp mechanism used to produce this
+      very report (src 1170-1256s) -- the source names its own analysis pipeline mid-interview.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="05">Process &amp; Next Steps</h2>
+    <p>Stated by the recruiter, in order (src 1599-1655s):</p>
+    <ol class="stepper">
+      <li class="done"><strong>Recruiter / hiring-manager screen</strong> <span class="note">This call. Complete.</span></li>
+      <li><strong>Take-home assignment</strong> <span class="note">Written reflection on past projects, plus a critical-analysis exercise reviewing an existing agent's code and proposing improvements. No coding from scratch. ~24hr window, described as a check-in rather than a hard deadline. The recruiter to send by email immediately after the call.</span></li>
+      <li><strong>Technical screening</strong> <span class="note">~30 min, with a senior engineer whose name whisper rendered as <span class="redact-bar">[NAME REDACTED]</span> -- unverified, see Corrections.</span></li>
+      <li><strong>Pair coding</strong></li>
+      <li><strong>System design</strong></li>
+      <li><strong>Executive interview</strong> <span class="note">With the company's founder -- name not independently confirmed.</span></li>
+    </ol>
+    <h3>Logistics stated in the Portuguese-language close (src 1549-1734s)</h3>
+    <p>Engagement as PJ (Brazilian contractor status), matching the candidate's prior Employer C
+      arrangement. Salary anchor stated by the candidate: <strong>[figure redacted]</strong>,
+      described as the figure he has been quoting across his other active interview processes.
+      Availability: immediate. The recruiter asks to be kept posted if any of the candidate's
+      parallel processes advances.</p>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="06">Verification Ledger -- Where the Transcript Broke</h2>
+    <p>
+      The transcript's own quality gate flagged four spans of unnatural word repetition. Each was
+      checked against Google Meet's live captions, burned into the on-screen recording. Three
+      resolved; one could not be settled either way.
+    </p>
+    <div class="timeline-wrap">
+      <div class="timeline-rule">
+        <div class="incident-pin" style="left: 18.7%;" data-sev="confirmed" title="354s"></div>
+        <div class="incident-pin" style="left: 73.7%;" data-sev="confirmed" title="1380s"></div>
+        <div class="incident-pin" style="left: 91.9%;" data-sev="unverified" title="1739s"></div>
+      </div>
+      <div class="timeline-labels"><span>0:00</span><span>15:46 (midpoint)</span><span>31:33</span></div>
+    </div>
+    <div class="incident-cards">
+      <div class="incident">
+        <time>src 354.01-356.71s</time>
+        <span class="wrong">"...help us bring you guys to the next level and to the next level and to the next level..." x6</span>
+        <span class="right">"...help us bring our ideas because I see myself as a very creative person..."</span>
+        <span class="stamp confirmed">CONFIRMED VIA CAPTIONS</span>
+      </div>
+      <div class="incident">
+        <time>src 1379.26-1397.70s</time>
+        <span class="wrong">"Yeah." x18 (18.4 seconds of nothing else)</span>
+        <span class="right">"...things like that. But yeah. I'm happy to know that as well." (straight into the next question, no gap)</span>
+        <span class="stamp confirmed">CONFIRMED VIA CAPTIONS</span>
+      </div>
+      <div class="incident">
+        <time>src 1738.84-1753.84s</time>
+        <span class="wrong">Portuguese filler "E..." x15 (15 seconds)</span>
+        <span class="right">Same diagnostic shape as the two confirmed cases (single token, uniform ~1.00s segments) -- but Meet's own English captioner produced nothing intelligible for this Portuguese stretch either, so the frames cannot settle it.</span>
+        <span class="stamp unverified">UNVERIFIED</span>
+      </div>
+    </div>
+    <h3 style="margin-top:32px;">Two more items settled by an accidental screen change</h3>
+    <p>
+      Around src 1638-1650s, the recording briefly shows a browser tab with the recruiter's
+      professional-networking profile page instead of the call. That window confirmed, from
+      pixels: her title ("Talent Acquisition &amp; People Ops Manager" at the company, Rio de
+      Janeiro, Brazil), and the company's exact identity via a job-ad snippet on the same page
+      (correcting the shortened form whisper produced elsewhere).
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="07">Key Insights</h2>
+    <div class="insight">
+      <span class="tag">Process detail</span>
+      <p class="full">Five stages remain after this call. Combined with the candidate's own
+        statement that he is running parallel interview processes, this is a pipeline worth
+        planning bandwidth for rather than treating as a quick follow-up.</p>
+    </div>
+    <div class="insight">
+      <span class="tag">Live correction</span>
+      <p class="full">The candidate caught and corrected the recruiter's "at least 40% hands-on"
+        paraphrase to the actual 60% figure in real time -- a small but genuine signal about
+        tracking numbers carefully during a live conversation, independent of anything else in
+        the call.</p>
+    </div>
+
+    <p class="defect-note"><strong>Defect note, added for publication -- not run output.</strong> The
+      insight directly above is <strong>inverted, and the signal it reports does not exist</strong>.
+      It is flagged rather than deleted because these examples are unmodified run output, and a
+      confident behavioural conclusion resting on a misattribution is worth seeing. The recording has
+      the recruiter stating "60 percent of the time is hands-on" at 05:15; the <em>candidate</em>
+      paraphrasing it down to "at least 40%" at 22:24; and the recruiter correcting <em>him</em> back
+      at 22:47, after which he answers "Awesome. Even better." The 60/40 figure is right; who erred
+      is the opposite of what this report says, and the same error appears in Section 03. The
+      <code>video-autopsy</code> run of this recording resolved it correctly.</p>
+    <div class="insight">
+      <span class="tag">Open question</span>
+      <p class="full">The technical-screening contact's identity is not reliably captured by either
+        transcript engine used here. It should be confirmed from the recruiter's actual follow-up
+        email, not assumed from this recording.</p>
+    </div>
+    <div class="insight">
+      <span class="tag">Compensation</span>
+      <p class="full">[figure redacted] was given as the candidate's current asking figure across
+        active processes, not a number negotiated specifically for this role -- worth checking
+        against whatever his other processes have since produced before it is repeated in a later
+        round.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="08">Applicability</h2>
+
+    <p class="redaction-note"><strong>Redaction note.</strong> External to the recording by
+      construction -- this section maps the video against the reader's own projects and tooling. It
+      is published line by line rather than as a shell: the half of each row that came from the call
+      is kept, and the half that describes private systems is redacted in place and marked
+      <span class="redacted">like this</span>.</p>
+
+    <h3>Daily routine</h3>
+    <p>No infrastructure or workflow change follows from this call by itself. The one action item is
+      administrative: log the process-step list, the screener-name gap and the salary anchor while
+      the call is fresh -- of everything here, those are the details that go stale fastest.</p>
+
+    <h3>Ongoing projects</h3>
+    <table class="apptable">
+      <tr><th>Project / surface</th><th>What to adopt</th><th>What to skip</th></tr>
+      <tr>
+        <td>Interview-process record<br><span class="redacted">[records redacted]</span></td>
+        <td>This round's process-step list, the salary anchor, and the unresolved screener name --
+          the details that go stale fastest.</td>
+        <td>&mdash;</td>
+      </tr>
+      <tr>
+        <td>Behavioural read<br><span class="redacted">[protocol redacted]</span></td>
+        <td>A behavioural pass on this same recording -- talk-time, pacing, how the 60%/40%
+          correction landed, reactions around the "why did you leave" question -- is the dedicated
+          <code>video-autopsy</code> sibling's job.</td>
+        <td>This report does not duplicate that analysis: out of scope by design for the package
+          that produced this file.</td>
+      </tr>
+      <tr>
+        <td>Crypto-trading ML pipeline<br><span class="redacted">[project redacted]</span></td>
+        <td>No direct overlap -- this call is about a hiring process, not pipeline internals.</td>
+        <td>The candidate's personal crypto-trading project described on the call is a separate,
+          unrelated system; keep the two distinct when this document is read later.</td>
+      </tr>
+      <tr>
+        <td>Agent-orchestration practice<br><span class="redacted">[convention redacted]</span></td>
+        <td>The harness described on the call (Opus/Fable orchestrator, Sonnet sub-agents, Opus
+          reviewer, ~300K-token ceiling) is worth a side-by-side: two independently-arrived-at
+          setups agreeing on both a reviewer pattern and a context ceiling is a mild corroborating
+          data point for each.</td>
+        <td>&mdash;</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2 class="section-head" data-num="09">Verdict</h2>
+    <div class="verdict-box">
+      <span class="stamp-big">Filed &amp; Closed -- Pending Take-Home</span>
+      <p class="full" style="color:#f0e9d2; max-width:none;">
+        A standard, well-run recruiter screen: company overview, role scope, candidate background,
+        and a clear process walkthrough, closing with a same-day take-home commitment. Worth the
+        full watch only for someone tracking this specific candidacy -- everyone else's use of this
+        file is the verification method demonstrated in Section 06, which generalizes to any
+        single-engine transcript: repeated short tokens on suspiciously uniform time boundaries are
+        a whisper failure signature worth checking, not a speaker's tic.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    Generated by watch-video-max &middot; transcript: faster-whisper large-v3 &middot;
+    frame rate: 5 fps &middot; local input, no platform metadata available &middot;
+    knowledge doc: tech-interview-screen_knowledge.md &middot;
+    transcript: withheld (not published with this example)
+  </footer>
+
+</div>
+</body>
+</html>
