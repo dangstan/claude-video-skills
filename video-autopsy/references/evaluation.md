@@ -327,6 +327,12 @@ Every run, whatever the recording:
 Tag every causal claim `VERIFIED(<command or artifact>)` or `HYPOTHESIS`. The confidence bar applies
 to what gets WRITTEN into a living document, not only to what is said in chat.
 
+Tag every claim that did NOT come from the recording `[EXTERNAL-RECORD: <source>]`, naming the
+record it came from. On a third-party recording there should be none, and one appearing is worth
+stopping over: it means something outside the footage has entered a document that claims to be
+about the footage. In self-review mode they are expected and governed by "Provenance partition"
+below.
+
 ## The self-review overlay
 
 **This section applies ONLY when the recording is a round the operator themselves sat, and their own
@@ -336,6 +342,42 @@ profile, the ledger and the history it compares against, and it is meaningless w
 
 Each item runs only where the corresponding config key is set. Where one is not, say so in the
 report rather than skipping silently.
+
+### Provenance partition -- settle this BEFORE writing a word of the overlay
+
+Everything above this section reads the RECORDING. This overlay reads the operator's own private
+records instead: the behavioural profile, the claims ledger, the tracker, an assist-tool log, and
+whatever ground truth the operator holds about how the round actually went. Both provenances land in
+one document, and once they are interleaved they cannot be told apart again by reading -- an
+external fact reads exactly like a finding, because the writing is equally confident either way.
+
+So separate them AS YOU WRITE, two ways at once.
+
+**1. A standing source-marker line opening every external-by-construction section.** First line of
+the section, before any prose, in this shape:
+
+```
+> SOURCE: EXTERNAL-RECORD -- ${VA_PROFILE_PATH}. Derived from the operator's own records, NOT
+> from the recording. Nothing below is evidence the footage contains.
+```
+
+Name the real source in place of the placeholder. Four things are external by construction and
+always carry it: the **behavioural check** (profile), the **claims-ledger consistency** pass (roles
+dir), **any calibration of the outcome estimate against the known actual outcome** (tracker, inbox,
+or the operator's own knowledge), and **assist dependence** (assist log). The outcome ESTIMATE
+itself is in-recording by construction -- it is anchored only in what happened in the round, and
+`../SKILL.md` forbids inferring it from anything else -- so it must NOT carry the marker. A marker
+on an in-recording section is not harmless: it makes the mechanical publication strip delete a
+finding that should have survived.
+
+**2. An `[EXTERNAL-RECORD: <source>]` tag on every individual external claim**, including the ones
+that appear OUTSIDE those four sections. External facts leak into the analysis body and the
+limitations list -- a date from a resume, an employment fact, a prior round's result used to frame
+a moment, a scheduling detail. A section marker cannot catch a stray sentence; only the tag can.
+
+Both, not either. The marker makes a section strippable; the tag makes a stray sentence findable. A
+publication pass built on markers alone leaves the strays behind, and one built on tags alone leaves
+section headings that name the private records by their purpose.
 
 ### Outcome estimate
 
@@ -347,10 +389,21 @@ not prove an earlier one cleared -- that inference was made once, upgraded two r
 hypothesis to "confirmed pass", and the premise turned out to be false on checking: nothing had been
 scheduled and the thread had been silent for a week.
 
+**A calibration against the KNOWN ACTUAL OUTCOME is a separate, EXTERNAL sub-section.** If the
+operator already knows how the round went, saying so is external-record content: it comes from an
+inbox, a tracker or their memory, never from the footage. Keep it out of the estimate proper -- an
+estimate written with the answer in hand is not an estimate and is worthless as a calibration -- give
+it its own heading, and open that heading with the EXTERNAL-RECORD marker naming the source.
+
 ### Behavioural check
 
 Against `${VA_PROFILE_PATH}`. The profile carries the operator's known patterns and their standing
 rules -- what they have decided in advance to disclose or refuse.
+
+**External by construction: open the section with the EXTERNAL-RECORD marker naming
+`${VA_PROFILE_PATH}`.** Every cross-round comparison in it is a statement about the operator's
+private history, not about this recording; the round's own behaviour is the only half a reader
+could have seen.
 
 - **Promote a pattern to "confirmed" only when it repeats across rounds.** One occurrence is a data
   point, not a trait.
@@ -376,12 +429,52 @@ Every round creates facts that later rounds must not contradict: numbers, dates,
 responsibility, tool ownership, availability, compensation. Compare what was said this round against
 the ledger in `${VA_ROLES_DIR}/<role>`.
 
+**External by construction: open the section with the EXTERNAL-RECORD marker naming
+`${VA_ROLES_DIR}/<role>`** (and any ground-truth document the comparison leans on). This is the
+sharpest case in the whole overlay. A contradiction is only a contradiction relative to a record
+nobody outside the operator holds, so stating one publishes that record's content even when every
+name in the sentence has been removed.
+
 - Flag every contradiction with both versions quoted.
 - Flag every NEW claim, so it enters the ledger and future rounds stay consistent with it.
 - A claim made loosely in a screen share is still a claim.
 
 ### Assist dependence
 
+**External by construction: open the section with the EXTERNAL-RECORD marker naming
+`${VA_ASSIST_LOG_DIR}` and the tools asked about in Step 4.** The tool names themselves are
+external-record content -- which products the operator runs is not something the footage shows.
+
 Measured by n-gram overlap between an assist-tool log and what was actually said, or explicitly
 **UNMEASURED**. There is no third option. See `../SKILL.md` Step 4 -- the categories matter, the
 absence of a log proves nothing, and inferring from anything else has produced a retraction.
+
+### Publishing a self-review deliverable
+
+The ordered gate lives in `../SKILL.md` under **PUBLICATION** and is not restated here: partition by
+SOURCE, then scrub identifiers, then verify, on every derived surface. What belongs here is the
+verification recipe, because it is the step that decides whether the partition actually held.
+
+Run all of it against the PUBLISHED copies, not the private originals, and run it on the HTML as
+well as the markdown:
+
+```bash
+PUB=<the published directory>
+grep -rn 'EXTERNAL-RECORD' "$PUB"              # expect ZERO: stripped sections leave no tags
+grep -rn 'SOURCE: EXTERNAL-RECORD' "$PUB"      # expect ZERO: no marker survives the strip
+for p in "${VA_PROFILE_PATH}" "${VA_ROLES_DIR}" "${VA_TRACKER_PATH}" "${VA_ASSIST_LOG_DIR}"; do
+  [ -n "$p" ] && grep -rn -- "$p" "$PUB"       # expect ZERO: no private path is quoted
+done
+grep -rniE '<private terms: names, employers, tools, roles>' "$PUB"   # expect ZERO
+grep -rlP '[^\x00-\x7F]' "$PUB"              # ASCII check, transcripts excepted
+```
+
+Zero hits on all of those is necessary and NOT sufficient. Every one of those greps is keyed on a
+string, and the leak this gate exists to stop is keyed on a SOURCE. Finish by READING the surviving
+document with one question in mind -- "could a reader who only had the recording have known this?"
+-- and treat every no as an untagged external claim to remove and, upstream, a missing tag to fix in
+the private original.
+
+State in the published copy, openly, that sections were removed and why. A visible redaction note is
+a better artifact than a document with a silent hole in it, and it stops the next person from
+"restoring" the gap from the private original.

@@ -1,6 +1,6 @@
 ---
 name: video-autopsy
-description: FULL-DEPTH behavioural and technical forensics on a recording of people talking and/or sharing a screen -- meetings, panels, podcasts, conference talks, pair-programming sessions, user interviews, sales calls, lectures, job interviews you sat yourself. Triggers on the keyword "autopsy", "run the autopsy" (optionally naming the recording), "run forensics on this recording", "do a forensics pass", "the whole evaluation treatment", or the explicit form "/video-autopsy <path>". The keyword ALONE runs the complete max-depth treatment with no re-explanation and no asking what depth is wanted -- there is exactly one depth and it is the deepest available. Produces a written analysis (<slug>_autopsy.md, agent-ingestible and evidence-tagged), a human-facing HTML report (<slug>_autopsy.html), and a verbatim transcript (<slug>_transcript.txt). Covers talk-share and turn-taking, continuous-monologue blocks, disfluency counts, silence and pace PER PHASE, speech rate, prosody where diarization supports it, micro-expression bursts at key moments, and screen-share and live-coding forensics read FROM PIXELS (screen-mode classification, typing activity, on-screen errors with the theme control, artifact reconstruction). When the recording is a round the OPERATOR THEMSELVES sat, a self-review overlay adds an outcome estimate with quoted timestamped evidence, a behavioural check against their own profile, a claims-ledger consistency pass, and an assist-dependence measurement -- that overlay is opt-in per run and is never assumed. Transcription is ALWAYS the verbatim whisper tier -- a supplied or platform transcript does NOT satisfy this skill, because cleaned-up transcripts strip the disfluencies and blur the segment timings this analysis is built on. IF THE RECORDING IS CONTENT-BEARING -- one presenter, and the subject is the MATERIAL rather than the exchange (a tutorial, talk, lecture, demo, screencast) -- USE THE SIBLING PACKAGE "watch-video-max" INSTEAD: every behavioural metric here is degenerate by construction on a single-presenter edited screencast. For a cheap content pass that reuses an existing transcript, use "watch-video".
+description: FULL-DEPTH behavioural and technical forensics on a recording of people talking and/or sharing a screen -- meetings, panels, podcasts, conference talks, pair-programming sessions, user interviews, sales calls, lectures, job interviews you sat yourself. Triggers on the keyword "autopsy", "run the autopsy" (optionally naming the recording), "run forensics on this recording", "do a forensics pass", "the whole evaluation treatment", or the explicit form "/video-autopsy <path>". The keyword ALONE runs the complete max-depth treatment with no re-explanation and no asking what depth is wanted -- there is exactly one depth and it is the deepest available. Produces a written analysis (<slug>_autopsy.md, agent-ingestible and evidence-tagged), a human-facing HTML report (<slug>_autopsy.html), and a verbatim transcript (<slug>_transcript.txt). Covers talk-share and turn-taking, continuous-monologue blocks, disfluency counts, silence and pace PER PHASE, speech rate, prosody where diarization supports it, micro-expression bursts at key moments, and screen-share and live-coding forensics read FROM PIXELS (screen-mode classification, typing activity, on-screen errors with the theme control, artifact reconstruction). When the recording is a round the OPERATOR THEMSELVES sat, a self-review overlay adds an outcome estimate with quoted timestamped evidence, a behavioural check against their own profile, a claims-ledger consistency pass, and an assist-dependence measurement -- that overlay is opt-in per run and is never assumed, and its deliverables are PRIVATE BY DEFAULT because they cross-reference the operator's own records rather than the recording (publishing one requires the ordered PUBLICATION gate: strip external-record content FIRST, then scrub identifiers). Transcription is ALWAYS the verbatim whisper tier -- a supplied or platform transcript does NOT satisfy this skill, because cleaned-up transcripts strip the disfluencies and blur the segment timings this analysis is built on. IF THE RECORDING IS CONTENT-BEARING -- one presenter, and the subject is the MATERIAL rather than the exchange (a tutorial, talk, lecture, demo, screencast) -- USE THE SIBLING PACKAGE "watch-video-max" INSTEAD: every behavioural metric here is degenerate by construction on a single-presenter edited screencast. For a cheap content pass that reuses an existing transcript, use "watch-video".
 ---
 
 # video-autopsy
@@ -387,6 +387,8 @@ This is the deliverable. `references/evaluation.md` carries the full contract; t
 **In SELF-REVIEW mode only (Step 0a), the overlay adds:** outcome estimate, behavioural check
 against `${VA_PROFILE_PATH}`, claims-ledger consistency against `${VA_ROLES_DIR}/<role>`, and assist
 dependence (measured or explicitly UNMEASURED). Full rubric in `references/evaluation.md`.
+**Those sections read the operator's private records rather than the recording**, so they carry the
+provenance markers and `[EXTERNAL-RECORD]` tags defined there, without exception.
 
 Three standing rules, all learned expensively:
 
@@ -408,8 +410,15 @@ descriptive prose. ASCII only.
 Agent-ingestible and evidence-tagged, written so a later run or another assistant can be handed it
 as context. Provenance tags inline: `[TRANSCRIPT hh:mm]` quoted verbatim | `[FRAME n / mm:ss]` read
 from pixels | `[MEASURED]` computed, with the method named | `[HYPOTHESIS]` inference | `[NULL]`
-the evidence could not answer it. Tag at least every number, every reaction claim and any outcome
-estimate.
+the evidence could not answer it | `[EXTERNAL-RECORD: <source>]` taken from a record OUTSIDE the
+recording -- the operator's profile, claims ledger, tracker, assist log or personal ground truth --
+naming which one. Tag at least every number, every reaction claim and any outcome estimate.
+
+**`[EXTERNAL-RECORD]` is mandatory and it is not decoration.** Every other tag says the claim came
+from the recording; this one says it did NOT. It is the only thing that lets a later publication
+pass separate the two provenances mechanically (see PUBLICATION below), and the only thing that
+stops a reader from taking a private-record fact for something the footage showed. Any claim in the
+document that is not traceable to the transcript, the frames, or a measurement over them carries it.
 
 Structure: header (what the recording is, participants, date, duration, **the two Step 0a modes**,
 transcript tier, audio-capture result, attribution method, frame rate) -> the analysis of the
@@ -417,7 +426,12 @@ subject -> what landed / what did not -> the metric passes with their numbers, p
 and technical findings -> narration-vs-screen discrepancies -> limitations.
 
 **In SELF-REVIEW mode only**, insert after the analysis: outcome estimate -> behavioural check ->
-claims ledger -> assist dependence.
+claims ledger -> assist dependence. **Every one of those except the outcome estimate itself is
+EXTERNAL-BY-CONSTRUCTION** -- built from the operator's private records rather than from the
+recording -- and each MUST open with the standing source-marker line defined in
+`references/evaluation.md` ("Provenance partition"), with `[EXTERNAL-RECORD: <source>]` on its
+individual claims. A run that writes those sections without markers has produced a document that
+cannot afterwards be prepared for publication by any mechanical pass.
 
 ### 2. `<slug>_autopsy.html` -- the human-facing report
 
@@ -448,6 +462,41 @@ configured-empty targets, but SAY in the report which updates were skipped and w
    rounds, so never rewrite a past entry.
 2. Update the role file in `${VA_ROLES_DIR}` with outcome and next steps.
 3. Append a row to `${VA_TRACKER_PATH}`.
+
+## PUBLICATION -- a self-review deliverable is PRIVATE BY DEFAULT
+
+**SELF-REVIEW MODE ONLY.** A third-party autopsy describes the recording and nothing else; this
+section does not apply to it.
+
+A self-review autopsy is not a shareable artifact, and nothing in the run should treat it as one.
+The overlay cross-references the operator's private records BY DESIGN, so the finished document
+carries two provenances at once: what the recording contained, and what their own history contains.
+Filing is already split for this reason -- `VA_OUTPUT_DIR` is deliberately not `WV_OUTPUT_DIR` --
+but a filing location is not a publication gate.
+
+**When any part of a self-review deliverable is to be published or shown outside the operator --
+a portfolio, a public examples tree, a demo, a colleague, a screenshot -- run this gate IN THIS
+ORDER:**
+
+1. **Partition by SOURCE first.** Remove, or redact to a stated shell, every section carrying the
+   standing EXTERNAL-RECORD marker line, and every individual claim carrying an
+   `[EXTERNAL-RECORD: ...]` tag. This is a mechanical pass over markers and tags -- not a judgment
+   call about what happens to look sensitive.
+2. **Then scrub identifiers** in whatever survived step 1: names, employers, roles, dates, figures,
+   local paths, tool names.
+3. **Then verify by grep**, on the published copy: the tag string itself, each configured source
+   path, and every private term the scrub was meant to remove. Then read the survivors for external
+   content that carries NO tag -- an untagged external claim is the failure mode the tag exists to
+   make visible, and grep cannot find it for you.
+4. **Apply all of it to every derived surface.** The HTML report mirrors the markdown. A redaction
+   made in one and not the other publishes the content anyway, and the HTML is the copy people
+   actually open.
+
+**Step 1 cannot be skipped by doing step 2 harder.** A scrub keyed on IDENTIFIERS cannot contain a
+PROVENANCE leak. "The ledger shows a claim that contradicts an earlier round" names nobody, passes
+every name check, and still publishes both the existence and the content of a private record. That
+is not hypothetical: it was found in a real published example on 2026-08-31, after a full identifier
+scrub had already been run and had passed clean.
 
 ## FINAL CLEAN PHASE (mandatory last step)
 
@@ -507,6 +556,10 @@ alive before finishing.
   third-party recording, do not produce an outcome estimate, open the profile, or touch the ledger
   or tracker -- that apparatus assumes the operator owns the history it compares against, and its
   output is a private document about a private performance.
+- **A self-review deliverable is PRIVATE BY DEFAULT** and leaves that state only through the
+  PUBLICATION gate above: partition by SOURCE (strip EXTERNAL-RECORD sections and tags), THEN scrub
+  identifiers, then verify, on every derived surface. The reverse order does not work -- a name
+  scrub cannot contain a provenance leak.
 - **A report whose body is measurements has failed.** The deliverable analyses the recording's
   subject; the numbers are how you got there. A degenerate metric gets one line and is dropped.
 - **This package does not study content.** If the subject turns out to be the MATERIAL rather than
