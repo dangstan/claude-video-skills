@@ -3,6 +3,16 @@
 > SANITIZED EXAMPLE: real output of a real run. External-record sections were removed
 > whole, identifiers scrubbed, and quasi-identifiers coarsened -- exact start time, exact
 > duration and job titles do not appear. The recording and its transcript are withheld.
+> COVERAGE IS ROUNDED, and it is rounded for a reason worth stating. This document
+> originally published the measured window as a seconds pair whose denominator was the
+> recording's exact length to the second, so the coarsened duration above was being
+> contradicted three sections below it by arithmetic, and the publication gate did not
+> catch it because it was scanning for the duration written as a duration. Dropping the
+> denominator alone would not have been enough either: the numerator divided by an exact
+> percentage recovers it to within a second. Coverage therefore ships here as the window
+> in mm:ss plus a percentage rounded to the nearest five. (This note itself quoted the
+> original seconds pair verbatim until the gate refused its own explanation -- a tombstone
+> that repeats the removed value re-publishes it.)
 
 
 This is a second pass over a recording already autopsied on an earlier pass. It was run to exercise the
@@ -31,7 +41,7 @@ unchanged and is not restated at length; what follows concentrates on what the r
 - **Audio-capture check**: two channels present; the earlier run measured mean -14.0 dB with the two
   channels the same signal. Not re-measured this run.
 - **Frame rate**: 5 fps, frames extracted fresh this run, and the frame count matches 5 fps across the full duration exactly, so the extraction is complete rather than truncated.
-- **Measured window (export-derived metrics)**: 0:00-25:52 = **82% of the recording**.
+- **Measured window (export-derived metrics)**: 0:00-25:52 = **about 80% of the recording**.
   Whisper-derived metrics are NOT restricted to this window; see the language finding below.
 
 ## What this re-run measured, and where it corrects the earlier pass
@@ -73,7 +83,7 @@ repeated as fact.
 
 ## The metric passes
 
-**Measured window for export-derived metrics: 0:00-25:52, 1552s of 1892s, 82.0% coverage.**
+**Measured window for export-derived metrics: 0:00-25:52, about 80% of the recording.**
 
 - **Talk-share** [MEASURED, export word counts, clean window]: the candidate 65.8% (2,344 words, 50 turns);
   the recruiter 34.2% (1,220 words, 48 turns). The earlier pass reported 65.9/34.1 on the same basis.
