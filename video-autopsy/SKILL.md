@@ -211,6 +211,29 @@ A residual autocorrelation peak at 10-150 ms is ordinary room reverb, not a dupl
 channels that genuinely differ -- a difference ratio well above 1%, correlation clearly below 1, or
 one channel lagging the other -- justify alignment or subtraction.
 
+**CORRELATION DECIDES, THE RATIO ONLY DESCRIBES -- and the reason is a dead zone measured on
+2026-08-31.** The two sentences above leave a gap wide enough to swallow an ordinary produced
+podcast. A 45-minute published interview measured `rms(L-R)/rms(L) = 1.700%` with correlation at
+lag 0 of `0.999855` and a cross-correlation peak at EXACTLY 0 samples over a +/-100 ms search. That
+is not "below about 1%", so it is not the same-signal branch; and it is not "well above 1%" with
+correlation "clearly below 1", so it is not the genuinely-different branch either. The rule as
+written returns NO verdict there, and a mechanical reading of it returns the WRONG one: the first
+implementation of this check thresholded on the ratio alone, printed "channels genuinely differ",
+and would have sent the run into alignment work on a file whose channels correlate at four nines.
+
+So order the two tests instead of listing them:
+
+1. **Correlation at lag 0 >= 0.999 AND peak lag 0** -> the channels are the SAME SIGNAL whatever the
+   ratio says. A 1-3% difference ratio at that correlation is stereo width or lossy channel
+   coupling, not a second source. `-ac 1` and move on.
+2. **Correlation below about 0.99, or a non-zero peak lag** -> genuinely different, and the ratio
+   tells you how much. This is the only branch that justifies alignment or subtraction.
+3. **Between the two** -> say so in the report as an unresolved audio note, downmix anyway, and do
+   not claim a per-channel result.
+
+**Write the branch you took into the transcript header**, with all three numbers. A ratio alone
+does not reconstruct the decision, which is how a dead zone survives being measured.
+
 ## Step 1 -- Frame extraction, at 5 fps MINIMUM
 
 ```bash
@@ -430,7 +453,16 @@ it for the whole call, and a scope stated afterwards cannot reach them.
   degraded span. That exact artifact appeared in a real run and was caught only by reading the
   turns; report the inspection either way.
 - **Never state a coverage fraction you did not compute.** Covered seconds over total seconds, both
-  printed.
+  printed -- **in the WORKING document.** On a PRIVATE source that is later published, that pair IS
+  the exact recording duration and this rule collides head-on with the quasi-identifier table under
+  PUBLICATION below. **Measured on 2026-08-31**: the shipped `tech-interview-screen` re-run document
+  published `1552s of 1892s, 82.0% coverage` and the gate read CLEAN, while refusing `31m32s` -- the
+  same quantity, one form coarser -- in a control planted in the same directory. The concrete rule
+  won because it runs first, and the leak arrived by arithmetic after a scrub that had passed.
+  **Dropping the denominator is not the fix**: the numerator over the percentage recovers it to
+  within a second, and so does the window end over the percentage. The publication conversion is in
+  the Coverage row of that table; it is a conversion, not a deletion, because a reader still has to
+  be able to see which span was excluded.
 
 In outline:
 
@@ -602,6 +634,7 @@ ORDER:**
    | Start time | dropped entirely | `17:13:23 BRT`, or any wall clock with a zone |
    | Date | the month (`August 2026`) | `2026-08-25` |
    | Duration | rounded to 5 minutes (`about 30 minutes`) | `31m32s`, `1892.7s` |
+   | Coverage of the measured window | the window in mm:ss plus a percentage rounded to 5 (`0:00-25:52, about 80% of the recording`) | `1552s of 1892s, 82.0%` -- the denominator is the duration to the second, and numerator-over-percentage recovers it even if you drop the denominator |
    | Job title | the family (`a senior engineering role`) | `Lead AI Engineer` |
    | Counterparty title | the function (`a recruiter`) | `Talent Acquisition and People Ops Manager` |
    | Organisation | the sector, if load-bearing | a description narrow enough to name one company |
@@ -679,6 +712,17 @@ applies to the pipeline's own working copy.)
 4. Never deleted, ever: user-supplied recordings, transcripts, and any other input the pipeline
    did not create, plus the final deliverables (autopsy md/html, transcript). Everything else
    this pipeline created is scratch and dies with the run.
+5. **A scratch script must never reach a COMMIT.** Rules 1-3 govern the working directory, and a
+   version-controlled package is a second surface they do not reach: a file copied out of scratch
+   into the package tree is not in `${WV_WORK_DIR}` any more, so no reaper will ever see it again.
+   Found on 2026-08-31, live and public: `video-assets pace.py` -- a throwaway per-phase pace
+   script -- had been committed into the published package and served at HTTP 200, carrying a
+   `/tmp/<scratch>/<run>_segments.json` path and the exact second-boundaries of a PRIVATE
+   recording, including the duration that the publication gate refuses in its other spelling.
+   Before committing any package change, list what is staged and confirm every file is part of the
+   package. **Do NOT try to cover this by pointing `publish_check.sh` at the package tree**: that
+   was tried and it refuses the package's own documentation, because the gate's own prose and
+   self-test fixtures QUOTE the strings it bans. A gate cannot tell a leak from its own tombstone.
 
 Delete: `${WV_WORK_DIR}/<slug>_frames/` including all `burst_*` sheets;
 `${WV_WORK_DIR}/<slug>_audio.wav` and any channel splits or segment cuts;

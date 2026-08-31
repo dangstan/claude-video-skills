@@ -79,6 +79,16 @@ run_checks() {
   grep_check tilde-path FAIL \
     '~/[A-Za-z0-9._-]+/' \
     'a shell-abbreviated private path survived the scrub'
+  # A scratch path is not somebody home directory, so the two checks above never see it -- and a
+  # run's scratch directory names the run. Found on 2026-08-31 in the PUBLISHED package: a
+  # throwaway analysis script (video-autopsy/pace.py) had been committed alongside the skill,
+  # carrying "/tmp/wv-scratch/sierra_rerun_segments.json" and the private recording's phase
+  # boundaries. Two path segments minimum, so the documented default "${TMPDIR:-/tmp}/video-autopsy"
+  # and the worked example "/tmp/ch_l.wav" do NOT fire -- those name a directory or a generic file,
+  # not an artifact of one run.
+  grep_check scratch-path FAIL \
+    '/(?:var/)?tmp/[A-Za-z0-9._-]+/[A-Za-z0-9._-]+' \
+    'a scratch path with a run artifact in it survived -- the directory name and the filename both describe one private run'
 
   local term
   for term in "${PRIVATE_TERMS[@]}"; do
@@ -104,6 +114,19 @@ run_checks() {
   grep_check exact-duration "$qi_sev" \
     '\b\d{1,3}m\d{2}s\b|\bduration[^.\n]{0,20}\d{1,2}:\d{2}:\d{2}' \
     'an exact recording duration survived -- round it, or a calendar entry matches it'
+  # The exact duration also arrives by ARITHMETIC, and at higher precision than the form above.
+  # A measured-window line reads "1552s of 1892s, 82.0% coverage" -- and that denominator IS the
+  # recording length to the second. Step 6 of SKILL.md orders both numbers printed; the table above
+  # orders the duration rounded. On a private source those two rules collide, the concrete one
+  # wins, and the leak passes every other check here. Measured on the shipped tech-interview-screen
+  # example on 2026-08-31: the gate read CLEAN while the document published 1892s, which is the
+  # same 31m32s that red:duration refuses.
+  # The pattern is deliberately narrow -- a seconds count on BOTH sides of "of" or "/". A bare
+  # "4.16s at 27:51" or "974s" is a span inside the recording and must not fire, or the check
+  # fires on every autopsy ever written and stops carrying information.
+  grep_check coverage-denominator "$qi_sev" \
+    '\b\d{2,7}(?:\.\d+)?\s*(?:s|sec|secs|seconds)\b\s*(?:of|/|out of)\s*\b\d{2,7}(?:\.\d+)?\s*(?:s|sec|secs|seconds)\b' \
+    'a coverage pair printed its DENOMINATOR in seconds -- that is the recording length to the second, the exact-duration quasi-identifier arriving by arithmetic'
   grep_check calendar-date WARN \
     '\b\d{4}-\d{2}-\d{2}\b' \
     'a full calendar date is present -- legitimate for a published source, identifying for a private one'
@@ -126,12 +149,24 @@ run_checks() {
   # A redaction made in the markdown and not the HTML publishes the content anyway, and the HTML is
   # the copy people open. Everything above already walks the whole tree; this only asserts that the
   # HTML mirror is actually present to have been walked.
-  local n_md n_html
-  n_md=$(find "$DIR" -type f -name '*.md' 2>/dev/null | wc -l)
-  n_html=$(find "$DIR" -type f -name '*.html' 2>/dev/null | wc -l)
-  if [ "$n_md" -gt 0 ] && [ "$n_html" -eq 0 ]; then
+  # PER DOCUMENT, not per directory. The directory-level form of this check counted any .html in
+  # the tree as vouching for every .md in it, so a second markdown document dropped into a
+  # directory that already had one mirrored report read GREEN while shipping unmirrored. That is
+  # exactly how the tech-interview-screen re-run document sat beside its parent's HTML with no
+  # mirror of its own from the day it shipped until 2026-08-31, with the gate clean throughout.
+  local md stem unmirrored=""
+  while IFS= read -r md; do
+    [ -z "$md" ] && continue
+    stem="${md%.md}"
+    [ -f "${stem}.html" ] && continue
+    # A README documents the directory; it is not a findings surface and needs no mirror.
+    case "$(basename "$stem")" in README|readme|index) continue ;; esac
+    unmirrored="${unmirrored}${md}"$'\n'
+  done < <(find "$DIR" -type f -name '*.md' 2>/dev/null)
+  if [ -n "$unmirrored" ]; then
     report WARN html-mirror-absent \
-      'markdown is present with no HTML mirror -- if the mirror exists elsewhere it was NOT scanned'
+      'a markdown document has no HTML mirror of its own -- if a mirror exists elsewhere it was NOT scanned'
+    printf '%s' "$unmirrored" | sed 's/^/      /'
   fi
 }
 
@@ -199,12 +234,69 @@ EOF
   red red:marker     x_autopsy.md   '> SOURCE: EXTERNAL-RECORD -- the operator profile.'                 external-record-marker
   red red:homepath   x_autopsy.md   'Frames landed in /home/someone/scratch/frames.'                     absolute-home-path
   red red:tildepath  x_autopsy.md   'The profile lives at ~/records/profile.md.'                          tilde-path
+  red red:scratch    x_autopsy.md   'Segments were read from /tmp/wv-scratch/thisrun_segments.json.'      scratch-path
   red red:wallclock  x_autopsy.md   'The meeting started 17:13:23 BRT.'                                  wallclock-with-timezone
   red red:datetime   x_autopsy.md   'Session began 2026-08-25 17:13:23 by the export header.'            date-plus-time-to-the-second
   red red:duration   x_autopsy.md   'Recording length 31m32s end to end.'                                exact-duration
+  red red:coverage   x_autopsy.md   'Measured window 0:00-25:52, 1552s of 1892s, 82.0 percent coverage.' coverage-denominator
   red red:privterm   x_autopsy.md   'The call was with Acme Robotics.'                                   private-term "Acme Robotics"
   # the surface control: the fault exists ONLY in the HTML mirror
   red red:html-only  x_autopsy.html '<p>Profile note [EXTERNAL-RECORD: profile].</p>'                    external-record-tag
+
+  # NEGATIVE control for coverage-denominator. A check narrow enough to be useful has to be shown
+  # NOT firing on the thing it deliberately spares: span durations, which every autopsy prints by
+  # the dozen. Without this leg the pattern could be widened to "any bare Ns" and still read GREEN
+  # on every red control above, while refusing every honest document.
+  mk_clean
+  printf 'The five longest gaps are 4.16s at 27:51 and 2.96s at 26:11; the longest block ran 974s.\n' \
+    >> "$tmp/pub/x_autopsy.md"
+  DIR="$tmp/pub"; SOURCE_KIND="private"; PRIVATE_TERMS=()
+  out=$(run_checks 2>&1)
+  if printf '%s' "$out" | grep -q '^FAIL coverage-denominator'; then
+    printf 'FAIL  %-28s span durations tripped it -- the check fires on every autopsy\n' "green:spans"
+    fails=$((fails + 1))
+    printf '%s\n' "$out" | sed 's/^/      /'
+  else
+    printf 'PASS  %-28s span durations do NOT trip coverage-denominator\n' "green:spans"
+  fi
+
+  # NEGATIVE control for scratch-path. The package's own documentation names a scratch DIRECTORY
+  # and a generic worked-example file, and neither is a leak. If this leg ever fires, the pattern
+  # has been widened to the point where the gate refuses the skill's own README.
+  mk_clean
+  printf 'Scratch lives under ${TMPDIR:-/tmp}/video-autopsy, and the split writes /tmp/ch_l.wav.\n' \
+    >> "$tmp/pub/x_autopsy.md"
+  DIR="$tmp/pub"; SOURCE_KIND="private"; PRIVATE_TERMS=()
+  out=$(run_checks 2>&1)
+  if printf '%s' "$out" | grep -q '^FAIL scratch-path'; then
+    printf 'FAIL  %-28s a documented scratch DIRECTORY tripped it -- the gate refuses its own docs\n' "green:scratchdoc"
+    fails=$((fails + 1))
+    printf '%s\n' "$out" | sed 's/^/      /'
+  else
+    printf 'PASS  %-28s documented scratch dir + generic temp file do NOT trip scratch-path\n' "green:scratchdoc"
+  fi
+
+  # html-mirror, the case the DIRECTORY-level form could not see: a second markdown document in a
+  # directory that already contains a mirrored pair. The clean fixture is the negative control for
+  # the same check -- x_autopsy.md has x_autopsy.html, so it must stay silent.
+  mk_clean
+  DIR="$tmp/pub"; SOURCE_KIND="private"; PRIVATE_TERMS=()
+  out=$(run_checks 2>&1)
+  if printf '%s' "$out" | grep -q 'html-mirror-absent'; then
+    printf 'FAIL  %-28s a mirrored pair still warned -- the check cannot pass\n' "green:mirrorpair"
+    fails=$((fails + 1))
+  else
+    printf 'PASS  %-28s a mirrored .md/.html pair does NOT warn\n' "green:mirrorpair"
+  fi
+  printf '# Re-run notes\n\nA second document, with no mirror of its own.\n' > "$tmp/pub/x_rerun_autopsy.md"
+  out=$(run_checks 2>&1)
+  if printf '%s' "$out" | grep -q 'html-mirror-absent' && printf '%s' "$out" | grep -q 'x_rerun_autopsy.md'; then
+    printf 'PASS  %-28s unmirrored 2nd doc warned, and the file was NAMED\n' "amber:mirror-per-doc"
+  else
+    printf 'FAIL  %-28s unmirrored 2nd doc beside a mirrored pair was not caught\n' "amber:mirror-per-doc"
+    fails=$((fails + 1))
+    printf '%s\n' "$out" | sed 's/^/      /'
+  fi
 
   # non-ASCII gets its own fixture because it cannot be planted as an ASCII heredoc line
   mk_clean
