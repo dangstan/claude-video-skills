@@ -411,8 +411,9 @@ Agent-ingestible and evidence-tagged, written so a later run or another assistan
 as context. Provenance tags inline: `[TRANSCRIPT hh:mm]` quoted verbatim | `[FRAME n / mm:ss]` read
 from pixels | `[MEASURED]` computed, with the method named | `[HYPOTHESIS]` inference | `[NULL]`
 the evidence could not answer it | `[EXTERNAL-RECORD: <source>]` taken from a record OUTSIDE the
-recording -- the operator's profile, claims ledger, tracker, assist log or personal ground truth --
-naming which one. Tag at least every number, every reaction claim and any outcome estimate.
+recording -- the operator's profile, claims ledger, tracker, assist log, personal ground truth,
+**their own brief or instructions to this run**, or **private filesystem state** (which files exist,
+their mtimes, what a private directory holds) -- naming which one. Tag at least every number, every reaction claim and any outcome estimate.
 
 **`[EXTERNAL-RECORD]` is mandatory and it is not decoration.** Every other tag says the claim came
 from the recording; this one says it did NOT. It is the only thing that lets a later publication

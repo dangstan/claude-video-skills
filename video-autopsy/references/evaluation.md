@@ -371,9 +371,29 @@ on an in-recording section is not harmless: it makes the mechanical publication 
 finding that should have survived.
 
 **2. An `[EXTERNAL-RECORD: <source>]` tag on every individual external claim**, including the ones
-that appear OUTSIDE those four sections. External facts leak into the analysis body and the
-limitations list -- a date from a resume, an employment fact, a prior round's result used to frame
-a moment, a scheduling detail. A section marker cannot catch a stray sentence; only the tag can.
+that appear OUTSIDE those four sections. External facts leak into the analysis body, the
+limitations list and the anomalies list -- a date from a resume, an employment fact, a prior round's
+result used to frame a moment, a scheduling detail. A section marker cannot catch a stray sentence;
+only the tag can.
+
+**Two source classes are easy to miss, and both have leaked past a clean identifier scrub:**
+
+- **The operator's own brief or instructions to this run.** A run is briefed, and the briefing is
+  routinely wrong about something the footage then settles. Noting that is useful PRIVATELY. But the
+  brief is not in the recording, so any sentence of the form "the operator said X, and the evidence
+  shows otherwise" is external-record content, and in a published copy it is also an accusation
+  about a person aimed at a reader who has no way to judge it. Tag it, and expect the publication
+  gate to remove it.
+- **Private filesystem state**: which files exist, their mtimes, what a private directory holds.
+  An mtime is evidence about the operator's disk, never about the recording.
+
+Both classes bit on 2026-08-31. An anomaly reading "an export the operator said did not exist
+appeared on disk mid-run ... with an mtime later than that stated check" shipped into a public
+examples tree. It named nobody, cleared every identifier grep, and still published a private
+directory's contents, a private file's mtime, and an implied accusation that the operator had
+misreported a check. It survived because the enumeration of external sources above did not name
+these two classes -- so the run never tagged it, and a gate that strips by tag cannot strip what was
+never tagged.
 
 Both, not either. The marker makes a section strippable; the tag makes a stray sentence findable. A
 publication pass built on markers alone leaves the strays behind, and one built on tags alone leaves
