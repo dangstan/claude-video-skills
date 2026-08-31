@@ -367,9 +367,29 @@ Every individual observation in that report was correct. The map was not.
   all of these tell you whose machine it is, and nothing at all about who is talking over it. A
   single share frame can show every participant's camera at once; reading identity off one is how
   a whole map gets inverted.
+- **Turn markers give BOUNDARIES, not IDENTITY. Never convert one into the other by alternation.**
+  A caption track's `>>` markers, a diarizer's segment breaks and a transcript's paragraph splits
+  all say *the speaker changed here*. None of them says *to whom*. Walking them in strict
+  alternation from a confidently identified opening turn converts a boundary signal into an
+  identity signal, and that conversion is valid only if NO boundary was ever missed. On an edited
+  recording it is guaranteed to fail, because a hard cut -- into an advertisement, a jump cut, a
+  spliced-in remote segment -- is not a speaker change any caption model can see. The marker is
+  simply absent, and the parity INVERTS for the whole remainder of the file.
+  Measured on a 2026-08-31 re-run: 68 markers; alternation correct for seven turns, then inverted
+  at a cut into a pre-recorded sponsor read and wrong from there on, with four further markers
+  missing later in the same file. **That is the same whole-map inversion as the bullet above,
+  reached from the opposite direction** -- which is the actual lesson here. Hardening one route to
+  a wrong map does not harden the others, and two independent methods failing at the same
+  timestamp is not coincidence, it is the edit.
+  Settle each turn from an INDEPENDENT signal and report the agreement rate. On that file a
+  frame-derived screen-mode classification over all 13,625 frames settled the sponsor span (a
+  dark-UI share carrying one webcam inset), and the resulting map was then controlled at 95.5%
+  across 368.4 s of single-speaker full-frame footage the attribution had never consulted.
+  **Expect merged turns at every editor cut, and split them by hand.**
 - **If the map rests on one source only, say so and tag every attribution `[HYPOTHESIS]`.** An
   unverified map does not make attribution slightly less certain; it makes each attribution a coin
-  flip that the report states as fact.
+  flip that the report states as fact. The same applies to a map derived from alternation alone:
+  that is one source, not two, however many markers it walked.
 
 **VERIFY THE TIMESTAMP OFFSET PER RECORDING, BEFORE CUTTING ANY FRAMES.** Recorders commonly start
 capturing before the session connects, so export time and video time differ by tens of seconds --
@@ -535,8 +555,10 @@ document that is not traceable to the transcript, the frames, or a measurement o
 
 Structure: header (what the recording is, participants, date, duration, **the two Step 0a modes**,
 **the source provenance from Step 0b**, **the face-to-name map and the evidence for it**, transcript
-tier, audio-capture result, attribution method, **the measured window and its coverage**, frame
-rate) -> the analysis of the subject -> what landed / what did not -> the metric passes with their
+tier, audio-capture result, **the attribution method AND the independent signal that settled it,
+with the agreement rate over a span the attribution never consulted** (say "single source,
+[HYPOTHESIS]" when there was none -- an omitted cross-check reads as a performed one), **the
+measured window and its coverage**, frame rate) -> the analysis of the subject -> what landed / what did not -> the metric passes with their
 numbers, per phase -> screen and technical findings -> narration-vs-screen discrepancies ->
 limitations -> run notes.
 
@@ -573,8 +595,8 @@ of it usefully.
 ### 3. `<slug>_transcript.txt`
 
 The verbatim transcript of record, with a header naming the model, device, compute type, language,
-the audio-capture check result, the attribution method, and which fallback path (if any) produced
-it.
+the audio-capture check result, the attribution method and the signal that cross-checked it, and
+which fallback path (if any) produced it.
 
 ### Document updates, same session -- SELF-REVIEW MODE ONLY
 

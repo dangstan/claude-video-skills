@@ -51,6 +51,15 @@ transcript they are a NULL, not a zero.
 
 ## Inference traps
 
+**A turn boundary is not a speaker identity.** Caption `>>` markers, diarizer segment breaks and
+paragraph splits mark THAT the speaker changed, never TO WHOM. Alternating over them from a known
+opening is only valid if no boundary was ever missed, and an edited recording breaks that at every
+hard cut, where no caption model can see a change. Measured: 68 markers, correct for seven turns,
+then inverted at a cut into a pre-recorded sponsor read and wrong for the rest of the file. It
+produced the same inverted face-to-name map as reading identity off a personalised screen -- a
+failure the package had already been hardened against by the other route. Settle turns from an
+independent signal and report the agreement rate over a span the attribution never used.
+
 **Downstream thread state does not establish an earlier round's outcome.** Reasoning that a
 later-stage round being pending proves an earlier one cleared upgraded two rounds from HYPOTHESIS
 to "CONFIRMED PASS". On checking, nothing had been scheduled and the thread had been silent for a
