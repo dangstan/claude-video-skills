@@ -361,10 +361,13 @@ the section, before any prose, in this shape:
 > from the recording. Nothing below is evidence the footage contains.
 ```
 
-Name the real source in place of the placeholder. Four things are external by construction and
+Name the real source in place of the placeholder. Five things are external by construction and
 always carry it: the **behavioural check** (profile), the **claims-ledger consistency** pass (roles
 dir), **any calibration of the outcome estimate against the known actual outcome** (tracker, inbox,
-or the operator's own knowledge), and **assist dependence** (assist log). The outcome ESTIMATE
+or the operator's own knowledge), **assist dependence** (assist log), and the **run notes** section
+(`../SKILL.md`, Deliverables) -- everything the run learned about the machine rather than the
+recording. The run-notes section carries the marker in BOTH modes, self-review or not: a scratch
+directory's contents describe a private disk whoever the recording is of. The outcome ESTIMATE
 itself is in-recording by construction -- it is anchored only in what happened in the round, and
 `../SKILL.md` forbids inferring it from anything else -- so it must NOT carry the marker. A marker
 on an in-recording section is not harmless: it makes the mechanical publication strip delete a
@@ -475,19 +478,22 @@ The ordered gate lives in `../SKILL.md` under **PUBLICATION** and is not restate
 SOURCE, then scrub identifiers, then verify, on every derived surface. What belongs here is the
 verification recipe, because it is the step that decides whether the partition actually held.
 
-Run all of it against the PUBLISHED copies, not the private originals, and run it on the HTML as
-well as the markdown:
+Run it against the PUBLISHED copies, not the private originals, on a directory holding the HTML as
+well as the markdown. **The recipe is a script now** -- `../publish_check.sh` -- because running
+these greps by hand is exactly what was believed to have happened on the two occasions a private
+record shipped anyway:
 
 ```bash
-PUB=<the published directory>
-grep -rn 'EXTERNAL-RECORD' "$PUB"              # expect ZERO: stripped sections leave no tags
-grep -rn 'SOURCE: EXTERNAL-RECORD' "$PUB"      # expect ZERO: no marker survives the strip
-for p in "${VA_PROFILE_PATH}" "${VA_ROLES_DIR}" "${VA_TRACKER_PATH}" "${VA_ASSIST_LOG_DIR}"; do
-  [ -n "$p" ] && grep -rn -- "$p" "$PUB"       # expect ZERO: no private path is quoted
-done
-grep -rniE '<private terms: names, employers, tools, roles>' "$PUB"   # expect ZERO
-grep -rlP '[^\x00-\x7F]' "$PUB"              # ASCII check, transcripts excepted
+bash ../publish_check.sh <the published directory> --source private \
+     --private-term 'a name' --private-term 'an employer'
+bash ../publish_check.sh --self-test     # 12 controls: one planted fault per check, plus a clean fixture
 ```
+
+It carries the checks the old hand recipe listed -- surviving tags and markers, each configured
+`VA_*` / `WV_*` path, declared private terms, ASCII -- and adds absolute and tilde paths, the
+quasi-identifier set, and a check that the HTML mirror is present to have been scanned. The ASCII
+check uses `iconv` rather than a character class, because `grep '[^[:print:]]'` reads GREEN on
+non-ASCII under several locales and would have been a check that cannot fire.
 
 Zero hits on all of those is necessary and NOT sufficient. Every one of those greps is keyed on a
 string, and the leak this gate exists to stop is keyed on a SOURCE. Finish by READING the surviving

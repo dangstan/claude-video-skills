@@ -170,6 +170,12 @@ the session you mean to review.** "Newest in directory" silently analyses the wr
 the expected recording failed to save, and a wrong-session autopsy reads exactly like a correct
 one.
 
+**RECORD THE SOURCE PROVENANCE, in the header, in one word.** `PUBLISHED` -- the recording is
+already public and anyone can watch it. `PRIVATE` -- it is not, whoever made it. This is not a mode
+question and it changes nothing about the analysis; it decides only whether the PUBLICATION gate at
+the end of this file applies, and a run that never wrote it down forces a later guess about people
+who cannot be asked. When it is not obvious, it is PRIVATE.
+
 **CHECK AUDIO CAPTURE BEFORE COMPUTING ANY TALK-TIME NUMBER.** A recorder pointed at the wrong
 source produces a file that plays fine and is missing one side of the conversation entirely; a
 naive word count then confidently reports the wrong speaker as dominant.
@@ -264,6 +270,26 @@ ${WV_WORK_DIR}/<slug>_audio.wav`.
 - **Preserve per-recording settings**, especially `language`. Not every interview is in English,
   and a wrong language tag produces fluent, confident, wrong text.
 
+**A RECORDING CAN CHANGE LANGUAGE MID-WAY, AND `language=` IS SET ONCE.** The parameter above is
+a single value for the whole file, so a call that switches languages part-way gets fluent, confident,
+wrong text for the switched span -- and, because the words are wrong, every word-count metric over
+that span measures ASR failure rather than behaviour. This is not exotic: it happens whenever two
+speakers share a first language and drop into it for the logistics at the end.
+
+Detect it rather than discovering it in the numbers:
+
+- Scan the segment stream for a span where the average segment confidence drops, repetition rises,
+  or the text stops being responsive to what the frames show. Re-transcribe that span alone with the
+  other language and compare -- the correct language produces coherent text and the wrong one does
+  not, and the difference is not subtle.
+- **Mark the span, and carry it as a boundary into Step 6, not into Limitations.** Its start time is
+  the end of the measured window (see "Declare the measured window BEFORE the numbers").
+- Speaker-separated exports fail here too, and usually harder: an English-only engine returns
+  garbage for the span AND no speaker labels for it, so attribution across that boundary is
+  inferred from turn logic, never measured. Say which.
+- On a real 31-minute call this cost the last 5m40s of every word-count metric. Reporting those
+  numbers would not have been slightly wrong; it would have been a measurement of the ASR.
+
 **Transcript quality gate.** Assess completeness before trusting it: full-duration coverage, no
 long timestamp gaps, no repeated gibberish, no silence where the frames show someone speaking.
 If degraded, work the chain in order: (1) ask for the platform's own transcript export and
@@ -287,6 +313,30 @@ whisper content plus frames: the recording shows who is on screen and most platf
 active-speaker indicator, so sample frames at speaker transitions to pin turns. **Talk-time then
 becomes APPROXIMATE and must be labelled as an estimate**, with the frame sampling leaned on
 harder.
+
+**BIND FACES TO NAMES EXPLICITLY, AND WRITE THE MAP INTO THE HEADER.** Every frame-derived claim
+in the report -- who reacted, who smiled, who was reading, who delivered a given line -- rests on a
+map from a position on screen to a person. That map is usually built once, early, from whatever was
+convenient, and then never questioned. It is the single highest-consequence unchecked assumption
+this package makes: in a shipped run on 2026-08-31 the two participants of a published interview were
+swapped, and the report credited the video's paid sponsor read to the person who did not deliver it.
+Every individual observation in that report was correct. The map was not.
+
+- **Bind each participant from TWO DISJOINT sources.** A rendered name label or nameplate is one. A
+  frame whose transcript line is unambiguous, showing mouth movement or the platform's own
+  active-speaker highlight on that tile, is the other. A name label alone is not enough -- labels
+  follow tiles, and tiles move.
+- **Re-verify the map at a second timestamp at least half the recording away from the first.** Grid
+  order changes when someone pins a speaker, turns a camera on or off, or starts sharing. A map
+  correct at 02:00 can be wrong at 40:00 with nothing on screen announcing the change.
+- **A personalised surface names the SHARER, not the speaker.** A shared screen, a logged-in
+  browser, a personal feed, a notification toast, a webcam strip inside somebody else's share --
+  all of these tell you whose machine it is, and nothing at all about who is talking over it. A
+  single share frame can show every participant's camera at once; reading identity off one is how
+  a whole map gets inverted.
+- **If the map rests on one source only, say so and tag every attribution `[HYPOTHESIS]`.** An
+  unverified map does not make attribution slightly less certain; it makes each attribution a coin
+  flip that the report states as fact.
 
 **VERIFY THE TIMESTAMP OFFSET PER RECORDING, BEFORE CUTTING ANY FRAMES.** Recorders commonly start
 capturing before the session connects, so export time and video time differ by tens of seconds --
@@ -352,7 +402,27 @@ ${WV_FFMPEG} -ss <t> -t 12 -i <video> -vf "fps=0.75,scale=640:-1,tile=3x3" \
 ## Step 6 -- The metric passes
 
 Full definitions, failure modes and worked numbers are in **`references/evaluation.md`**. Read it
-in full before computing anything. In outline:
+in full before computing anything.
+
+**DECLARE THE MEASURED WINDOW BEFORE THE NUMBERS, NOT IN LIMITATIONS AFTER THEM.** Almost no
+recording is measurable end to end: a language switch, a dropped channel, an unattributable stretch
+or a degraded span cuts a window out of it. Open the metric section with the window, its duration,
+and the fraction of the recording it covers -- `0:00-25:52 of 31:32 = 82%` -- and repeat the window
+on every aggregate computed over it. A reader who stops at a talk-share percentage has already taken
+it for the whole call, and a scope stated afterwards cannot reach them.
+
+- **`VOID` is a first-class value with a reason**, not an omission. A phase whose numbers would
+  measure ASR failure gets the word VOID and one line saying why. Omitting it silently reads as
+  a phase where nothing happened.
+- **Any block that straddles the window boundary is inspected by hand before it is reported.** The
+  merge that builds monologue blocks does not know the boundary is there and will happily report a
+  five-minute floor-hold that is actually both speakers exchanging four-word turns through a
+  degraded span. That exact artifact appeared in a real run and was caught only by reading the
+  turns; report the inspection either way.
+- **Never state a coverage fraction you did not compute.** Covered seconds over total seconds, both
+  printed.
+
+In outline:
 
 - **Talk-share and turn-taking**, per speaker, with word counts.
 - **Continuous monologue blocks** (>= 60s of one speaker). This is usually the single most
@@ -422,9 +492,23 @@ stops a reader from taking a private-record fact for something the footage showe
 document that is not traceable to the transcript, the frames, or a measurement over them carries it.
 
 Structure: header (what the recording is, participants, date, duration, **the two Step 0a modes**,
-transcript tier, audio-capture result, attribution method, frame rate) -> the analysis of the
-subject -> what landed / what did not -> the metric passes with their numbers, per phase -> screen
-and technical findings -> narration-vs-screen discrepancies -> limitations.
+**the source provenance from Step 0b**, **the face-to-name map and the evidence for it**, transcript
+tier, audio-capture result, attribution method, **the measured window and its coverage**, frame
+rate) -> the analysis of the subject -> what landed / what did not -> the metric passes with their
+numbers, per phase -> screen and technical findings -> narration-vs-screen discrepancies ->
+limitations -> run notes.
+
+**`## Run notes` is a section of its own, and it is EXTERNAL-BY-CONSTRUCTION.** Everything the run
+learned about the machine rather than the recording goes here and nowhere else: scratch directories
+that already existed, file counts and mtimes, which tool version produced what, a stale artifact
+that was found and not trusted. None of it is evidence about the recording -- an mtime is evidence
+about a disk -- and all of it describes a private filesystem. It therefore opens with the standing
+source-marker line and is stripped whole by the publication gate.
+
+**It exists because that content had no home and kept landing in `## Anomalies`,** which is a
+findings section about the recording and survives the strip. A shipped example published a scratch
+directory's file count and image dimensions that way, through a partition pass that was working
+correctly: the class was named as external, and there was still nowhere for it to go.
 
 **In SELF-REVIEW mode only**, insert after the analysis: outcome estimate -> behavioural check ->
 claims ledger -> assist dependence. **Every one of those except the outcome estimate itself is
@@ -464,10 +548,23 @@ configured-empty targets, but SAY in the report which updates were skipped and w
 2. Update the role file in `${VA_ROLES_DIR}` with outcome and next steps.
 3. Append a row to `${VA_TRACKER_PATH}`.
 
-## PUBLICATION -- a self-review deliverable is PRIVATE BY DEFAULT
+## PUBLICATION -- run this gate on TWO triggers, not one
 
-**SELF-REVIEW MODE ONLY.** A third-party autopsy describes the recording and nothing else; this
-section does not apply to it.
+**Trigger A -- SELF-REVIEW mode.** The overlay cross-references the operator's private records, so
+the document carries a provenance the recording never had. Steps 1 through 5 all apply.
+
+**Trigger B -- the source recording is PRIVATE, in EITHER mode** (Step 0b records this). A
+third-party autopsy of a private recording contains no external-record sections, so step 1 finds
+nothing to do -- but everything from step 2 onward applies in full. A client call, a teammate's
+working session and a stranger's unpublished recording are all documents about people who did not
+publish themselves.
+
+The gate does NOT apply to a third-party autopsy of a source the world can already watch. There,
+naming the video is the point.
+
+**This scoping was wrong until 2026-08-31.** The section used to open "SELF-REVIEW MODE ONLY", which
+left a third-party autopsy of a private recording with no publication gate at all -- the commonest
+professional case this package has, and the one where the subjects have the least say.
 
 A self-review autopsy is not a shareable artifact, and nothing in the run should treat it as one.
 The overlay cross-references the operator's private records BY DESIGN, so the finished document
@@ -485,13 +582,50 @@ ORDER:**
    call about what happens to look sensitive.
 2. **Then scrub identifiers** in whatever survived step 1: names, employers, roles, dates, figures,
    local paths, tool names.
-3. **Then verify by grep**, on the published copy: the tag string itself, each configured source
-   path, and every private term the scrub was meant to remove. Then read the survivors for external
-   content that carries NO tag -- an untagged external claim is the failure mode the tag exists to
-   make visible, and grep cannot find it for you.
-4. **Apply all of it to every derived surface.** The HTML report mirrors the markdown. A redaction
+3. **Then COARSEN THE QUASI-IDENTIFIERS.** A quasi-identifier names nobody and identifies the
+   session anyway, by letting a counterparty match the document against a record they already hold.
+   Step 2 does not catch these, because there is no name in them to scrub. Apply this table on a
+   PRIVATE source; on a published one, keep whatever the source itself already discloses:
+
+   | Field | Ships as | Never ships as |
+   |---|---|---|
+   | Start time | dropped entirely | `17:13:23 BRT`, or any wall clock with a zone |
+   | Date | the month (`August 2026`) | `2026-08-25` |
+   | Duration | rounded to 5 minutes (`about 30 minutes`) | `31m32s`, `1892.7s` |
+   | Job title | the family (`a senior engineering role`) | `Lead AI Engineer` |
+   | Counterparty title | the function (`a recruiter`) | `Talent Acquisition and People Ops Manager` |
+   | Organisation | the sector, if load-bearing | a description narrow enough to name one company |
+   | Platform / tooling | keep -- it is method, not identity | -- |
+
+   **The test is stated from the other side: could a person who was in that meeting match this
+   document against their own calendar?** Three of these shipped in a real published example on
+   2026-08-31, in a copy whose identifier scrub had already passed clean, and the start time alone
+   was enough.
+
+4. **Then verify, by running the gate.** Prose verification is what failed twice.
+
+   ```bash
+   bash publish_check.sh <published-dir> --source private [--private-term 'A Name']...
+   ```
+
+   It exits non-zero on any surviving tag or marker, absolute or tilde path, declared private term,
+   quasi-identifier, or non-ASCII byte, and names WHICH check refused. It auto-loads the configured
+   `VA_*` / `WV_*` paths as private terms. `--source published` demotes the quasi-identifier checks
+   to warnings and leaves everything else hard.
+
+   `bash publish_check.sh --self-test` plants one fault per check and asserts each is refused by its
+   own check name, with a clean fixture that must pass. Run it if you change the script: a gate that
+   has never been observed refusing is indistinguishable from one that cannot.
+
+   **The gate is step 3 of the ordered pass and nothing more.** A clean exit does NOT mean the copy
+   is publishable. Read the survivors yourself for external content carrying NO tag -- an untagged
+   external claim is the exact failure the tag exists to make visible, and no grep will find it for
+   you. The script says this on every clean run rather than letting a green line stand alone.
+
+5. **Apply all of it to every derived surface.** The HTML report mirrors the markdown. A redaction
    made in one and not the other publishes the content anyway, and the HTML is the copy people
-   actually open.
+   actually open. Point the gate at a directory holding BOTH; if the mirror lives elsewhere, it was
+   not scanned and the gate says so.
 
 **Step 1 cannot be skipped by doing step 2 harder.** A scrub keyed on IDENTIFIERS cannot contain a
 PROVENANCE leak. "The ledger shows a claim that contradicts an earlier round" names nobody, passes

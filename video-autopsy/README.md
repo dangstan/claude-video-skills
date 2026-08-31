@@ -85,6 +85,7 @@ video-autopsy/
   SKILL.md              the protocol
   README.md             this file
   preflight.sh          the gate -- run it first
+  publish_check.sh      the publication gate -- run it before anything leaves the machine
   cleanup.sh            scratch removal, callable on any terminal state
   config.example.json   every key, documented
   lib/config.sh         the configuration resolver
@@ -181,6 +182,9 @@ A 5 fps extraction of an hour-long recording is tens of gigabytes, and frames la
 deliverable exists.
 
 ```bash
+bash publish_check.sh <dir> --source private   # refuse a copy that is not ready to leave
+bash publish_check.sh --self-test             # 12 controls, one planted fault per check
+
 bash cleanup.sh <slug>            # remove this run's scratch, verify, report
 bash cleanup.sh <slug> --dry-run  # show what would go
 bash cleanup.sh --stale 1 --force # reap orphans from earlier runs older than a day

@@ -98,7 +98,7 @@ with a path or URL -- the trigger phrases are part of each skill's definition.
 ```
 watch-video/       SKILL.md, README.md, preflight.sh, cleanup.sh, lib/config.sh, config.example.json
 watch-video-max/   same layout
-video-autopsy/     same layout + references/ (evaluation methodology, known pitfalls)
+video-autopsy/     same layout + publish_check.sh + references/ (evaluation methodology, known pitfalls)
 ```
 
 `SKILL.md` is the machine-facing workflow the agent follows; `README.md` is the human-facing
