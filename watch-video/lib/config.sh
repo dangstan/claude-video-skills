@@ -1,0 +1,293 @@
+#!/usr/bin/env bash
+# watch-video: portable configuration resolver.
+#
+# Source this file, do not execute it:
+#   source /path/to/watch-video-skill/lib/config.sh
+#
+# It resolves every WV_* setting this skill needs and exports it, using this order for EVERY
+# value (first hit wins):
+#   1. environment variable   (e.g. WV_PYTHON)
+#   2. config file key        (e.g. "python" in the resolved config file)
+#   3. auto-detection         (probe the machine: command -v, python imports, nvidia tooling)
+#   4. documented default     (a plain, always-safe fallback)
+#
+# Config file location, first that exists:
+#   1. $WV_CONFIG                                                   (explicit override)
+#   2. ./.watch-video.json                                          (project-local)
+#   3. ${XDG_CONFIG_HOME:-$HOME/.config}/watch-video/config.json    (user-global)
+#
+# THIS IS THE SAME CONFIG FILE the heavier sibling package (watch-video-max) reads -- same
+# locations, same WV_ environment prefix, same key names for every setting the two packages
+# share (python, ffmpeg, ffprobe, ytdlp, js_runtime, work_dir, output_dir, whisper_model,
+# whisper_device, whisper_compute, knowledge_fps). A single config file works for both packages.
+# This package simply never reads the forensics-only keys (recordings_dir, transcript_dir,
+# forensics_fps, forensics_delete_source) -- if they happen to be
+# present in a shared config file, they are silently ignored here.
+#
+# If no config file exists at all, resolution still works: every value falls through to
+# auto-detect then default. That "no config file" path is the primary case for a freshly
+# downloaded copy of this skill -- it must never hard-fail.
+#
+# JSON parsing needs no external dependency: it tries `jq` first, then falls back to a small
+# python one-liner run through whatever python3/python is on PATH (NOT the resolved WV_PYTHON --
+# that would be circular, since the config file can itself set the python key). If neither is
+# available, config-file values are simply skipped and resolution continues through
+# auto-detect/default; a missing or malformed config file is never a fatal error here.
+#
+# Call `wv_config_dump` after sourcing to print every resolved key, its value, and which of the
+# four sources produced it -- this is the transparency surface for "what did the skill decide
+# about my machine."
+
+# ---------------------------------------------------------------------------------------------
+# 0. locate a bootstrap JSON parser (independent of the python key we are about to resolve)
+# ---------------------------------------------------------------------------------------------
+
+_WV_BOOTSTRAP_PY=""
+if command -v python3 >/dev/null 2>&1; then
+  _WV_BOOTSTRAP_PY="$(command -v python3)"
+elif command -v python >/dev/null 2>&1; then
+  _WV_BOOTSTRAP_PY="$(command -v python)"
+fi
+
+# ---------------------------------------------------------------------------------------------
+# 1. find the config file (first that EXISTS, in priority order)
+# ---------------------------------------------------------------------------------------------
+
+_wv_find_config_file() {
+  if [ -n "${WV_CONFIG:-}" ] && [ -f "${WV_CONFIG:-}" ]; then
+    printf '%s' "$WV_CONFIG"
+    return 0
+  fi
+  if [ -f "./.watch-video.json" ]; then
+    printf '%s' "./.watch-video.json"
+    return 0
+  fi
+  local xdg_config
+  xdg_config="${XDG_CONFIG_HOME:-$HOME/.config}/watch-video/config.json"
+  if [ -f "$xdg_config" ]; then
+    printf '%s' "$xdg_config"
+    return 0
+  fi
+  printf ''
+  return 0
+}
+
+WV_CONFIG_FILE="$(_wv_find_config_file)"
+if [ -n "${WV_CONFIG:-}" ] && [ ! -f "${WV_CONFIG:-}" ]; then
+  WV_CONFIG_NOTE="WV_CONFIG=$WV_CONFIG was set but that path does not exist; fell through to the next candidate."
+else
+  WV_CONFIG_NOTE=""
+fi
+
+# ---------------------------------------------------------------------------------------------
+# 2. JSON key lookup (jq, else bootstrap-python, else "not available" -- never fatal)
+# ---------------------------------------------------------------------------------------------
+
+_wv_json_get() {
+  local key="$1"
+  if [ -z "${WV_CONFIG_FILE:-}" ] || [ ! -f "${WV_CONFIG_FILE:-}" ]; then
+    printf ''
+    return 0
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    jq -r --arg k "$key" '.[$k] // empty' "$WV_CONFIG_FILE" 2>/dev/null
+    return 0
+  fi
+  if [ -n "$_WV_BOOTSTRAP_PY" ]; then
+    "$_WV_BOOTSTRAP_PY" -c '
+import json, sys
+path, key = sys.argv[1], sys.argv[2]
+try:
+    with open(path) as f:
+        data = json.load(f)
+except Exception:
+    sys.exit(0)
+if not isinstance(data, dict):
+    sys.exit(0)
+val = data.get(key)
+if val is None:
+    sys.exit(0)
+sys.stdout.write(str(val))
+' "$WV_CONFIG_FILE" "$key" 2>/dev/null
+    return 0
+  fi
+  # no parser available at all: degrade gracefully, config file is simply not consulted
+  printf ''
+  return 0
+}
+
+# ---------------------------------------------------------------------------------------------
+# 3. generic resolver: env -> config -> detect (lazy, only run if needed) -> default
+# ---------------------------------------------------------------------------------------------
+
+_wv_resolve() {
+  local resultvar="$1" envname="$2" jsonkey="$3" detectfunc="$4" defaultval="$5"
+  local envval=""
+  eval "envval=\"\${${envname}:-}\""
+  if [ -n "$envval" ]; then
+    printf -v "$resultvar" '%s' "$envval"
+    printf -v "${resultvar}_SOURCE" '%s' "env"
+    return 0
+  fi
+  local jsonval=""
+  jsonval="$(_wv_json_get "$jsonkey")"
+  if [ -n "$jsonval" ]; then
+    printf -v "$resultvar" '%s' "$jsonval"
+    printf -v "${resultvar}_SOURCE" '%s' "config"
+    return 0
+  fi
+  local detectval=""
+  if [ -n "$detectfunc" ]; then
+    detectval="$("$detectfunc" 2>/dev/null)"
+  fi
+  if [ -n "$detectval" ]; then
+    printf -v "$resultvar" '%s' "$detectval"
+    printf -v "${resultvar}_SOURCE" '%s' "detect"
+    return 0
+  fi
+  printf -v "$resultvar" '%s' "$defaultval"
+  printf -v "${resultvar}_SOURCE" '%s' "default"
+  return 0
+}
+
+# ---------------------------------------------------------------------------------------------
+# 4. auto-detect functions
+# ---------------------------------------------------------------------------------------------
+
+_wv_detect_python() {
+  local candidates="" c
+  if command -v python3 >/dev/null 2>&1; then
+    candidates="$candidates $(command -v python3)"
+  fi
+  if [ -n "${CONDA_PREFIX:-}" ] && [ -x "${CONDA_PREFIX}/bin/python3" ]; then
+    candidates="$candidates ${CONDA_PREFIX}/bin/python3"
+  fi
+  for c in "$HOME"/miniconda3/envs/*/bin/python3 "$HOME"/anaconda3/envs/*/bin/python3 \
+           "$HOME"/miniforge3/envs/*/bin/python3 \
+           "$HOME"/miniconda3/bin/python3 "$HOME"/anaconda3/bin/python3 \
+           "$HOME"/.venv/bin/python3 ./venv/bin/python3 ./.venv/bin/python3; do
+    [ -x "$c" ] 2>/dev/null && candidates="$candidates $c"
+  done
+  for c in $candidates; do
+    [ -x "$c" ] || continue
+    if "$c" -c 'import faster_whisper' >/dev/null 2>&1; then
+      printf '%s' "$c"
+      return 0
+    fi
+  done
+  printf ''
+  return 0
+}
+
+_wv_detect_ffmpeg()  { command -v ffmpeg  2>/dev/null; }
+_wv_detect_ffprobe() { command -v ffprobe 2>/dev/null; }
+
+_wv_detect_ytdlp() {
+  if command -v yt-dlp >/dev/null 2>&1; then
+    command -v yt-dlp
+    return 0
+  fi
+  local py="${WV_PYTHON:-python3}"
+  if command -v "$py" >/dev/null 2>&1 || [ -x "$py" ]; then
+    if "$py" -c 'import yt_dlp' >/dev/null 2>&1; then
+      printf '%s -m yt_dlp' "$py"
+      return 0
+    fi
+  fi
+  printf ''
+  return 0
+}
+
+_wv_detect_js_runtime() {
+  if command -v deno >/dev/null 2>&1; then
+    command -v deno
+    return 0
+  fi
+  if command -v node >/dev/null 2>&1; then
+    command -v node
+    return 0
+  fi
+  printf ''
+  return 0
+}
+
+_wv_detect_whisper_device() {
+  local py="${WV_PYTHON:-python3}"
+  local n
+  if ! command -v "$py" >/dev/null 2>&1 && [ ! -x "$py" ]; then
+    printf ''
+    return 0
+  fi
+  n="$("$py" -c 'import ctranslate2 as c; print(c.get_cuda_device_count())' 2>/dev/null)"
+  if [ -n "$n" ] && [ "$n" -ge 1 ] 2>/dev/null; then
+    printf 'cuda'
+  else
+    printf ''
+  fi
+  return 0
+}
+
+_wv_detect_whisper_compute() {
+  case "${WV_WHISPER_DEVICE:-}" in
+    cuda) printf 'float16' ;;
+    cpu)  printf 'int8' ;;
+    *)    printf '' ;;
+  esac
+  return 0
+}
+
+# ---------------------------------------------------------------------------------------------
+# 5. resolve everything, IN DEPENDENCY ORDER (python before ytdlp/whisper_device; whisper_device
+#    before whisper_compute). No interview_dir / profile_path / tracker_path / transcriber_dir /
+#    forensics_fps / forensics_delete_source here -- this package has no forensics mode, so those keys
+#    are simply never resolved (a shared config file may still carry them for the sibling
+#    package; they are ignored here, not an error).
+# ---------------------------------------------------------------------------------------------
+
+_wv_resolve WV_FFMPEG  WV_FFMPEG  "ffmpeg"  _wv_detect_ffmpeg  "ffmpeg"
+_wv_resolve WV_FFPROBE WV_FFPROBE "ffprobe" _wv_detect_ffprobe "ffprobe"
+
+_wv_resolve WV_PYTHON WV_PYTHON "python" _wv_detect_python "python3"
+
+_wv_resolve WV_YTDLP      WV_YTDLP      "ytdlp"      _wv_detect_ytdlp      "yt-dlp"
+_wv_resolve WV_JS_RUNTIME WV_JS_RUNTIME "js_runtime" _wv_detect_js_runtime ""
+
+_wv_resolve WV_WORK_DIR   WV_WORK_DIR   "work_dir"   "" "${TMPDIR:-/tmp}/watch-video"
+_wv_resolve WV_OUTPUT_DIR WV_OUTPUT_DIR "output_dir" "" "$HOME/watch-video/reports"
+
+_wv_resolve WV_WHISPER_MODEL   WV_WHISPER_MODEL   "whisper_model"   "" "large-v3"
+_wv_resolve WV_WHISPER_DEVICE  WV_WHISPER_DEVICE  "whisper_device"  _wv_detect_whisper_device  "auto"
+_wv_resolve WV_WHISPER_COMPUTE WV_WHISPER_COMPUTE "whisper_compute" _wv_detect_whisper_compute "auto"
+
+_wv_resolve WV_KNOWLEDGE_FPS WV_KNOWLEDGE_FPS "knowledge_fps" "" "1"
+
+export WV_FFMPEG WV_FFPROBE WV_PYTHON WV_YTDLP WV_JS_RUNTIME
+export WV_WORK_DIR WV_OUTPUT_DIR
+export WV_WHISPER_MODEL WV_WHISPER_DEVICE WV_WHISPER_COMPUTE WV_KNOWLEDGE_FPS
+
+# ---------------------------------------------------------------------------------------------
+# 6. transparency surface
+# ---------------------------------------------------------------------------------------------
+
+_WV_ALL_KEYS="WV_PYTHON WV_FFMPEG WV_FFPROBE WV_YTDLP WV_JS_RUNTIME WV_WORK_DIR WV_OUTPUT_DIR WV_WHISPER_MODEL WV_WHISPER_DEVICE WV_WHISPER_COMPUTE WV_KNOWLEDGE_FPS"
+
+wv_config_dump() {
+  echo "=== watch-video resolved configuration ==="
+  if [ -n "${WV_CONFIG_FILE:-}" ]; then
+    echo "config file : $WV_CONFIG_FILE"
+  else
+    echo "config file : (none found -- using environment / auto-detect / defaults only)"
+  fi
+  if [ -n "${WV_CONFIG_NOTE:-}" ]; then
+    echo "note        : $WV_CONFIG_NOTE"
+  fi
+  local k v s display
+  for k in $_WV_ALL_KEYS; do
+    eval "v=\"\${${k}:-}\""
+    eval "s=\"\${${k}_SOURCE:-unknown}\""
+    display="$v"
+    [ -z "$display" ] && display="(empty)"
+    printf '  %-20s %-45s [%s]\n' "$k" "$display" "$s"
+  done
+  echo "source key: env=environment variable, config=config file, detect=auto-detected on this machine, default=built-in fallback"
+}

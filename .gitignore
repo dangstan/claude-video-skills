@@ -1,0 +1,5 @@
+.watch-video.json
+config.json
+*.log
+__pycache__/
+.DS_Store

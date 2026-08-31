@@ -1,0 +1,50 @@
+{
+  "_comment": "video-autopsy configuration. Copy to ${XDG_CONFIG_HOME:-$HOME/.config}/watch-video/config.json (the shared family location, read by watch-video, watch-video-max and this package), or to ./.video-autopsy.json for a project-local override, or point $VA_CONFIG at it. Every key is optional: with no config file at all, resolution falls through to auto-detect then to a documented default. Environment variables (WV_* / VA_*) override anything here.",
+
+  "_comment_toolchain": "SHARED WV_* KEYS. These mean exactly what they mean in the sibling packages -- pin them once and all three use them. There is no ytdlp/js_runtime key here: this package analyses a recording you already have, so it has no URL path.",
+  "python": "/usr/bin/python3",
+  "ffmpeg": "/usr/bin/ffmpeg",
+  "ffprobe": "/usr/bin/ffprobe",
+  "work_dir": "/tmp/video-autopsy",
+
+  "_comment_recordings": "Where your recorder writes. The skill takes the NEWEST file here by default and asks you to confirm its mtime matches the session -- 'newest in directory' silently analyses the wrong session when the expected recording failed to save.",
+  "recordings_dir": "/home/example-user/video-autopsy/recordings",
+
+  "_comment_transcript_dir": "Where you export speaker-SEPARATED transcripts from a meeting tool, if you use one. Used for who-said-what attribution and for disfluency counts (whisper's VAD strips fillers; most meeting transcribers keep them). Leaving this empty is fine and common -- many transcribers only attach to one platform, so recordings from another will never have an export. The skill falls back to attribution from content plus frames and labels talk-time as an ESTIMATE.",
+  "transcript_dir": "",
+
+  "_comment_whisper": "The verbatim tier is mandatory in this package -- there is no supplied-transcript escape hatch, because cleaned-up transcripts strip the disfluencies and blur the segment timings the whole analysis is built on. Do not switch to a distilled model or the batched pipeline: both trade exactly that fidelity. 'auto' probes for a CUDA device and falls back to CPU int8 (roughly 20x slower).",
+  "whisper_model": "large-v3",
+  "whisper_device": "auto",
+  "whisper_compute": "auto",
+
+  "_comment_autopsy": "VA_* KEYS -- this package only.",
+
+  "_comment_output": "Deliberately NOT the same directory as watch-video's output. An autopsy is a private document about your own performance; filing it beside a report you intend to share is how it gets shared.",
+  "autopsy_output_dir": "/home/example-user/video-autopsy/reports",
+
+  "_comment_fps": "5 is the FLOOR, not a target. Below it, micro-expression bursts and typing-cadence metrics stop resolving and every frame-derived behavioural finding has to be labelled DEGRADED. Raise it for rounds with live coding or fast screen scrolling.",
+  "autopsy_fps": 5,
+
+  "_comment_delete_source": "false by default, and it matters more here than anywhere else in the family: the input is a recording of a conversation that may not be repeatable, and you may hold the only copy. Set true ONLY if an original survives on the device that recorded it.",
+  "delete_source": false,
+
+  "_comment_profile": "A document describing YOU: known behavioural patterns, standing rules (what you will and will not disclose), flaws already confirmed across previous rounds. This is the key that turns a single-round report into a trend. Without it the skill reports this round only and says plainly that no pattern can be promoted to confirmed. It lives outside the package because it is personal data -- a published skill that hardcoded one person's flaws would be useless to everyone else.",
+  "profile_path": "",
+
+  "_comment_roles": "A directory of per-role notes, each carrying a claims ledger: the numbers, dates, scope and availability you have already stated to that company. The skill checks this round against the ledger and flags both contradictions and NEW claims that future rounds must stay consistent with.",
+  "roles_dir": "",
+
+  "_comment_tracker": "An optional pipeline tracker to append a row to after each round. Skipped silently when empty, but the report says which updates were skipped.",
+  "tracker_path": "",
+
+  "_comment_tools": "Name the tools you actually use, so the skill can ask BY NAME which were running. 'Was anything on?' is too coarse and has produced a false finding in practice by conflating the two categories. A TRANSCRIBER records what was said and is harmless to an assessment of your own performance; an ASSIST tool generates answers and changes what the assessment means. Leave these empty and the skill has to ask the weaker open question.",
+  "transcriber_tools": "",
+  "assist_tools": "",
+
+  "_comment_assist_logs": "Where assist-tool log exports land, if you export them. The ONLY valid measurement of assist dependence is n-gram overlap between such a log and what was actually said. Absence of a log is NOT evidence the tool was off -- the skill marks dependence UNMEASURED rather than inferring in either direction.",
+  "assist_log_dir": "",
+
+  "_comment_wvmax": "Path to the sibling watch-video-max package, which carries the shared ingest mechanism and the HTML design direction this package references rather than copies. Auto-detected from ../watch-video-max and ~/.claude/skills/watch-video-max; set explicitly only if it lives elsewhere.",
+  "_wvmax_dir_note": "set the VA_WVMAX_DIR environment variable, not a config key"
+}
