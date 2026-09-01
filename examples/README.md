@@ -61,7 +61,11 @@ transcript are withheld.**
 
 ## Sanitization, stated openly
 
-Only `tech-interview-screen` is sanitized; the two published sources ship as produced. Three rules,
+Only `tech-interview-screen` needs the identity scrub; the published sources ship as produced --
+with one exception that applies to every document here. Each knowledge document ends with a value
+map against the operator's own private projects and tooling, which is external to the video by
+construction, so that section is redacted in EVERY example regardless of whether its source was
+public. Three rules,
 applied in this order, and the order is the point -- a scrub keyed on IDENTIFIERS cannot contain a
 leak whose problem is PROVENANCE:
 

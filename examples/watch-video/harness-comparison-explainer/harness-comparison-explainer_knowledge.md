@@ -487,7 +487,7 @@ Stated right-fact-first; the source's version follows.
 Assessed honestly against the work you have described in this session. Several rows are "no value
 here", and those are the useful ones.
 
-**Threaded-trie memtable performance track.** Direct and specific value in one place: the
+**[REDACTED: private systems-performance track].** Direct and specific value in one place: the
 configuration-control failure in section 7.1 is exactly the failure mode your own guardrails were
 written against -- a comparison that fixes the headline variable (the model / the core) and leaves
 a second variable (reasoning effort / the argument tail) unequal, then attributes the whole delta
@@ -499,7 +499,7 @@ discipline: typed, structured events that a prose summary cannot silently smooth
 your work there is C++ cores and a Python binding under a pinned interpreter, and a different chat
 agent harness is orthogonal to it.
 
-**CryptoML pipeline (crypto_ml_v2).** Moderate and indirect. The relevant intake is the harness
+**[REDACTED: private ML pipeline].** Moderate and indirect. The relevant intake is the harness
 layer as a recorded variable: your cascade orchestration and multi-model advisor workflow (Opus
 plans, Sonnet builds, Haiku runs bash) is itself a harness composition, and the source's finding
 is that swapping that layer changes output character even with the model held fixed. That argues
@@ -514,7 +514,7 @@ gain.
 **Agent orchestration and skill authoring generally.** The strongest transferable finding for you
 is section 7.3: skills are harness-coupled and get re-interpreted on any harness or model change.
 You maintain a substantial skill surface (`graphify`, `watch-video`, `watch-video-max`,
-`video-autopsy`, the `cryptoml-*` family) plus hook-enforced behaviours. If any of those are ever
+`video-autopsy`, a family of project-specific skills) plus hook-enforced behaviours. If any of those are ever
 run under a different harness, expect silent reinterpretation rather than failure -- the divergence
 observed here was two headers that both looked correct and specified different audiences. A cheap
 mitigation matching how you already work: make the skill state its own invariants explicitly enough
