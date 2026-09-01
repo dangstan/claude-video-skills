@@ -642,9 +642,13 @@
 </section>
 
 <footer>
-  <div>Ingest cost: about 31 minutes source &middot; 1,893 frames extracted at 1 fps &middot; 39 frames read at pixel level across 6 composites &middot; 14 language-detection probes &middot; 6 isolated audio re-cuts &middot; 1 whisper pass discarded, 5 accepted</div>
+  <div>Ingest cost: about 31 minutes source &middot; frames extracted at 1 fps &middot; 39 frames read at pixel level across 6 composites &middot; 14 language-detection probes &middot; 6 isolated audio re-cuts &middot; 1 whisper pass discarded, 5 accepted</div>
   <div>Transcript: tier D, faster-whisper large-v3, CUDA float16 &middot; 4,892 verbatim words, 155 wpm &middot; tiers A, B and C each proven unavailable before escalating</div>
   <div>No audio, prosody, diarization, talk-time or behavioural analysis was performed</div>
+  <div>Post-run edit, declared: the extracted frame count was removed from the first line above,
+  because at 1 fps the count IS the recording's length in seconds. The word count and rate on the
+  second line recover the same quantity and were left as produced -- see the examples README, which
+  states one policy for this source across all three documents rather than a per-file judgement</div>
 </footer>
 
 </div>

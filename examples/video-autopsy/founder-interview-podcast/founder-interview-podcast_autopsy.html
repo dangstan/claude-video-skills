@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autopsy: Ex-Uber dev explains his Multi-Agent Workflow</title>
+<!--
+  ART DIRECTION -- three considered, one chosen.
+  (a) SPLIT-SCREEN EDITING BAY. The page is a two-panel composite divided by the same hairline
+      the video carries for 79.6% of its runtime; the divider becomes the structural spine and
+      every measurement hangs off one side of it or the other.
+  (b) MAGNETIC-TAPE STRIP. A horizontal 45-minute ribbon of waveform on tape leader, everything
+      indexed by timecode.
+  (c) AGENT RUN LOG. Monospace dark terminal, findings as log lines with severity prefixes.
+  CHOSEN: (a). The single most consequential thing measured in this recording is that both faces
+  are on screen at once for four fifths of it -- which is exactly why attribution had to be built
+  and controlled rather than read off the cut. A page spined by that divider states the finding
+  before a word is read. (b) would have made the page about time, which is not the finding;
+  (c) would have made it about the tooling, which is not the subject.
+  Palette locked AFTER the direction and after the signature element was built.
+-->
+<style>
+:root{
+  --paper:#f4f1ea;
+  --paper-2:#eae5da;
+  --ink:#1c1a17;
+  --ink-2:#4a453d;
+  --ink-3:#7d766a;
+  --rule:#c9c2b4;
+  --divider:#ffffff;
+  --flo:#b4622a;        /* the guest lane */
+  --flo-soft:#e8c9ae;
+  --david:#2f6b70;      /* the host lane */
+  --david-soft:#b6d2d3;
+  --flag:#a3202b;       /* narration-vs-screen discrepancy */
+  --share:#5d5470;      /* screen share */
+  --serif: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+  --mono: "SF Mono", "IBM Plex Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:18px;line-height:1.62;
+}
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px 120px}
+a{color:var(--david)}
+:focus-visible{outline:3px solid var(--flag);outline-offset:3px}
+
+/* ---------- masthead ---------- */
+header.mast{padding:72px 0 40px;border-bottom:1px solid var(--rule)}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 26px
+}
+h1{
+  font-size:clamp(2.6rem,6.4vw,4.6rem);line-height:1.02;margin:0 0 22px;
+  font-weight:600;letter-spacing:-.022em;max-width:15ch
+}
+.standfirst{font-size:1.22rem;color:var(--ink-2);max-width:60ch;margin:0 0 34px}
+.credits{
+  font-family:var(--mono);font-size:12px;color:var(--ink-3);line-height:1.9;
+  display:grid;grid-template-columns:max-content 1fr;gap:2px 22px;max-width:760px
+}
+.credits dt{letter-spacing:.08em;text-transform:uppercase}
+.credits dd{margin:0;color:var(--ink-2)}
+
+/* ---------- section furniture ---------- */
+section{padding:64px 0 0}
+h2{
+  font-size:clamp(1.5rem,2.7vw,2.05rem);line-height:1.16;margin:0 0 8px;
+  font-weight:600;letter-spacing:-.012em;max-width:24ch
+}
+.sec-num{
+  font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--flo);
+  text-transform:uppercase;display:block;margin-bottom:10px
+}
+h3{font-size:1.16rem;margin:38px 0 10px;font-weight:600;letter-spacing:-.005em}
+p{max-width:66ch;margin:0 0 18px}
+.lede{font-size:1.08rem;color:var(--ink-2);max-width:64ch}
+
+/* ---------- signature element: the floor ribbon ---------- */
+.ribbon-frame{margin:34px 0 12px;background:var(--paper-2);border:1px solid var(--rule);padding:26px 22px 18px}
+.ribbon-title{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin:0 0 20px}
+.ribbon{position:relative;height:190px;width:100%;margin:50px 0 32px}
+.lane{position:absolute;left:0;right:0;height:78px}
+.lane.flo{top:0}
+.lane.david{bottom:0}
+.spine{position:absolute;left:0;right:0;top:82px;height:5px;background:var(--divider);
+  box-shadow:0 0 0 1px var(--rule)}
+.blk{position:absolute;border-radius:1px;transform-origin:50% 100%}
+.lane.flo .blk{bottom:0;background:var(--flo);opacity:.86}
+.lane.david .blk{top:0;background:var(--david);opacity:.86;transform-origin:50% 0%}
+.blk.long{opacity:1}
+.blk.long::after{content:"";position:absolute;left:0;right:0;height:3px;background:var(--ink)}
+.lane.flo .blk.long::after{top:-5px}
+.lane.david .blk.long::after{bottom:-5px}
+/* specificity must beat `.lane.david .blk`, or the legend promises a pattern
+   the page never draws -- caught by the screenshot pass, not by source review */
+.lane.david .blk.sponsor{
+  background:repeating-linear-gradient(135deg,var(--david) 0 5px,#8fb3b6 5px 10px)
+}
+.pin{position:absolute;top:0;width:2px;height:190px;background:var(--flag);z-index:4;opacity:.75}
+.pin span{
+  position:absolute;left:6px;font-family:var(--mono);font-size:10px;
+  color:var(--flag);white-space:nowrap;letter-spacing:.04em;
+  background:var(--paper-2);padding:1px 5px;border:1px solid var(--flag);line-height:1.5
+}
+.pin.hi span{top:-38px}
+.pin.hi2 span{top:-16px}
+.pin.lo span{bottom:-16px}
+.axis{position:relative;height:26px;margin-top:8px;border-top:1px solid var(--rule)}
+.tick{position:absolute;top:0;font-family:var(--mono);font-size:10px;color:var(--ink-3);
+  transform:translateX(-50%);padding-top:5px}
+.tick::before{content:"";position:absolute;top:0;left:50%;width:1px;height:5px;background:var(--rule)}
+.lane-tag{
+  position:absolute;right:0;font-family:var(--mono);font-size:11px;letter-spacing:.16em;
+  text-transform:uppercase;z-index:3;background:var(--paper-2);padding:0 4px
+}
+.lane-tag.flo{top:-2px;color:var(--flo)}
+.lane-tag.david{bottom:-2px;color:var(--david)}
+.legend{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:20px;
+  font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:.03em}
+.legend i{display:inline-block;width:22px;height:10px;margin-right:8px;vertical-align:1px}
+.caption{font-size:.94rem;color:var(--ink-3);max-width:70ch;margin:14px 0 0}
+
+/* ---------- number strip ---------- */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));
+  gap:1px;background:var(--rule);border:1px solid var(--rule);margin:30px 0}
+.fig{background:var(--paper);padding:20px 18px}
+.fig b{display:block;font-family:var(--mono);font-size:2.05rem;line-height:1;font-weight:500;
+  letter-spacing:-.03em;margin-bottom:8px}
+.fig span{font-size:.86rem;color:var(--ink-3);display:block;line-height:1.45}
+.fig.f-flo b{color:var(--flo)} .fig.f-david b{color:var(--david)} .fig.f-flag b{color:var(--flag)}
+
+/* ---------- tables ---------- */
+.scroll{overflow-x:auto;margin:26px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:640px}
+caption{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-3);padding-bottom:12px}
+th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);border-bottom:1px solid var(--ink-3);font-weight:400}
+tbody td{font-family:var(--mono);font-size:.86rem}
+tbody td:first-child{font-family:var(--serif);font-size:.95rem}
+tr.hi td{background:var(--paper-2)}
+td.flo{color:var(--flo)} td.david{color:var(--david)}
+
+/* ---------- discrepancy blocks ---------- */
+.disc{border-left:4px solid var(--flag);padding:4px 0 4px 24px;margin:34px 0}
+.disc .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--flag);display:block;margin-bottom:8px}
+.disc h3{margin-top:0}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:18px 0}
+.vs>div{background:var(--paper);padding:16px 18px}
+.vs .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:8px}
+.vs .said{color:var(--ink)}
+.vs .shown{font-family:var(--mono);font-size:.95rem;color:var(--flag)}
+blockquote{margin:0;font-size:1.02rem}
+
+/* ---------- ok list ---------- */
+.checks{border:1px solid var(--rule);padding:22px 24px;margin:30px 0;background:var(--paper-2)}
+.checks ul{margin:0;padding-left:20px}
+.checks li{margin-bottom:9px;max-width:64ch}
+.checks .tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--david);display:block;margin-bottom:12px}
+
+.null{font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:var(--ink);
+  color:var(--paper);padding:2px 7px;border-radius:2px}
+footer{margin-top:80px;padding-top:26px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:11px;color:var(--ink-3);line-height:1.9}
+
+@media (max-width:720px){
+  body{font-size:17px}
+  .wrap{padding:0 18px 80px}
+  .vs{grid-template-columns:1fr}
+  .ribbon{height:150px}
+  .lane{height:58px}
+  .spine{top:62px}
+  .pin{height:150px}
+  .pin span{font-size:9px;white-space:normal;max-width:11ch}
+  .credits{grid-template-columns:1fr;gap:0 0}
+  .credits dt{margin-top:10px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .blk{animation:grow .7s cubic-bezier(.2,.7,.3,1) backwards}
+  @keyframes grow{from{transform:scaleY(0);opacity:0}to{transform:scaleY(1)}}
+}
+.redaction-note{background:var(--paper-2);border-left:3px solid var(--flag);padding:14px 18px;font-size:.92em;line-height:1.6;margin:18px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">Video autopsy / third-party / published source</p>
+  <h1>Two faces, one floor, and a demo that argues with itself</h1>
+  <p class="standfirst">A 45-minute founder interview in which both participants are on screen at
+  once for four fifths of the runtime, one of them does two thirds of the talking, and the
+  sponsor demo's own output contradicts the claim being made over it.</p>
+  <dl class="credits">
+    <dt>Source</dt><dd>youtu.be/utb7zYbK10c &mdash; "Ex-Uber dev explains his Multi-Agent Workflow", David Ondrej, 2026-08-10</dd>
+    <dt>Duration</dt><dd>45m 25s (2725.094 s), 1920x1080, AV1, stereo AAC</dd>
+    <dt>Participants</dt><dd>David Ondrej (host) &middot; Flo / Florent Crivello (guest, Lindy)</dd>
+    <dt>Mode 1</dt><dd>The exchange, not the material</dd>
+    <dt>Mode 2</dt><dd>Third-party &mdash; no self-review overlay</dd>
+    <dt>Transcript</dt><dd>faster-whisper large-v3, CUDA float16, verbatim, quality gate passed first pass</dd>
+    <dt>Frames</dt><dd>13,625 at 5 fps (2725 x 5, exact)</dd>
+    <dt>Window</dt><dd>0:00&ndash;45:25, the whole recording, 100% coverage</dd>
+  </dl>
+</header>
+
+<section>
+  <span class="sec-num">01 / The shape of it</span>
+  <h2>Who held the floor, and for how long at a time</h2>
+  <p class="lede">The ribbon below is the whole recording. The white spine down its middle is the
+  divider the video itself carries: this podcast almost never cuts to a single face, so both
+  participants are visible at once and the edit tells you nothing about who is speaking. Above the
+  spine is the guest. Below it is the host.</p>
+
+  <div class="ribbon-frame">
+    <p class="ribbon-title">Floor-holding, 0:00 to 45:25 &mdash; block width is turn duration</p>
+    <div class="ribbon" id="ribbon">
+      <div class="lane flo" id="laneFlo"><span class="lane-tag flo">Flo &mdash; guest</span></div>
+      <div class="spine"></div>
+      <div class="lane david" id="laneDavid"><span class="lane-tag david">David &mdash; host</span></div>
+    </div>
+    <div class="axis" id="axis"></div>
+    <div class="legend">
+      <span><i style="background:var(--flo)"></i>Flo speaking</span>
+      <span><i style="background:var(--david)"></i>David speaking</span>
+      <span><i style="background:repeating-linear-gradient(135deg,var(--david) 0 5px,#7ba3a6 5px 10px)"></i>Sponsor read (see the defect note below)</span>
+      <span><i style="background:var(--ink);height:3px"></i>Continuous block 60 s or longer</span>
+      <span><i style="background:var(--flag);width:3px"></i>Narration contradicted by the screen</span>
+    </div>
+  </div>
+  <p class="caption">118 turns, 59 each. The equal turn counts are the trap: the median Flo turn
+  runs 12.8 s against David's 3.5 s, so the two men take the floor equally often and one of them
+  keeps it nearly four times as long each time. Sixteen blocks run 60 s or longer; thirteen are
+  Flo's. The single widest host block is not conversation at all &mdash; it is a 132-second read for
+  the host's own product, starting four minutes into his guest's interview.</p>
+  <p class="redaction-note"><b>Defect, annotated rather than repaired (found in review, not by
+  the run).</b> The line above calls Deep API the host's own product. The recording does not
+  establish that. Its own evidence points the other way: he says he spent two months building
+  <em>with</em> Deep API (02:46), refers to what an agent unlocks "the moment he has a single API
+  key from Deep API" (04:30), and closes with "click the first link below the video" (04:43),
+  which is the phrasing of a paid placement. The sibling watch-video-max document reads the same
+  segment as a paid advertisement for a third product, read by the host. The claim the evidence
+  supports is that this is a sponsor read the host delivers; ownership is not settled by the
+  recording, and it is a materially heavier claim about a named person. The duration, its rank
+  among the host's blocks, and the editor removing the guest from screen are measured and stand.</p>
+
+
+  <div class="figs">
+    <div class="fig f-flo"><b>67/33</b><span>Speaking time, Flo to David. 66/34 by word count.</span></div>
+    <div class="fig f-flo"><b>13</b><span>Of the 16 continuous blocks of 60 s or more are Flo's.</span></div>
+    <div class="fig f-david"><b>132.3 s</b><span>Longest David block: the sponsor read at 2:35.</span></div>
+    <div class="fig"><b>96.6%</b><span>Of the runtime is speech. The editor cut the pauses out.</span></div>
+    <div class="fig f-flag"><b>0</b><span>Pauses of 1.5 s or longer anywhere in 45 minutes.</span></div>
+    <div class="fig"><b>96.8%</b><span>Agreement between the two independent attribution signals.</span></div>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">02 / The exchange</span>
+  <h2>A jointly constructed thesis, not an interrogation of one</h2>
+  <p>Flo's argument is that AI tools are currently single-player &mdash; everyone runs their own agent
+  on their own machine and passes files around &mdash; and that the next transition is to multiplayer:
+  an agent with a Slack account, an email address, a shared file system, shared skills and shared
+  memory, addressable in the surface the team already uses. He argues the bottleneck is not model
+  intelligence but context, and derives an operating stance from it: embrace chaos, let engineers
+  build competing workflows, reward it publicly, and spend at least twenty hours a week
+  hands-on-keyboard or the company dies.</p>
+  <p>Across 45 minutes the host does not once push back on a claim. His turns are of three kinds:
+  assent tokens, elaborations that extend the point in the same direction, and topic-switch
+  questions. The one turn that is structurally shaped like a challenge is a stronger version of the
+  guest's own position offered for agreement, and it is met with "1,000%". This is a description of
+  the genre rather than a criticism of the host &mdash; but a viewer who came to see the
+  multiplayer-agent claim stress-tested will not find that here.</p>
+
+  <h3>The title's promise is delivered in three and a half minutes of forty-five</h3>
+  <p>The segment that actually answers "his multi-agent workflow" runs 19:05 to 22:48, and its
+  content is deflationary in a useful way. Asked to describe his setup, Flo says he is confused by
+  people with complex ones: the coding agent works out of the box, he has added some MCP servers,
+  and his agent instruction file is now basically empty. The complexity does not live in the coding
+  agent at all &mdash; it lives in a set of always-on cloud routines, which the screen shows are
+  product features toggled on rather than apparatus he assembled.</p>
+
+  <h3>What landed, and what bounced</h3>
+  <p>The strongest rapport moment in the file is a shared confession at 20:36, where the guest asks
+  whether the host also texts an agent all day and the host answers that he tracks all his calories
+  that way. It is the only exchange in which information moves from host to guest and the guest asks
+  a follow-up.</p>
+  <p>The host's one personal-stakes question &mdash; how worried are you about AGI, how are you
+  preparing &mdash; bounces off a prepared surface. The guest reduces the space to a rehearsed binary,
+  "death or house cat", and then declines to discuss it further unless someone has something
+  original to say. That the answer is polished is itself the finding: this is material the guest has
+  delivered before.</p>
+  <p>The close is flat. A twelve-second reaction sheet across the wrap shows both participants
+  neutral-faced: no laughter, no warmth spike, mouths closed in most frames. The host announces two
+  minutes remaining and the recording ends nineteen seconds later.</p>
+</section>
+
+<section>
+  <span class="sec-num">03 / Narration versus screen</span>
+  <h2>Three places the words and the pixels disagree</h2>
+  <p class="lede">These are the highest-value findings this method produces, because they cannot be
+  reached from the transcript alone. Each was read from an upscaled crop of a 1080p frame at the
+  timestamp given.</p>
+
+  <div class="disc">
+    <span class="tag">Discrepancy 1 &middot; 03:20 and 03:35 &middot; verified from frame</span>
+    <h3>A thirty-minute claim over a thirteen-minute screen</h3>
+    <div class="vs">
+      <div><div class="lbl">What was said</div>
+        <blockquote class="said">"So it ran for 30 minutes." &mdash; and again, fifteen seconds
+        later, "after 30 minutes, it created a hundred unique contractors."</blockquote></div>
+      <div><div class="lbl">What the screen read</div>
+        <p class="shown">Worked for 13m</p></div>
+    </div>
+    <p>The claim is made twice and is 2.3x the figure printed directly above the task. The control
+    that makes this a real discrepancy rather than my own misreading is the <em>other</em> task in
+    the same demo: for the ticker job the host says "ran for four minutes" and the screen reads
+    <span style="font-family:var(--mono)">Worked for 4m 44s</span>. Same speaker, same interface,
+    same minute of video &mdash; one figure accurate, one wrong by a factor of two.</p>
+  </div>
+
+  <div class="disc">
+    <span class="tag">Discrepancy 2 &middot; 03:16 to 03:39 &middot; verified from frame</span>
+    <h3>The demo's premise, refuted by the demo's own output</h3>
+    <div class="vs">
+      <div><div class="lbl">What was said</div>
+        <blockquote class="said">The prompt asks for 100 active licensed general contractors "from
+        the state licensing records", and the voiceover repeats that framing while presenting the
+        result as a clean win.</blockquote></div>
+      <div><div class="lbl">What the screen read, two lines above the result</div>
+        <p class="shown">"Texas does not issue statewide general-contractor licenses. Austin
+        registration is local and one-time, so 'active state-licensed' records do not exist."</p></div>
+    </div>
+    <p>The agent states, unprompted and in body text large enough to read, that the source the demo
+    claims to have queried does not exist. The 100 rows were assembled some other way. The same
+    screenshot's coverage line puts the delivered table at 88 websites, 98 phone numbers and
+    <strong>40 emails across 100 rows</strong>, against a prompt that asked for name, website, phone
+    and email. This is the strongest finding in the recording: the flagship result of a sponsor demo
+    is qualified into near-meaninglessness by the tool itself, while the narration calls it a
+    success.</p>
+  </div>
+
+  <div class="disc">
+    <span class="tag">Discrepancy 3 &middot; 09:39 &middot; verified across four frames</span>
+    <h3>"Updating live", against a counter that does not move</h3>
+    <div class="vs">
+      <div><div class="lbl">What was said</div>
+        <blockquote class="said">"And you can see it's updating its learnings live."</blockquote></div>
+      <div><div class="lbl">What the screen read at 09:32, 09:36, 09:46 and 09:52</div>
+        <p class="shown">Still learning &middot; 1,284 messages and 18 channels reviewed<br>
+        <span style="color:var(--ink-3)">bit-identical across all four samples</span></p></div>
+    </div>
+    <p>The artifact on screen is, per its own message header, a screen recording made three weeks
+    earlier and posted to the team's chat by a colleague, being played back during the call.
+    Two mitigations belong beside this and they matter: the guest's very next sentence says "at this
+    point of <em>the video</em>", which is consistent with playback rather than concealment, and his
+    numeric claim is accurate &mdash; he says "like, 1,200 messages" against 1,284 on screen. The
+    discrepancy is confined to the word "live". It is a framing slip, not a fabrication.</p>
+  </div>
+
+  <div class="checks">
+    <span class="tag">And the claims that check out</span>
+    <ul>
+      <li>Every routine the guest lists aloud at 20:04&ndash;20:17 &mdash; daily brief by text, email
+      drafting, email labelling, meeting notes, meeting prep, a message before this podcast &mdash;
+      maps one-to-one onto the toggles enabled on screen. The only nuance is phrasing: he says "I
+      have an agent that...", and what is shown are the product's built-in routines switched on.</li>
+      <li>The dashboard's 99% success ring is arithmetically consistent with its own breakdown of
+      3,828 succeeded against 3,869 requests (98.9%).</li>
+      <li>"Ran for four minutes" against 4m 44s on screen.</li>
+      <li>"Like, 1,200 messages" against 1,284 on screen.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <span class="sec-num">04 / Per phase</span>
+  <h2>The averages hide everything; the phases do not</h2>
+  <p>A whole-recording silence figure would have said one number about a file whose phases range
+  from 0.5% to 10.2%. The tightest window is the opening exchange, cut to essentially no air. The
+  loosest are the two guest-dominated autobiographical stretches, where the editor left room. Phase
+  10 is the only balanced phase in the recording, and it is the one where the two men build a
+  comparison together rather than one explaining to the other.</p>
+  <div class="scroll">
+  <table>
+    <caption>Per-phase talk-share, silence and pace</caption>
+    <thead><tr>
+      <th>Phase</th><th>Window</th><th>Dur</th><th>Flo</th><th>David</th>
+      <th>Silence</th><th>wpm Flo</th><th>wpm David</th><th>Longest block</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>Cold-open montage</td><td>0:00&ndash;0:23</td><td>23.5 s</td><td class="flo">100%</td><td class="david">0%</td><td>3.9%</td><td>301</td><td>&mdash;</td><td>22.2 s</td></tr>
+      <tr class="hi"><td>Multiplayer premise</td><td>0:23&ndash;2:35</td><td>131.5 s</td><td class="flo">61.4%</td><td class="david">38.6%</td><td>0.5%</td><td>250</td><td>244</td><td>50.8 s</td></tr>
+      <tr><td>Sponsor read</td><td>2:35&ndash;4:48</td><td>133.0 s</td><td class="flo">0.6%</td><td class="david">99.4%</td><td>4.3%</td><td>&mdash;</td><td>223</td><td>132.3 s</td></tr>
+      <tr><td>Post-agent hardware / Lindy</td><td>4:48&ndash;8:40</td><td>232.0 s</td><td class="flo">68.0%</td><td class="david">32.0%</td><td>2.5%</td><td>242</td><td>255</td><td>109.0 s</td></tr>
+      <tr><td>Shared context + demo</td><td>8:40&ndash;14:23</td><td>343.0 s</td><td class="flo">70.8%</td><td class="david">29.2%</td><td>3.3%</td><td>241</td><td>268</td><td>120.7 s</td></tr>
+      <tr><td>Distribution / Slack</td><td>14:23&ndash;19:05</td><td>282.0 s</td><td class="flo">55.9%</td><td class="david">44.1%</td><td>2.4%</td><td>261</td><td>248</td><td>89.5 s</td></tr>
+      <tr><td>The actual setup</td><td>19:05&ndash;22:48</td><td>223.0 s</td><td class="flo">72.2%</td><td class="david">27.8%</td><td>3.7%</td><td>248</td><td>262</td><td>90.4 s</td></tr>
+      <tr><td>Play, break stuff</td><td>22:48&ndash;27:22</td><td>274.0 s</td><td class="flo">79.6%</td><td class="david">20.4%</td><td>8.2%</td><td>225</td><td>253</td><td>63.4 s</td></tr>
+      <tr><td>Chaos operating model</td><td>27:22&ndash;30:20</td><td>178.0 s</td><td class="flo">81.6%</td><td class="david">18.4%</td><td>6.6%</td><td>240</td><td>247</td><td>135.6 s</td></tr>
+      <tr class="hi"><td>Middle ages / the machine</td><td>30:20&ndash;35:41</td><td>321.0 s</td><td class="flo">49.6%</td><td class="david">50.4%</td><td>4.1%</td><td>230</td><td>235</td><td>65.8 s</td></tr>
+      <tr><td>AGI: death or house cat</td><td>35:41&ndash;40:55</td><td>314.0 s</td><td class="flo">73.1%</td><td class="david">26.9%</td><td>5.4%</td><td>240</td><td>249</td><td>87.8 s</td></tr>
+      <tr><td>What to build</td><td>40:55&ndash;45:07</td><td>252.0 s</td><td class="flo">90.5%</td><td class="david">9.5%</td><td>5.9%</td><td>228</td><td>280</td><td>54.8 s</td></tr>
+      <tr><td>Close</td><td>45:07&ndash;45:25</td><td>18.1 s</td><td class="flo">34.8%</td><td class="david">65.2%</td><td>10.2%</td><td>162</td><td>282</td><td>6.9 s</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3>The zero that needed a control</h3>
+  <p>At a 1.5-second threshold the silence detector returned <strong>zero events across 45
+  minutes</strong>. Zero silence reads exactly like a broken parse, so it was controlled: the same
+  command at a 0.5-second threshold returns 390 event lines, and at a louder noise floor 1,656. The
+  parse is live, and the zero is real &mdash; there is not one pause of 1.5 seconds or longer anywhere
+  in this recording, and the longest silence of any kind is 1.07 s. That is a measurement of the
+  <em>editor</em>, not of the speakers, and it is why speech occupies 96.6% of the runtime.</p>
+
+  <h3>A genuine null worth stating</h3>
+  <p>The two speakers use the discourse marker "like" at 14.54 and 14.92 times per minute of their
+  own speech respectively &mdash; statistically indistinguishable, despite one of them talking twice
+  as long. The verbal register of this conversation is shared, not a property of either man.</p>
+</section>
+
+<section>
+  <span class="sec-num">05 / Method</span>
+  <h2>Attribution had to be built, so it had to be controlled</h2>
+  <p>Because both faces are on screen for 79.6% of the runtime and no speaker-separated export
+  exists, "who is on camera" carries no information for most of the file. Two independent signals
+  were built:</p>
+  <div class="scroll">
+  <table>
+    <caption>Two signals, one control</caption>
+    <thead><tr><th>Signal</th><th>What it is</th><th>Coverage</th></tr></thead>
+    <tbody>
+      <tr><td>A &mdash; audio</td><td>13-coefficient MFCC mean and standard deviation per whisper segment over voiced frames, 2-means clustering</td><td>1,676 of 1,694 segments</td></tr>
+      <tr><td>B &mdash; frames</td><td>Where the editor cut to a continuous single-speaker shot, the person is identified from background alone (studio wall against bay window)</td><td>384.8 s</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Signal B never consulted signal A. Over the 219 segments lying wholly inside single-speaker
+  footage &mdash; 268.8 s of the recording &mdash; the two agree on 212: <strong>96.8%</strong>.
+  Stratified by segment length, agreement is 94.7% under one second, 98.6% at one to two seconds,
+  and 100% above two seconds. The face-to-name map itself was bound from two disjoint sources
+  &mdash; the editor's own speaker-inset over the cold-open B-roll, and aggregate mouth-region motion
+  per panel (Welch t = 14.3) &mdash; then re-verified at six timestamps up to 44 minutes apart. The
+  panels never swap.</p>
+
+  <h3>Where it fails, measured rather than asserted</h3>
+  <p>On rapid back-and-forth the segment-level attribution fragments, alternating speakers
+  mid-sentence. 77.3% of segments are shorter than two seconds; 145 of those are audio-attributed
+  with a weak cluster margin, together carrying 4.2% of speech. One error is <em>proved</em> rather
+  than suspected: the cold open turns out to be spliced from three separate later moments, and one
+  of the phrases it replays as a single continuous guest utterance is split across both speakers by
+  the mechanical pass at 32:20. The transcript of record keeps the mechanical output and flags the
+  error in its header rather than quietly correcting it.</p>
+
+  <h3>What this run refused to report</h3>
+  <p><span class="null">NULL</span> <strong>Prosody.</strong> No diarizer was run, and a
+  segment-clustering pass is not one. Pitch statistics over a mixed track would measure a blend, so
+  none are given. Every delivery claim here rests on frames and content.</p>
+  <p><span class="null">NULL</span> <strong>Disfluency counts.</strong> Whisper's voice-activity
+  filter strips fillers, so the counts are a floor; the measured zero for the host establishes
+  nothing at all.</p>
+  <p><span class="null">NULL</span> <strong>Diction slips.</strong> Both ASR engines converge on
+  non-canonical renderings of several product names, but two systems agreeing on the same phonetic
+  reading is evidence about the audio, not about the speaker's pronunciation. No slip is logged.</p>
+  <p><span class="null">NULL</span> <strong>On-screen error detection.</strong> No live coding
+  occurs, so there is no editor problem-counter anywhere in the file against which the red-pixel
+  heuristic could be controlled. It was not run.</p>
+</section>
+
+<footer>
+  Third-party autopsy of a published source; the self-review overlay did not open and no outcome
+  estimate, behavioural profile, claims ledger or tracker was touched. Frames 5 fps &middot;
+  transcript faster-whisper large-v3 verbatim &middot; measured window 0:00&ndash;45:25, 100% coverage.
+  Companion documents: founder-interview-podcast_autopsy.md, founder-interview-podcast_transcript.txt.
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var DUR = 2725.094;
+  var TURNS = [[0.1,22.2,1],[23.6,7.1,0],[31.1,50.8,1],[82.2,0.3,0],[82.7,8.4,1],[91.5,4.4,0],[96.2,20.2,1],[116.7,38.1,0],[155.0,0.8,1],[155.7,132.3,0],[288.1,16.6,1],[305.2,1.9,0],[307.1,109.0,1],[416.5,16.7,0],[433.5,3.2,1],[437.0,0.7,0],[438.0,28.9,1],[467.1,53.0,0],[520.2,120.7,1],[641.2,101.0,0],[742.4,121.3,1],[864.0,35.2,0],[899.5,0.8,1],[900.5,12.8,0],[913.4,0.4,1],[914.2,11.8,0],[926.5,63.3,1],[990.0,26.2,0],[1016.5,89.5,1],[1106.3,39.0,0],[1145.3,90.4,1],[1236.1,0.6,0],[1236.9,1.4,1],[1238.6,4.0,0],[1242.7,56.4,1],[1299.2,0.5,0],[1299.7,12.8,1],[1312.8,55.6,0],[1368.5,5.3,1],[1374.0,0.3,0],[1374.3,24.5,1],[1398.8,0.2,0],[1399.0,1.0,1],[1400.0,0.3,0],[1400.5,63.4,1],[1463.9,0.2,0],[1464.1,62.3,1],[1526.5,5.7,0],[1532.2,61.5,1],[1593.6,48.9,0],[1642.5,135.6,1],[1778.1,31.2,0],[1809.4,1.0,1],[1810.4,1.0,0],[1811.4,8.9,1],[1820.3,62.7,0],[1883.0,1.0,1],[1884.0,1.4,0],[1885.4,1.0,1],[1886.4,1.4,0],[1887.8,52.7,1],[1940.5,1.2,0],[1941.7,2.9,1],[1944.6,37.3,0],[1981.9,1.6,1],[1983.4,0.5,0],[1984.0,65.8,1],[2049.7,0.3,0],[2050.0,33.4,1],[2083.5,57.0,0],[2140.5,1.1,1],[2141.6,9.2,0],[2150.9,5.6,1],[2156.4,0.8,0],[2157.3,87.8,1],[2245.0,0.7,0],[2245.7,18.4,1],[2264.2,0.2,0],[2264.3,7.2,1],[2271.5,0.4,0],[2272.0,16.6,1],[2288.5,23.8,0],[2312.3,0.3,1],[2312.7,12.6,0],[2325.3,1.1,1],[2326.4,0.2,0],[2326.6,11.7,1],[2338.3,0.3,0],[2338.6,3.8,1],[2342.5,0.9,0],[2343.3,37.6,1],[2380.9,0.5,0],[2381.4,5.2,1],[2386.6,7.4,0],[2394.0,0.5,1],[2394.4,26.9,0],[2421.3,1.7,1],[2423.0,0.5,0],[2423.5,32.2,1],[2455.7,9.7,0],[2465.4,2.1,1],[2467.5,0.7,0],[2468.2,35.4,1],[2503.5,0.3,0],[2503.8,50.3,1],[2554.1,0.4,0],[2554.6,4.0,1],[2558.5,3.5,0],[2562.1,1.7,1],[2563.7,1.2,0],[2564.9,54.8,1],[2619.7,7.4,0],[2627.1,5.7,1],[2632.8,0.7,0],[2633.5,74.0,1],[2707.5,4.8,0],[2712.3,5.7,1],[2718.0,6.9,0]];
+  var PINS = [[200,"30m claimed, 13m on screen","hi"],
+              [203,"premise refuted by the agent itself","lo"],
+              [579,"\"live\", but the counter never moves","hi2"]];
+  var flo = document.getElementById('laneFlo');
+  var dav = document.getElementById('laneDavid');
+  var ribbon = document.getElementById('ribbon');
+  var maxLen = 135.6;
+  TURNS.forEach(function(t,i){
+    var s=t[0], d=t[1], isFlo=t[2]===1;
+    var el=document.createElement('div');
+    el.className='blk'+(d>=60?' long':'')+((!isFlo && Math.abs(s-155.7)<0.5)?' sponsor':'');
+    el.style.left=(100*s/DUR)+'%';
+    el.style.width=Math.max(100*d/DUR,0.09)+'%';
+    // height encodes duration on a square-root scale so short turns stay visible
+    el.style.height=(16+62*Math.sqrt(Math.min(d,maxLen)/maxLen))+'%';
+    el.style.animationDelay=(i*4)+'ms';
+    el.setAttribute('title',(isFlo?'Flo':'David')+' -- '+
+      String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0')+
+      ' for '+d.toFixed(1)+' s');
+    (isFlo?flo:dav).appendChild(el);
+  });
+  PINS.forEach(function(p){
+    var el=document.createElement('div');
+    el.className='pin '+p[2]; el.style.left=(100*p[0]/DUR)+'%';
+    var s=document.createElement('span'); s.textContent=p[1];
+    if(p[0]/DUR>0.6){ s.style.left='auto'; s.style.right='6px'; }
+    el.appendChild(s); ribbon.appendChild(el);
+  });
+  var ax=document.getElementById('axis');
+  for(var m=0;m<=45;m+=5){
+    var d=document.createElement('div');
+    d.className='tick'; d.style.left=(100*(m*60)/DUR)+'%';
+    d.textContent=m+"'";
+    if(m===0){d.style.transform='translateX(0)';}
+    if(m===45){d.style.transform='translateX(-100%)';}
+    ax.appendChild(d);
+  }
+})();
+</script>
+</body>
+</html>

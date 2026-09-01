@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tech-interview-screen -- video autopsy</title>
+<style>
+:root{
+  --panel:#14171a; --panel2:#1b1f23; --panel3:#22272c;
+  --rule:#333a41; --ink:#e9e5dd; --ink2:#b3b7bb; --muted:#868c93;
+  --candidate:#e0a13a;      /* one speaker */
+  --interviewer:#4bb0a4;      /* the other speaker */
+  --neither:#2b3036;     /* neither indicator lit */
+  --blind:#5a4a3e;       /* an instrument that cannot read this span */
+  --offcall:#d2543f;     /* the capture is not showing the call */
+  --serif:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--panel);color:var(--ink);font-family:var(--serif);
+  font-size:18px;line-height:1.62;text-rendering:optimizeLegibility}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+.measure{max-width:34em}
+a{color:var(--candidate)}
+h1,h2,h3{font-weight:600;line-height:1.12;margin:0}
+h2{font-size:1.9rem;letter-spacing:-.012em;margin:0 0 .35em}
+h3{font-size:1.16rem;letter-spacing:.01em;margin:2.1em 0 .5em}
+p{margin:0 0 1.05em}
+em{font-style:italic;color:#f2ede4}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- masthead ---------- */
+header.mast{border-bottom:1px solid var(--rule);padding:64px 0 40px;margin-bottom:0}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 26px}
+.eyebrow span{color:var(--offcall)}
+h1{font-size:clamp(2.7rem,7.2vw,5.1rem);letter-spacing:-.028em;margin:0 0 .34em;max-width:15em}
+h1 .qual{display:block;color:var(--ink2);font-size:.44em;letter-spacing:-.01em;margin-top:.5em;
+  font-style:italic}
+.stand{font-size:1.22rem;color:var(--ink2);max-width:33em;margin:0 0 34px}
+dl.prov{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:2px 30px;
+  margin:0;padding-top:22px;border-top:1px solid var(--rule)}
+dl.prov div{padding:9px 0}
+dl.prov dt{font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted)}
+dl.prov dd{margin:2px 0 0;font-family:var(--mono);font-size:.83rem;color:var(--ink2);line-height:1.45}
+
+/* ---------- signature timeline ---------- */
+section.sig{padding:56px 0 10px;border-bottom:1px solid var(--rule)}
+.sig-lede{max-width:36em;color:var(--ink2);margin-bottom:34px}
+.tl{position:relative;margin:0 0 12px}
+.ruler{position:relative;height:22px;border-bottom:1px solid var(--rule);margin-bottom:14px}
+.ruler i{position:absolute;top:8px;bottom:0;width:1px;background:var(--rule)}
+.ruler b{position:absolute;top:0;font-family:var(--mono);font-size:.66rem;color:var(--muted);
+  transform:translateX(-50%);font-weight:400}
+.lane{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;margin:0 0 7px}
+.lane > .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--muted);
+  text-align:right;text-transform:uppercase;line-height:1.3}
+.track{position:relative;height:20px;background:var(--panel2);border-radius:2px;overflow:hidden;
+  transform-origin:left center}
+.track.tall{height:30px}
+.track i{position:absolute;top:0;bottom:0}
+.track b{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding-left:8px;
+  font-family:var(--mono);font-size:.68rem;color:var(--ink2);font-weight:400;
+  border-left:1px solid var(--rule);white-space:nowrap;overflow:hidden}
+.hatch{background-image:repeating-linear-gradient(135deg,var(--blind) 0 3px,transparent 3px 7px);
+  background-color:#211d1a}
+.marks{position:relative;height:26px;margin-top:5px}
+.marks .stem{position:absolute;top:0;width:1px;height:9px;background:var(--rule)}
+.mk{position:absolute;top:9px;transform:translateX(-50%);background:none;border:1px solid var(--rule);
+  border-radius:50%;width:17px;height:17px;padding:0;font-family:var(--mono);font-size:.64rem;
+  color:var(--candidate);line-height:15px;text-align:center;cursor:default;
+  transition:transform .18s ease,background-color .18s ease}
+.mk:hover,.mk:focus-visible{transform:translateX(-50%) translateY(-2px);background:#2a2018}
+.mk:focus-visible{outline:2px solid var(--candidate);outline-offset:2px}
+ol.key{list-style:none;counter-reset:k;margin:22px 0 0;padding:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:4px 34px}
+ol.key li{counter-increment:k;position:relative;padding:5px 0 5px 30px;
+  font-family:var(--mono);font-size:.75rem;color:var(--ink2);line-height:1.45}
+ol.key li::before{content:counter(k);position:absolute;left:0;top:5px;width:17px;height:17px;
+  border:1px solid var(--rule);border-radius:50%;text-align:center;line-height:15px;
+  font-size:.64rem;color:var(--candidate)}
+ol.key li b{color:var(--ink);font-weight:400}
+.pivot{position:absolute;top:0;bottom:0;width:1px;background:var(--offcall);opacity:.95;
+  pointer-events:none}
+.legend{display:flex;flex-wrap:wrap;gap:10px 26px;margin:26px 0 8px;padding-top:20px;
+  border-top:1px solid var(--rule);font-family:var(--mono);font-size:.74rem;color:var(--ink2)}
+.legend span{display:flex;align-items:center;gap:9px}
+.sw{width:22px;height:11px;border-radius:2px;display:inline-block;flex:none}
+.tl-note{font-size:.95rem;color:var(--muted);max-width:40em;margin:12px 0 44px}
+
+/* ---------- body ---------- */
+main section{padding:52px 0;border-bottom:1px solid var(--rule)}
+.kicker{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin:0 0 12px}
+blockquote{margin:1.6em 0;padding:0 0 0 22px;border-left:2px solid var(--candidate);
+  font-style:italic;color:#f2ede4;max-width:34em}
+blockquote cite{display:block;font-style:normal;font-family:var(--mono);font-size:.72rem;
+  letter-spacing:.09em;color:var(--muted);margin-top:.7em}
+table{border-collapse:collapse;width:100%;margin:1.4em 0 1.8em;font-family:var(--mono);
+  font-size:.82rem;font-variant-numeric:tabular-nums}
+caption{text-align:left;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted);padding-bottom:10px}
+th,td{text-align:left;padding:9px 14px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+th{color:var(--muted);font-weight:400;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase}
+td.n{text-align:right;padding-right:26px;white-space:nowrap}
+td strong,th strong{color:var(--ink);font-weight:600}
+.hi{color:var(--candidate)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 54px}
+@media(max-width:820px){
+  .two{grid-template-columns:1fr;gap:0}
+  .lane{grid-template-columns:88px 1fr;gap:10px}
+  .lane > .lbl{font-size:.6rem}
+  ol.key{grid-template-columns:1fr}
+  /* At this width the numbered circles for 25:44 and 26:13 sit 4 px apart and overlap.
+     Keep the stems, drop the numerals, and let the key below carry them -- it is already
+     numbered in the same order and stacks to a single column here. */
+  .mk{display:none}
+  .ruler b.dense{display:none}
+  body{font-size:17px}
+}
+ul.plain{list-style:none;padding:0;margin:1.1em 0}
+ul.plain li{padding:0 0 .85em 20px;position:relative;max-width:34em}
+ul.plain li::before{content:"--";position:absolute;left:0;color:var(--muted);font-family:var(--mono)}
+.src{font-family:var(--mono);font-size:.74rem;color:var(--offcall);letter-spacing:.06em;
+  border:1px solid #4a2a22;background:#221815;padding:12px 16px;margin:0 0 22px;max-width:44em;
+  line-height:1.55}
+footer{padding:46px 0 90px;color:var(--muted);font-family:var(--mono);font-size:.76rem;
+  line-height:1.7;max-width:46em}
+
+/* The one moment of motion on this page is the marker lift on hover/focus, above.
+   It is deliberately an INTERACTION and not an entry animation: an entry animation that
+   fills backwards leaves the lanes at scale 0 until it starts, and any renderer that
+   captures the first frame -- a headless screenshot, a print, a reader who lands mid-load --
+   then sees an empty timeline. No content on this page depends on motion having run. */
+@media(prefers-reduced-motion:reduce){
+  .mk{transition:none}
+  .mk:hover,.mk:focus-visible{transform:translateX(-50%)}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">video autopsy &middot; self-review &middot; source: <span>private</span></p>
+  <h1>The interview stopped being in English at 25:44.
+    <span class="qual">Every instrument pointed at it went blind in the same place.</span></h1>
+  <p class="stand">One screening call, about 30 minutes. The company pitch, the CV walkthrough and five
+    behavioural questions run in English. Then the language changes, and in the six minutes no
+    transcript engine could read, the two of them settle the contract structure, the salary
+    number, the whole remaining hiring pipeline, and three questions the candidate had written
+    down in advance.</p>
+  <dl class="prov">
+    <div><dt>Duration</dt><dd>about 30 minutes</dd></div>
+    <div><dt>Frames read</dt><dd>every frame at 5 fps, plus 6 reaction bursts</dd></div>
+    <div><dt>Transcript</dt><dd>faster-whisper large-v3, verbatim,<br>float16 GPU, 9.57x realtime</dd></div>
+    <div><dt>Attribution</dt><dd>speaker-separated export,<br>cross-checked at 91.5 % against pixels</dd></div>
+    <div><dt>Export-derived window</dt><dd>0:48-25:44, about 80% coverage</dd></div>
+    <div><dt>Frame-derived window</dt><dd>about 100% coverage</dd></div>
+  </dl>
+</header>
+
+<section class="sig">
+  <p class="kicker">The signature reading</p>
+  <h2>One file, four readings, four different blind spots</h2>
+  <p class="sig-lede">Each lane below is the same recording, about 30 minutes. The floor lane is who was
+    speaking, second by second, read from the active-speaker border Google Meet draws around a
+    tile -- not from any transcript. The four instrument lanes underneath show where each reading
+    of the audio is trustworthy and where it is not. Hatching means the instrument returns text
+    for that span and the text is not what was said.</p>
+
+  <div class="tl" id="tl">
+    <div class="ruler" id="ruler"></div>
+
+    <div class="lane"><span class="lbl">Phase</span>
+      <div class="track tall" id="lane-phase"></div></div>
+
+    <div class="lane"><span class="lbl">Floor<br>(from pixels)</span>
+      <div class="track tall" id="lane-floor"></div></div>
+
+    <div class="lane"><span class="lbl">Caption export</span>
+      <div class="track" id="lane-export"></div></div>
+
+    <div class="lane"><span class="lbl">Whisper, en</span>
+      <div class="track" id="lane-wen"></div></div>
+
+    <div class="lane"><span class="lbl">Whisper, pt</span>
+      <div class="track" id="lane-wpt"></div></div>
+
+    <div class="lane"><span class="lbl">Capture shows<br>the call</span>
+      <div class="track" id="lane-screen"></div></div>
+
+    <div class="lane"><span class="lbl"></span><div class="marks" id="marks"></div></div>
+    <div class="lane"><span class="lbl"></span><ol class="key" id="key"></ol></div>
+  </div>
+
+  <div class="legend">
+    <span><i class="sw" style="background:var(--candidate)"></i>candidate holds the floor</span>
+    <span><i class="sw" style="background:var(--interviewer)"></i>interviewer holds the floor</span>
+    <span><i class="sw" style="background:var(--neither)"></i>neither indicator lit</span>
+    <span><i class="sw" style="background:#47584f"></i>instrument is readable here</span>
+    <span><i class="sw hatch"></i>instrument returns text that is not what was said</span>
+    <span><i class="sw" style="background:var(--panel2)"></i>instrument not applied to this span</span>
+    <span><i class="sw" style="background:var(--offcall)"></i>capture is showing a browser window, not the call</span>
+    <span><i class="sw" style="background:var(--offcall);width:2px"></i>25:44, where the language changes</span>
+  </div>
+  <p class="tl-note">The three red slivers are the only 34.8 seconds, across the whole recording,
+    in which the capture is not showing the call. The middle one is 17.9 seconds long and sits directly
+    underneath the interviewer describing the remaining interview stages.</p>
+</section>
+
+<main>
+
+<section>
+  <p class="kicker">What the exchange actually was</p>
+  <h2>A screening call conducted in a borrowed language</h2>
+  <div class="measure">
+    <p>That the English was borrowed is not an inference. It is negotiated in the first minute, in
+      Portuguese, before any of it. The interviewer asks whether they can do the rest of the
+      conversation in English; the candidate says yes, and that he actually prefers it, because he
+      is more used to giving these interviews in English. The English window is a deliberate
+      exercise for both of them, and the close is the two of them dropping the exercise once the
+      evaluative part is over and the transactional part begins.</p>
+
+    <p>The shape of the English window is monologue-and-response, lopsided first in one direction
+      and then the other. The interviewer opens with a continuous four-minute company overview.
+      The candidate then holds the floor for most of the next six minutes and answers five open
+      questions at length. Across the whole English window he takes <span class="hi">70.3 % of the
+      speaking time</span> on <span class="hi">65.7 % of the words</span> -- speaking for more of
+      the clock than his word count accounts for, which is the arithmetic signature of slow,
+      unpaused delivery rather than fast delivery.</p>
+
+    <p>The call goes well. Its strongest moment is unprompted and, in a way the recording could not
+      have anticipated, self-referential: asked how he stays current, the candidate spends five
+      minutes describing his own multi-agent orchestration setup, and ends on a tool he built to
+      make an assistant watch a video for him.</p>
+
+    <blockquote>you can say, transcribe the audio, read the transcription. Then, every time you
+      feel like you want to see what is happening in the video while you are reading the
+      transcription, extract a frame from the video for that specific moment.
+      <cite>transcript 20:27</cite></blockquote>
+
+    <p>That is, step for step, the pipeline that produced this page. The interviewer's reply is
+      specific rather than a polite backchannel -- she volunteers that she has recently started
+      building skills for the same assistant at work, and that it helps her a great deal. It is
+      the only point in the recording where she discloses something about her own practice.</p>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">The finding</p>
+  <h2>Eighteen seconds on LinkedIn, and the two minutes that close on them</h2>
+  <div class="two">
+    <div>
+      <p>From <span class="mono hi">27:12.2</span> to <span class="mono hi">27:30.0</span> the
+        capture stops showing the call and shows LinkedIn: the candidate's own feed, then the
+        interviewer's profile page, then a toast reading <em>Invitation sent to [REDACTED: name].</em>, read
+        from a 2.5x upscaled crop of a single frame.</p>
+      <p>Across exactly those eighteen seconds the interviewer is naming the stages that remain in
+        the hiring process: a pair-coding round, a system-design round, and an executive interview
+        with the founder. No gap appears in his speech, because he had the floor for none of it.</p>
+      <p>Two minutes later he says so himself.</p>
+      <blockquote>You already told me what the next stages will be, they are... we have the, I
+        won't remember now, but we have the transcript.
+        <cite>transcript 29:21-29:26, translated from the verbatim Portuguese decode</cite></blockquote>
+      <p>The screen and the words close on each other exactly. Neither half of that is audible, and
+        no reading of this recording that stops at the language boundary contains either one.</p>
+    </div>
+    <div>
+      <p><strong>A previously banked comparison has been withheld.</strong> [Content removed under
+        publication rule 1.] It measured this run's frame-derived count of the LinkedIn episode(s)
+        in this span against a private prior note describing the same span, and corrected the
+        episode count, duration and which episode contained the name search. Because the comparison
+        depends on that external record, both the comparison and the record it drew on are removed
+        whole rather than partially redacted.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Measured, per phase</p>
+  <h2>He does not rush under pressure. He stops leaving room.</h2>
+  <div class="measure">
+    <p>The single most diagnostic number in the run is not the talk share. It is the silence in one
+      phase against the silence in the next two.</p>
+  </div>
+
+  <table>
+    <caption>Silence, pace and floor share, per phase. Silence: silencedetect at -35 dB, d = 1.0 s, 49 events parsed.</caption>
+    <tr><th>Phase</th><th class="n">Length</th><th class="n">Silence</th><th class="n">Events</th>
+        <th class="n">Longest pause</th><th class="n">His pace</th><th class="n">His floor share</th></tr>
+    <tr><td>Portuguese opening 0:00-0:48</td><td class="n">48 s</td><td class="n">3.11 %</td>
+        <td class="n">1</td><td class="n">1.49 s</td><td class="n">--</td><td class="n">--</td></tr>
+    <tr><td>Company overview 0:48-5:36</td><td class="n">288 s</td><td class="n">1.20 %</td>
+        <td class="n">3</td><td class="n">1.27 s</td><td class="n">--</td><td class="n">6.6 %</td></tr>
+    <tr><td><strong>Background walkthrough 5:36-11:52</strong></td><td class="n">376 s</td>
+        <td class="n hi"><strong>0.32 %</strong></td><td class="n hi"><strong>1</strong></td>
+        <td class="n">1.22 s</td><td class="n">137.5 wpm</td><td class="n hi"><strong>96.5 %</strong></td></tr>
+    <tr><td>English question and answer 11:52-25:44</td><td class="n">832 s</td><td class="n">4.46 %</td>
+        <td class="n">27</td><td class="n">2.30 s</td><td class="n">129.5 wpm</td><td class="n">80.3 %</td></tr>
+    <tr><td>Portuguese close 25:44-31:32</td><td class="n">349 s</td><td class="n">7.49 %</td>
+        <td class="n">17</td><td class="n">5.22 s</td><td class="n">void</td><td class="n">35.4 %</td></tr>
+    <tr><td>Whole recording</td><td class="n">about 30 min</td><td class="n">3.66 %</td><td class="n">49</td>
+        <td class="n">5.22 s</td><td class="n">--</td><td class="n">--</td></tr>
+  </table>
+
+  <div class="measure">
+    <p>Six minutes and sixteen seconds of speaking with one pause above a second in it. A
+      whole-recording average of 3.66 % hides that completely -- and so does the package's own
+      default 1.5-second threshold, which finds no events at all in the first three phases and
+      would have reported three consecutive spans of "0.00 % silence": a number that reads as a
+      clean result and is really the instrument's floor. The threshold was swept from -25 dB to
+      -45 dB before any of these figures were believed; the metric responds monotonically across
+      that range, so it is live rather than stuck.</p>
+    <p>His pace <em>falls</em> from the easy phase to the questioned phase, 137.5 to 129.5 wpm,
+      against the interviewer's 187.0 wpm in the overview she had prepared. Pace, pause structure
+      and monologue length are three views of one behaviour here, and they agree, which is the
+      cross-check that says the reading is behavioural rather than instrumental. This is not
+      rushing. It is continuous, unpaused composition in a second language.</p>
+  </div>
+
+  <table>
+    <caption>Continuous monologue blocks at or above 60 s, 3 s backchannel tolerance, English window</caption>
+    <tr><th>Method</th><th>Candidate</th><th>Interviewer</th></tr>
+    <tr><td>Caption export</td><td>5 blocks, 743 s total, longest <strong>226 s</strong> (3 m 46 s) at 6:24-10:10</td>
+        <td>1 block, <strong>244 s</strong> (4 m 04 s) at 1:23-5:27</td></tr>
+    <tr><td>Frame active-speaker</td><td>4 blocks, 854 s total, longest <strong>328 s</strong> (5 m 28 s) at 6:26-11:54</td>
+        <td>1 block, <strong>244 s</strong> (4 m 04 s) at 1:24-5:28</td></tr>
+  </table>
+
+  <div class="measure">
+    <p>The two methods agree to one second on her single block and diverge on his, because the
+      export absorbs one-word backchannels into the line before them while the pixel signal sees
+      her indicator light for a second and breaks the run. Both are reported and the narrower one
+      governs any claim.</p>
+    <p>A sixth apparent block, 71 seconds at 28:46, was measured and then discarded: it sits inside
+      the span where the export is word salad, and turn-by-turn inspection against the verbatim
+      Portuguese decode shows both speakers trading full turns through it. The merge does not know
+      the window boundary is there. The inspection is reported whether or not it changed the
+      result; here it did.</p>
+  </div>
+
+  <table>
+    <caption>Disfluency, English window, normalised per minute of each speaker's own speech</caption>
+    <tr><th></th><th class="n">um</th><th class="n">uh</th><th class="n">you know</th>
+        <th class="n">immediate word repeats</th><th class="n">own speech</th>
+        <th class="n">um+uh / min</th><th class="n">repeats / min</th></tr>
+    <tr><td>Candidate</td><td class="n">84</td><td class="n">14</td><td class="n">4</td>
+        <td class="n hi"><strong>49</strong></td><td class="n">1050 s</td><td class="n">5.60</td>
+        <td class="n hi"><strong>2.80</strong></td></tr>
+    <tr><td>Interviewer</td><td class="n">30</td><td class="n">9</td><td class="n">11</td>
+        <td class="n"><strong>1</strong></td><td class="n">444 s</td><td class="n">5.27</td>
+        <td class="n"><strong>0.14</strong></td></tr>
+  </table>
+
+  <div class="measure">
+    <p>The filler rates are close enough to carry nothing. The restart rate is not: 2.80 a minute
+      against 0.14, a factor of twenty on the same recording with the same instrument. That, and
+      not the filler count, is the measurable form of self-interrupting narration.</p>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">What landed</p>
+  <h2>Three moments the transcript reads wrong</h2>
+  <div class="measure">
+    <p>A transcript cannot say how something was received. Each of these was resolved by cutting a
+      nine-frame reaction sheet across twelve seconds and reading it.</p>
+    <ul class="plain">
+      <li><strong>The push-back on her own length.</strong> After a four-minute overview he says he
+        had expected a brief one and got a lot, and thanks her for it. Read cold that is a mild
+        criticism from a candidate to a recruiter. The frames show her moving from a neutral
+        speaking face to a broad, open, eye-crinkling smile across the following eight seconds
+        while he is still talking. It was received as charm.</li>
+      <li><strong>The word he could not find.</strong> Asked about ideal company culture he stalls
+        outright -- he cannot find the word in English and asks how to translate it; she answers
+        that she does not know. The two longest pauses in the whole English window, 2.30 s and
+        2.01 s, sit inside this exchange. Read from the transcript alone it is the worst moment in
+        the round. The frames show both of them smiling within four seconds and her still smiling
+        eight seconds later. It cost him time, not rapport.</li>
+      <li><strong>The salary number.</strong> Asked directly for an expectation in dollars, he
+        names one, with a visible search and a hedge, framed as what he has been asking elsewhere.
+        Her face across the following eight seconds is neutral: no smile, no surprise, no lean. She
+        moves straight to the availability question. That is a genuine null, and it is reported as
+        one -- the recording cannot say whether the number was high, low or expected.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Method</p>
+  <h2>How the pixels were made to check the transcript</h2>
+  <div class="two">
+    <div>
+      <p>Attribution in a two-party call is the assumption most likely to be wrong and least likely
+        to be checked. Here the primary source is a speaker-separated caption export, which is
+        exact where it is legible and useless where it is not.</p>
+      <p>The independent check is Google Meet's own active-speaker indicator: the thin border the
+        interface draws around whichever tile is speaking, measured as blue-channel excess over a
+        four-pixel strip at the top edge of each tile, on every extracted frame. It shares
+        nothing with the export -- one is caption text, the other is a rendered interface element.</p>
+      <p>Across the English window the two agree on <strong>1361 of 1488</strong> decided seconds,
+        <strong>91.5 %</strong>, and their aggregate talk-share differs by 0.2 percentage points.
+        The border is lit on both tiles in <strong>zero frames of the recording</strong>, which is the
+        structural check that the probe reads one indicator rather than two brightness artifacts.</p>
+    </div>
+    <div>
+      <p>The face-to-name map was bound from two disjoint sources -- the nameplate the interface
+        renders inside each tile, and the active-speaker border lighting on a tile at times the
+        caption panel attributes the line to that person -- and re-verified at 02:00, 10:00 and
+        28:20. Grid order and geometry are unchanged at all three.</p>
+      <p>The recording's own on-screen live captions settle the export's failure directly rather
+        than by inference: at 28:20 they read <span class="mono">Titan.</span>,
+        <span class="mono">And complements. The.</span>, <span class="mono">Make, follow.</span> --
+        the same nonsense the export carries at the same timestamps, visible in the pixels.</p>
+      <p>Two audio channels turned out to be the same signal: difference ratio 0.81 %, correlation
+        0.999967 at lag 0, cross-correlation peak at exactly lag 0. Same-signal branch, mono
+        downmix, no alignment work, and no prosody claim anywhere on this page -- a single mixed
+        track cannot support one.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Limits</p>
+  <h2>What this page cannot tell you</h2>
+  <div class="measure">
+    <ul class="plain">
+      <li>Word counts, filler counts and exact turn text exist only for the 79.0 % of the recording
+        the export can read. The remaining 21.0 % is fully recovered by a second decode, but not by
+        the same instrument, so no statistic is computed across the two.</li>
+      <li>The package's own prescribed way of detecting a language switch -- running language
+        identification over the transcript text -- does not work on this file. Driven in English,
+        the model emitted English for Portuguese speech, so language identification over its output
+        reports English everywhere. What found the switch: the export collapsing, an in-recording
+        line thanking him for speaking English, a repetition loop, and a re-decode.</li>
+      <li>The verbatim tier fabricates about fourteen seconds of filler at 13:20-13:42 and loops
+        one sentence seven times at 25:56-26:03. Both are excluded from quotation. A systematic
+        scan finds no other repeat run of three or more segments.</li>
+      <li>Reaction reading is limited to one participant. The other wears glasses that catch the
+        monitor's reflection in most frames, so no eye-direction claim is made about him; the
+        postures cited are gross posture. Gaze cannot distinguish reading from thinking without a
+        contrasting baseline, and none exists here.</li>
+      <li>Whether an answer-generating assistant was running is <strong>unmeasured</strong>. No log
+        exists to overlap against what was said, and absence of a log is not evidence of absence.
+        No assistant surface appears in any extracted frame, which bounds the captured region
+        and not the machine.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <p class="kicker">Scope</p>
+  <h2>What is not on this page</h2>
+  <p class="src">SOURCE NOTE. This is a published copy of a self-review autopsy of a private
+    recording. Four sections of the written analysis were built from the candidate's own private
+    records rather than from the footage -- a behavioural comparison against prior rounds, a
+    claims-ledger consistency pass, an assist-dependence measurement, and the run's notes about the
+    analysis machine -- and have been removed whole from the markdown deliverable beside this file,
+    each replaced by a one-line declared shell. They were never reproduced here in the first place.
+    One further individual claim, inside a section that otherwise survives, has been removed in
+    place in the markdown. Nothing has been silently removed: this note is the redaction.</p>
+  <p class="src">DURATION. The total extracted frame count has also been removed from this page and
+    from the markdown, because divided by the stated frame rate it recovers the recording's exact
+    length, which is a declared quasi-identifier for a private source. That coarsening is
+    incomplete and saying so is part of the redaction: the phase table above runs to a boundary in
+    the thirty-second minute, so the length is still recoverable here to within a few seconds. The
+    phase boundaries were not moved because every per-phase rate on this page is computed from
+    them, and recomputing a run's findings after the fact is not a permitted edit. The exact
+    duration is published knowingly; "about 30 minutes" is the intended coarsening, not an achieved
+    one.</p>
+</section>
+
+</main>
+
+<footer>
+  video-autopsy &middot; MODE 1 the exchange &middot; MODE 2 self-review &middot; source class private<br>
+  5 fps &middot; 6 reaction bursts &middot; 530 verbatim segments &middot; 1 second decode &middot;
+  49 silence events &middot; 4 instrument coverage lanes<br>
+  Companion file: <span class="mono">tech-interview-screen_autopsy.md</span> (the primary,
+  evidence-tagged deliverable). The verbatim transcript this analysis was built from is withheld
+  from this published copy.
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var DUR = 1900;
+  function pct(x){ return (x/DUR*100).toFixed(4)+'%'; }
+  function put(el,a,b,style,label){
+    var i=document.createElement(label?'b':'i');
+    i.style.left=pct(a); i.style.width=pct(b-a);
+    if(style) i.style.cssText+=style;
+    if(label) i.textContent=label;
+    el.appendChild(i); return i;
+  }
+
+  /* ruler */
+  var ruler=document.getElementById('ruler');
+  for(var s=0;s<=1800;s+=300){
+    var tick=document.createElement('i'); tick.style.left=pct(s); ruler.appendChild(tick);
+    var lab=document.createElement('b');
+    lab.style.left=pct(s);
+    lab.textContent=(s/60)+':00';
+    if((s/300)%2===1) lab.className='dense';         /* 5, 15, 25 -- dropped on narrow screens */
+    if(s===0){lab.style.left='0'; lab.style.transform='none';}
+    if(s>=DUR-240){lab.style.left='auto'; lab.style.right='0'; lab.style.transform='none';}
+    ruler.appendChild(lab);
+  }
+
+  /* phases */
+  var ph=[[0,48,'PT open'],[48,336,'company overview'],[336,712,'his background'],
+          [712,1544,'English Q and A'],[1544,1900,'PT close']];
+  var lp=document.getElementById('lane-phase');
+  ph.forEach(function(p,idx){
+    put(lp,p[0],p[1],'background:'+(idx%2?'#23282d':'#1e2226')+';',p[2]);
+  });
+
+  /* floor, run-length encoded: [startSecond, length, who] 0 none 1 interviewer 2 candidate */
+  var RLE=[[0,3,1],[3,1,2],[4,5,1],[9,1,2],[10,9,1],[19,1,2],[20,13,1],[33,11,0],[44,4,2],[48,13,1],[61,10,2],[71,7,1],[78,6,2],[84,245,1],[329,1,0],[330,11,2],[341,2,0],[343,8,2],[351,2,0],[353,28,2],[381,1,0],[382,4,1],[386,33,2],[419,1,1],[420,39,2],[459,1,1],[460,3,2],[463,1,1],[464,43,2],[507,1,1],[508,22,2],[530,1,1],[531,6,2],[537,1,1],[538,5,2],[543,2,1],[545,67,2],[612,1,1],[613,65,2],[678,2,1],[680,35,2],[715,17,1],[732,24,2],[756,1,1],[757,8,2],[765,1,1],[766,5,2],[771,1,1],[772,5,2],[777,2,1],[779,20,2],[799,2,1],[801,9,2],[810,1,1],[811,2,2],[813,1,1],[814,81,2],[895,2,1],[897,28,2],[925,1,1],[926,14,2],[940,2,1],[942,1,2],[943,22,1],[965,62,2],[1027,1,1],[1028,27,2],[1055,2,1],[1057,25,2],[1082,1,1],[1083,37,2],[1120,1,1],[1121,7,2],[1128,1,1],[1129,40,2],[1169,1,1],[1170,6,2],[1176,1,1],[1177,17,2],[1194,10,1],[1204,31,2],[1235,1,1],[1236,17,2],[1253,1,1],[1254,4,2],[1258,19,1],[1277,32,2],[1309,1,1],[1310,35,2],[1345,1,1],[1346,12,2],[1358,1,1],[1359,7,2],[1366,5,1],[1371,1,2],[1372,1,1],[1373,1,2],[1374,19,1],[1393,5,2],[1398,1,1],[1399,15,2],[1414,6,1],[1420,1,2],[1421,2,1],[1423,25,2],[1448,1,1],[1449,6,2],[1455,1,1],[1456,6,2],[1462,25,1],[1487,23,2],[1510,1,1],[1511,12,2],[1523,1,1],[1524,19,2],[1543,12,1],[1555,4,2],[1559,1,0],[1560,3,1],[1563,1,0],[1564,24,2],[1588,1,0],[1589,7,1],[1596,1,0],[1597,1,2],[1598,1,0],[1599,36,1],[1635,11,0],[1646,1,2],[1647,3,0],[1650,27,1],[1677,6,2],[1683,11,1],[1694,12,2],[1706,1,1],[1707,3,2],[1710,17,1],[1727,13,2],[1740,17,1],[1757,5,2],[1762,1,1],[1763,3,2],[1766,1,1],[1767,8,2],[1775,2,1],[1777,5,2],[1782,2,1],[1784,9,2],[1793,1,0],[1794,29,1],[1823,1,0],[1824,6,2],[1830,1,0],[1831,18,1],[1849,1,0],[1850,16,1],[1866,1,0],[1867,5,2],[1872,3,1],[1875,2,2],[1877,5,1],[1882,5,2],[1887,6,0]];
+  var COL={0:'var(--neither)',1:'var(--interviewer)',2:'var(--candidate)'};
+  var lf=document.getElementById('lane-floor');
+  RLE.forEach(function(r){ put(lf,r[0],r[0]+r[1],'background:'+COL[r[2]]+';'); });
+
+  /* instrument lanes: [start, end, kind] kind ok|blind */
+  function lane(id,spans){
+    var el=document.getElementById(id);
+    spans.forEach(function(s){
+      var i=put(el,s[0],s[1],'');
+      if(s[2]==='ok'){ i.style.background='#47584f'; }
+      else { i.className='hatch'; }
+    });
+  }
+  lane('lane-export',[[0,48,'blind'],[48,1544,'ok'],[1544,1900,'blind']]);
+  lane('lane-wen',   [[0,48,'blind'],[48,800,'ok'],[800,822,'blind'],[822,1544,'ok'],[1544,1900,'blind']]);
+  lane('lane-wpt',   [[0,70,'ok'],[1530,1900,'ok']]);
+  var ls=document.getElementById('lane-screen');
+  put(ls,0,1900,'background:#47584f;');
+  [[33.0,44.8],[1632.2,1650.0],[1886.6,1900]].forEach(function(s){
+    put(ls,s[0],s[1],'background:var(--offcall);');
+  });
+
+  /* the pivot: one vertical rule at the language boundary, across every lane */
+  document.querySelectorAll('#tl .track').forEach(function(t){
+    var r=document.createElement('span'); r.className='pivot'; r.style.left=pct(1544);
+    t.appendChild(r);
+  });
+
+  /* markers: numbered stems on the timeline, chronological key beneath.
+     A key cannot collide the way floating labels can, and the content really is a sequence. */
+  var MK=[[38,'0:38','the language frame is agreed, in Portuguese'],
+          [328,'5:28','he says her overview was long; she laughs'],
+          [1191,'19:51','her only disclosure about her own practice'],
+          [1392,'23:12','the word he cannot find in English'],
+          [1544,'25:44','English ends; every engine goes blind'],
+          [1573,'26:13','the salary number, hedged'],
+          [1641,'27:21','on LinkedIn while she names the stages'],
+          [1755,'29:15','three reverse questions, written down beforehand']];
+  var mk=document.getElementById('marks'), key=document.getElementById('key');
+  MK.forEach(function(m,idx){
+    var stem=document.createElement('span');
+    stem.className='stem'; stem.style.left=pct(m[0]); mk.appendChild(stem);
+    var b=document.createElement('button');
+    b.type='button'; b.className='mk'; b.style.left=pct(m[0]);
+    b.textContent=String(idx+1);
+    b.setAttribute('aria-label',m[1]+' -- '+m[2]);
+    mk.appendChild(b);
+    var li=document.createElement('li');
+    li.innerHTML='<b>'+m[1]+'</b> &nbsp;'+m[2];
+    key.appendChild(li);
+  });
+})();
+</script>
+</body>
+</html>

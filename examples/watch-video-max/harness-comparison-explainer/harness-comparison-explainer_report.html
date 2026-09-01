@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teardown: DeepSeek Harness vs Claude Code -- what survives the pixels</title>
+<style>
+:root{
+  /* Palette locked AFTER the direction was chosen. Every accent maps to ONE provenance
+     class and is used for nothing else. See the legend on PLATE 00. */
+  --paper:#ece7dc;
+  --paper-2:#e3ddcf;
+  --ink:#17150f;
+  --ink-soft:#4a463c;
+  --rule:#c3bba7;
+  --rule-hard:#8d8571;
+
+  --screen:#1c4f7c;   /* ON-SCREEN  : read from pixels */
+  --stated:#8a6010;   /* STATED     : narrator, unverified */
+  --corrected:#a8341a;/* CORRECTED  : frames overturned what was heard */
+  --inferred:#55524a; /* INFERRED   : this report's synthesis */
+
+  --mono:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --serif:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#16150f;--paper-2:#1e1c14;--ink:#e8e3d5;--ink-soft:#a29b88;
+    --rule:#38352a;--rule-hard:#57523f;
+    --screen:#7fb3e0;--stated:#d6a441;--corrected:#e0765a;--inferred:#9c968a;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:19px;line-height:1.62;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px 120px}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:3px double var(--rule-hard);padding:52px 0 22px;margin-bottom:8px}
+.stamp{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0 0 26px
+}
+h1{
+  font-size:clamp(38px,7.4vw,74px);line-height:1.02;margin:0 0 20px;font-weight:600;
+  letter-spacing:-.018em;max-width:17ch
+}
+h1 em{font-style:italic;color:var(--corrected)}
+.standfirst{font-size:clamp(19px,2.1vw,23px);line-height:1.5;max-width:60ch;margin:0 0 30px;color:var(--ink-soft)}
+
+/* ---------- spec block (provenance of the page itself) ---------- */
+.spec{
+  font-family:var(--mono);font-size:12.5px;line-height:1.85;
+  border-top:1px solid var(--rule);
+  padding:16px 0 2px;margin:0;
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:4px 40px
+}
+.spec div{display:flex;gap:12px}
+.spec b{font-weight:400;color:var(--ink-soft);min-width:104px;text-transform:uppercase;letter-spacing:.08em;font-size:11px;padding-top:2px}
+.spec span{flex:1}
+
+/* ---------- plates ---------- */
+.plate{margin:74px 0 0;scroll-margin-top:20px}
+.plate-no{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink-soft);border-bottom:1px solid var(--rule);padding-bottom:7px;margin-bottom:20px;
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap
+}
+h2{font-size:clamp(27px,3.7vw,40px);line-height:1.12;margin:0 0 16px;font-weight:600;letter-spacing:-.012em;max-width:22ch}
+h3{font-size:21px;margin:34px 0 9px;font-weight:600;letter-spacing:-.004em}
+p{max-width:66ch;margin:0 0 17px}
+.lede{font-size:20.5px;max-width:64ch}
+
+/* ---------- provenance tag: the one device that carries meaning ---------- */
+.tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  border:1px solid currentColor;padding:2px 6px;white-space:nowrap;vertical-align:2px;
+  display:inline-block;line-height:1.5
+}
+.t-screen{color:var(--screen)}
+.t-stated{color:var(--stated)}
+.t-corr{color:var(--corrected)}
+.t-inf{color:var(--inferred)}
+
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:16px 34px;margin:26px 0 8px}
+.legend div{border-left:3px solid;padding:2px 0 2px 13px;font-size:15.5px;line-height:1.48;max-width:40ch}
+.legend .l1{border-color:var(--screen)}
+.legend .l2{border-color:var(--stated)}
+.legend .l3{border-color:var(--corrected)}
+.legend .l4{border-color:var(--inferred)}
+.legend b{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.legend .l1 b{color:var(--screen)} .legend .l2 b{color:var(--stated)}
+.legend .l3 b{color:var(--corrected)} .legend .l4 b{color:var(--inferred)}
+
+/* ---------- SIGNATURE ELEMENT: the parts bench ---------- */
+.bench{margin:30px 0 8px;border-top:2px solid var(--ink)}
+.part{
+  display:grid;grid-template-columns:52px 1fr 128px;gap:0 22px;align-items:start;
+  border-bottom:1px solid var(--rule);padding:17px 0
+}
+.part-no{
+  font-family:var(--mono);font-size:12px;color:var(--ink-soft);letter-spacing:.06em;
+  border:1px solid var(--rule-hard);text-align:center;padding:3px 0;line-height:1.3
+}
+.part-body b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+.part-body q{font-size:19.5px;quotes:'"' '"';display:block;max-width:52ch}
+.part-body .note{font-size:15px;color:var(--ink-soft);margin-top:7px;max-width:56ch;line-height:1.5}
+.part-tag{justify-self:end;padding-top:2px}
+@media(max-width:660px){
+  .part{grid-template-columns:44px 1fr;gap:0 14px}
+  .part-tag{grid-column:2;justify-self:start;margin-top:9px}
+}
+
+/* ---------- the one measured result: two-lane timing strip ----------
+   Honesty note: 52 s and 53 s are nearly equal and the bars say so. The bars are
+   drawn to a SHARED time axis, so neither length is rhetorical. What actually
+   separates the two runs is that one has an endpoint and the other does not, and
+   that is carried by the hatched open-ended continuation, not by bar length. */
+.race{border:1px solid var(--rule-hard);padding:26px 24px;margin:26px 0 10px;background:var(--paper-2)}
+.race h4{margin:0 0 4px;font-size:18px;font-weight:600}
+.race .sub{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 24px;max-width:none}
+.lane{margin:0 0 16px}
+.lane-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:6px;flex-wrap:wrap}
+.lane-name{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em}
+.lane-val{font-family:var(--mono);font-size:12.5px;color:var(--ink-soft)}
+.track{position:relative;height:22px;border-left:1px solid var(--ink)}
+.fill{
+  position:absolute;left:0;top:0;bottom:0;width:var(--w);
+  transform-origin:left center
+}
+/* BOTH solid segments are ON-SCREEN readings -- 52 s and 53 s were each read off a
+   panel in the same frame -- so both take the on-screen colour. Only the tail, which
+   is the part nobody ever observed, takes the unverified colour. Colouring the whole
+   Claude Code bar amber would have implied its 53 s was merely asserted. It was not. */
+.lane .fill{background:var(--screen)}
+.tail{ /* open-ended: no answer had arrived when the frame was taken */
+  position:absolute;top:0;bottom:0;left:var(--w);right:0;
+  background:repeating-linear-gradient(135deg,var(--stated) 0 2px,transparent 2px 9px);
+  opacity:.62
+}
+.cap{ /* terminal marker: this run ENDED here */
+  position:absolute;top:-3px;bottom:-3px;left:var(--w);width:2px;background:var(--ink)
+}
+.axis{position:relative;height:22px;margin-top:2px;border-top:1px solid var(--rule-hard)}
+.axis span{
+  position:absolute;top:3px;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);white-space:nowrap
+}
+.axis span::before{content:"";position:absolute;left:50%;top:-5px;width:1px;height:4px;background:var(--rule-hard)}
+/* No entrance animation on the bars, deliberately. They are the page's one piece of
+   evidence-carrying geometry, and a growth animation renders them EMPTY in every
+   static context -- print, PDF, and any headless screenshot taken before the
+   animation settles. A flourish that can silently blank the exhibit is not worth
+   having. The page therefore carries no motion at all. */
+.race .read{font-size:15.5px;color:var(--ink-soft);max-width:62ch;margin:20px 0 0;line-height:1.55}
+.race .read strong{color:var(--ink);font-weight:600}
+
+/* ---------- artifact blocks ---------- */
+pre{
+  font-family:var(--mono);font-size:13px;line-height:1.62;background:var(--paper-2);
+  border-left:3px solid var(--screen);padding:15px 17px;margin:6px 0 20px;
+  max-width:74ch;
+  /* These blocks are quoted artifacts read off the screen. They must never clip:
+     a truncated definition is a changed definition. Wrap instead of scrolling. */
+  white-space:pre-wrap;overflow-wrap:break-word
+}
+code{font-family:var(--mono);font-size:.88em;background:var(--paper-2);padding:1px 4px}
+pre code{background:none;padding:0;font-size:inherit}
+
+/* ---------- walkthrough ---------- */
+.seg{border-left:1px solid var(--rule);padding:0 0 4px 22px;margin:0 0 30px;position:relative}
+.seg::before{content:"";position:absolute;left:-4px;top:9px;width:7px;height:7px;background:var(--ink)}
+.ts{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--ink-soft);display:block;margin-bottom:4px}
+.seg h3{margin:0 0 8px}
+
+/* ---------- discrepancy entries ---------- */
+.disc{border-top:1px solid var(--rule);padding:20px 0}
+.disc:last-child{border-bottom:1px solid var(--rule)}
+.disc h3{margin:0 0 10px;font-size:20px}
+.disc dl{margin:0;display:grid;grid-template-columns:118px 1fr;gap:7px 18px;max-width:70ch}
+.disc dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);padding-top:4px}
+.disc dd{margin:0;font-size:17px;line-height:1.5}
+@media(max-width:600px){.disc dl{grid-template-columns:1fr;gap:2px}.disc dt{padding-top:9px}}
+
+ul{max-width:66ch;padding-left:22px}
+li{margin-bottom:9px}
+.foot{margin-top:80px;border-top:3px double var(--rule-hard);padding-top:20px;
+  font-family:var(--mono);font-size:11.5px;line-height:1.8;color:var(--ink-soft)}
+
+/* ---------- redaction note: neutral, not a provenance accent ---------- */
+.redaction-note{
+  border:1px solid var(--rule-hard);background:var(--paper-2);
+  padding:14px 18px;margin:0 0 26px;max-width:66ch;
+}
+.redaction-note p{margin:0;font-size:15px;line-height:1.55;color:var(--ink-soft)}
+.redaction-note b{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink);display:block;margin-bottom:6px;
+}
+a{color:inherit;text-underline-offset:3px}
+a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--corrected);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="stamp">Teardown report &nbsp;/&nbsp; single source &nbsp;/&nbsp; verbatim pass at 5 fps</p>
+  <h1>The harness is the variable. The title is <em>not</em> a measurement.</h1>
+  <p class="standfirst">
+    An 18-minute review of DeepSeek Harness against Claude Code, taken apart claim by claim and
+    checked against its own screen. Most of it holds. Two things do not: what PTC mode actually
+    does, and the number in the title.
+  </p>
+
+  <div class="spec">
+    <div><b>Source</b><span>"100 Hours Testing Deepseek Harness vs. Claude Code. What You Need to Know."</span></div>
+    <div><b>Channel</b><span>Nate Herk | AI Automation</span></div>
+    <div><b>Published</b><span>2026-08-23</span></div>
+    <div><b>Duration</b><span>18:02 (1081.7 s)</span></div>
+    <div><b>URL</b><span><a href="https://youtu.be/UsfCe5fJK6A">youtu.be/UsfCe5fJK6A</a></span></div>
+    <div><b>Frame rate</b><span>5 fps, 5,408 frames extracted</span></div>
+    <div><b>Transcript</b><span>faster-whisper large-v3, verbatim, CUDA float16. 258 segments,
+      100% duration coverage, no gap over 3 s. Audio live (mean -25.3 dB).</span></div>
+    <div><b>Cross-check</b><span>YouTube en-orig captions, 310 spans after overlap dedup.
+      99.1% word volume vs verbatim, zero dropouts. 8 fact-bearing disagreements kept,
+      7 settled from frames, 1 unresolved.</span></div>
+    <div><b>Ingest cost</b><span>8 contact sheets, 2 burst sheets, 11 cropped and upscaled
+      artifact reads.</span></div>
+  </div>
+</header>
+
+<!-- ============================ PLATE 00 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 00</span><span>How to read the stamps</span></div>
+  <h2>Every claim below carries where it came from</h2>
+  <p class="lede">
+    This report exists because a spoken review and its own screen do not always agree. Colour on
+    this page means exactly one thing: the provenance of the claim it marks. It is used for
+    nothing else.
+  </p>
+  <div class="legend">
+    <div class="l1"><b>On-screen</b>Read from the pixels of a specific frame. The strongest
+      evidence available here.</div>
+    <div class="l2"><b>Stated</b>Asserted by the narrator, with nothing on screen to confirm or
+      refute it.</div>
+    <div class="l3"><b>Corrected</b>The frames overturned what the audio said, or what both
+      transcription engines heard.</div>
+    <div class="l4"><b>Inferred</b>This report's own reading, drawn from evidence the video
+      presents but does not connect.</div>
+  </div>
+</section>
+
+<!-- ============================ PLATE 01 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 01</span><span>Executive summary</span></div>
+  <h2>What the video is, and what it teaches</h2>
+  <p class="lede">
+    Nate Herk, an AI-automation YouTuber speaking to camera from a home studio with screen
+    recordings cut in, reports on roughly a week of using DeepSeek Harness (DSH) -- an
+    open-source, free, locally-run agent harness released in developer preview -- and compares it
+    with Claude Code, which is his working tool. The argument is built on a separation he
+    establishes in the first minute: a harness is the scaffolding around a model, and the model is
+    a slot inside it. Codex, Claude Code and DSH are three such containers; DSH's distinguishing
+    property is that everything else is swappable too. Its own landing page states the position as
+    "Everything is a plugin", and lists models, tools, skills, sessions, sandboxes, storage,
+    loops, scheduling and the UI as the swappable set.
+  </p>
+  <p>
+    Because harness and model are separable, the sharpest test in the video runs the same model
+    -- Claude Opus 5, through an OpenRouter key -- inside both harnesses on one prompt at one
+    time. DSH finished a retrieval task over a large personal repository in 52 seconds while
+    Claude Code was still widening its search at 53. Two further comparisons, on an Excel
+    analytics build and a research report, went to DSH on speed and to Claude Code on depth and
+    source count. The verdict the video lands on is a seven-row scorecard whose last row is
+    "Replace Claude? No": DSH is faster, vastly more customisable, materially buggier in long
+    sessions, and free only in the sense that the scaffolding costs nothing while inference still
+    bills per token. The recommendation is unusually self-aware -- unlimited customisation buys
+    nothing unless you have actually felt a harness constrain you, and the author says he has not.
+  </p>
+</section>
+
+<!-- ============================ PLATE 02 : SIGNATURE ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 02</span><span>Signature exhibit &nbsp;/&nbsp; the verdict, dismantled</span></div>
+  <h2>The scorecard, with each row's evidence stamped</h2>
+  <p>
+    The video's spine is a seven-row card filled in one row at a time across the runtime, complete
+    at 10:47. Read from pixels, verbatim. The stamps are this report's addition: they record what
+    each verdict actually rests on.
+  </p>
+
+  <div class="bench">
+    <div class="part">
+      <div class="part-no">01</div>
+      <div class="part-body"><b>Output quality</b>
+        <q>Entirely depends on the model and effort</q>
+        <p class="note">A deliberate non-answer. The harness cannot rescue a weak model, so the row
+          refuses to score. Correct, and the reason the rest of the card is about everything except
+          quality.</p></div>
+      <div class="part-tag"><span class="tag t-screen">On-screen</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">02</div>
+      <div class="part-body"><b>Cost</b>
+        <q>Harness is free, inference is not. Deepseek models are cheap.</q>
+        <p class="note">Supported by the install path and the settings surface. No dollar figure is
+          given anywhere in the video, and a Claude or Codex subscription cannot be used by
+          default -- so moving here converts a fixed monthly cost into a variable per-token one.</p></div>
+      <div class="part-tag"><span class="tag t-screen">On-screen</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">03</div>
+      <div class="part-body"><b>Tokens</b>
+        <q>Cheap but inefficient tokens = not really cheap</q>
+        <p class="note">The best idea in the video: cost-to-completion is the unit of account, not
+          cost per token. It is argued but never computed -- no task in the video is priced.</p></div>
+      <div class="part-tag"><span class="tag t-screen">On-screen</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">04</div>
+      <div class="part-body"><b>Reliability</b>
+        <q>Promising, but feels like a preview when doing deep coding.</q>
+        <p class="note">Rests on anecdotes: intermittent stalls, compaction bugs, and one incident
+          where the mouse was confined to a small square and another agent was used to diagnose it.
+          The product does self-describe as a developer preview, which the landing page confirms.</p></div>
+      <div class="part-tag"><span class="tag t-stated">Stated</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">05</div>
+      <div class="part-body"><b>Long sessions</b>
+        <q>Compaction bugs and context regressions</q>
+        <p class="note">Reported with the honest concession that some of it may be user error from
+          deliberately pushing into context-rot territory. No session is shown failing on camera.</p></div>
+      <div class="part-tag"><span class="tag t-stated">Stated</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">06</div>
+      <div class="part-body"><b>Customization</b>
+        <q>Awesome. Models, tools, loops, subagents, etc.</q>
+        <p class="note">The one row the settings panel proves directly: the agent loop is a
+          configurable object with a numeric "Parallel tool calls" field. But no third-party plugin
+          was installed on purpose, so the ceiling is argued from the surface, not demonstrated.</p></div>
+      <div class="part-tag"><span class="tag t-screen">On-screen</span></div>
+    </div>
+    <div class="part">
+      <div class="part-no">07</div>
+      <div class="part-body"><b>Replace Claude?</b>
+        <q>No</q>
+        <p class="note">The conclusion, revealed at 10:47. It rests on reliability impressions and
+          on subscription economics for Opus, not on any coding benchmark -- no coding task is run
+          end to end anywhere in the video.</p></div>
+      <div class="part-tag"><span class="tag t-screen">On-screen</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ PLATE 03 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 03</span><span>The only resolvable measurement</span></div>
+  <h2>Same model, same prompt, same moment</h2>
+  <p>
+    At 12:30 both panels are on screen at once, which makes this the one comparison in the video
+    that does not depend on the narrator's recall. The task: find a YouTube transcript from a vague
+    description inside a large personal knowledge repository, then summarise it in two sentences.
+  </p>
+
+  <div class="race">
+    <h4>Retrieval over a large personal corpus</h4>
+    <p class="sub">Both legs on Claude Opus 5, verified from each panel's own model selector</p>
+
+    <div class="lane done">
+      <div class="lane-top">
+        <span class="lane-name">DeepSeek Harness</span>
+        <span class="lane-val">52 s &nbsp;-- ended, answer delivered</span>
+      </div>
+      <div class="track" style="--w:86.7%">
+        <div class="fill"></div><div class="cap"></div>
+      </div>
+    </div>
+
+    <div class="lane run">
+      <div class="lane-top">
+        <span class="lane-name">Claude Code</span>
+        <span class="lane-val">53 s &nbsp;-- no endpoint observed</span>
+      </div>
+      <div class="track" style="--w:88.3%">
+        <div class="fill"></div><div class="tail"></div>
+      </div>
+      <div class="axis">
+        <span style="left:0">0 s</span>
+        <span style="left:33.3%">20</span>
+        <span style="left:66.7%">40</span>
+        <span style="left:86.7%">52</span>
+        <span style="left:100%">60 s</span>
+      </div>
+    </div>
+
+    <p class="read">
+      <strong>Read the bars carefully:</strong> they share one time axis, so their near-equal
+      lengths are the honest picture. 52 s and 53 s are almost the same instant. The difference is
+      not duration -- it is that one run has a terminal mark and the other runs off into hatching,
+      because no endpoint for it was ever shown.
+    </p>
+    <p class="read">
+      <strong>What the frame actually shows.</strong> DSH returned three transcript file paths, a
+      published title and a summary. Its own footer reads
+      <code>1 turns - 4 steps | LLM 15.3s - Tool call 33.4s | Cache hit 52% | Input 156K tok</code>.
+      Claude Code's panel reads <code>Ran 2 commands / No obvious match there. Let me search wider.</code>
+      at <code>53s - 158 tokens - 1 running task</code>.
+    </p>
+    <p class="read">
+      <strong>What it does not show.</strong> The Claude Code leg is never shown finishing, so the
+      gap is a lower bound, not a measured interval. And DSH's own numbers attribute 33.4 s of its
+      52 s to tool calls against 15.3 s of model time -- so on this task the win is a
+      search-planning result (two targeted greps versus a failed search then a widened one), not
+      raw speed. That distinction is nowhere in the narration, and it is the part that decides
+      whether the result generalises beyond corpus lookups.
+      <span class="tag t-inf">Inferred</span>
+    </p>
+  </div>
+
+  <p>
+    Two further comparisons are reported but not shown: an Excel analytics build returning in about
+    three minutes against about seventeen, and a research report of roughly 4,400 words with 14
+    load-bearing sources against roughly 5,000 words with 26. <span class="tag t-stated">Stated</span>
+    Only the 14 is independently confirmed -- the DSH report's own header reads "All 14 load-bearing
+    citations independently checked against primary sources", with the result "0 fabricated, 6
+    corrected, 3 demoted". <span class="tag t-screen">On-screen</span>
+  </p>
+  <p>
+    The video names its own confound here, which is to its credit: every skill used in these
+    comparisons was written for Claude Code. A DSH-native skill was never authored or tested, so
+    the quality gap is loaded against DSH by an unmeasured amount.
+  </p>
+</section>
+
+<!-- ============================ PLATE 04 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 04</span><span>Walkthrough</span></div>
+  <h2>Section by section, with what the screen added</h2>
+
+  <div class="seg">
+    <span class="ts">00:00 - 00:35 &nbsp;/&nbsp; Framing</span>
+    <h3>A week of use, promised in 60 seconds</h3>
+    <p>Opens by stating the harness has been in use "for the past week" -- which is the first thing
+      the title contradicts. DeepSeek's model line is sketched (the R1 moment, then V4 Flash and
+      V4 Pro) before the harness itself is introduced as open source and free.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">00:35 - 01:12 &nbsp;/&nbsp; The separation</span>
+    <h3>Three containers, one interchangeable slot</h3>
+    <p>The diagram that makes the rest of the video legible: Codex, Claude Code and Deepseek
+      Harness drawn side by side, each with an "AI Model" slot, with the Z, Kimi and Meta marks
+      below as examples of what else can go in. This frame also settles the spelling of both
+      competing products, which neither transcription engine got right.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">01:12 - 02:33 &nbsp;/&nbsp; Architecture</span>
+    <h3>The car, exploded</h3>
+    <p>The closed-versus-open metaphor is shown as a diagram: a sealed car labelled "Fixed system /
+      Not easily changed" against the same car exploded into separately replaceable parts, with
+      both sides annotated "Same model". The landing page then states it plainly, and the install
+      path is one command:</p>
+    <pre><code>npx @deepseek-ai/dsh web</code></pre>
+    <p>A security caveat is offered unprompted and is worth repeating: community plugins are
+      arbitrary third-party code, and the advice is to have another agent review one before
+      installing it. This video installs none, which bounds every finding in it.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">02:33 - 03:37 &nbsp;/&nbsp; Setup</span>
+    <h3>Hand the repo to an agent, then add a key</h3>
+    <p>Setup was delegated: the GitHub link was given to an existing coding agent with "help me set
+      this up". It runs on localhost. An OpenRouter key in Settings makes the whole OpenRouter
+      catalogue selectable -- the picker on screen includes Claude Opus 5, Claude Opus 5 (Fast),
+      Claude Sonnet 4 through 5, Claude Fable 5, Claude Haiku 4.5, Amazon Nova, and Arcee models.
+      A Claude or Codex subscription cannot be used by default; this is per-token API billing.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">03:37 - 05:53 &nbsp;/&nbsp; Modes and context</span>
+    <h3>Four modes, and the interoperability result</h3>
+    <p>The mode dropdown is the densest artifact in the video, and its exact wording matters
+      because the narration paraphrases one entry incorrectly:</p>
+    <pre>STANDARD MODE
+  Full coding agent with file editing, shell, file and web
+  search, skills, planning, goals, subagents, and workflows.
+
+PTC MODE
+  All Standard mode capabilities, with tools exposed through
+  the Code Mode SDK so the model can combine multi-step
+  operations in one TypeScript program.
+
+MINIMAL MODE
+  Two-tool coding agent with persistent bash and
+  str_replace_editor.
+
+CREATOR MODE
+  Built for creating custom agent presets, with all Standard
+  mode capabilities plus runtime inspection, plugin
+  experiments, and preset-authoring guidance.</pre>
+    <p>Then the quietly important frame. Asked "hi who am i?" in Standard mode, the harness shows
+      its context loading in the open:</p>
+    <pre>Context injection - AGENTS.md, CLAUDE.md, CLAUDE.local.md
+Context injection - @deepseek-ai/dsh-system-prompt
+Context injection - skill-catalog</pre>
+    <p>A competing harness reads Claude Code's own context files by their real names. That is why
+      an existing personal agent setup "plugged in and I didn't have to change anything" -- the
+      portability is a consequence of filename convergence, not of any migration tooling. In
+      Minimal mode the same question triggers no injection at all, exactly as the mode description
+      implies.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">05:53 - 09:00 &nbsp;/&nbsp; Cost, tokens, reliability</span>
+    <h3>Where a blind model is the limit</h3>
+    <p>A coffee-brand landing page built with DeepSeek V4 Flash comes out on-brand and structurally
+      sound but with a visual defect. The attribution is made carefully and is the right one: the
+      V4 models cannot see, so no screenshot-look-iterate loop is possible. That is a model
+      constraint, not a harness one -- and it is the practical cost of owning the model slot.
+      Reliability anecdotes follow, including the mouse-lock incident. This stretch also contains
+      the transcript's only degraded passage, a brief stutter around 07:52 that the caption track
+      confirms is a whisper artifact rather than a real repetition.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">09:00 - 11:30 &nbsp;/&nbsp; Customisation and the verdict</span>
+    <h3>The agent loop is a settable field</h3>
+    <p>Settings shows General, Models, Plugins and Agent presets, and the plugin panel proves the
+      "everything is a plugin" claim better than the slogan does:</p>
+    <pre>SHELL        Limits every command the agent runs.
+
+AGENT LOOP   How the agent dispatches tool calls.
+             Parallel tool calls: [ 10 ]
+             "Upper bound on parallel-safe calls running
+              at once within one step."
+
+WEB SEARCH   The DeepSeek search provider.</pre>
+    <p>Creator mode is shown failing to stay selected -- a bug demonstrated live rather than
+      described. The verdict section that follows is the most honest passage in the video: for
+      knowledge work, research and document creation, no gap in the closed harnesses was ever
+      felt, so the customisation is worth nothing to him personally. The recommendation is
+      explicitly conditional on having actually hit the wall.</p>
+  </div>
+
+  <div class="seg">
+    <span class="ts">11:30 - 18:02 &nbsp;/&nbsp; Evidence and close</span>
+    <h3>Three comparisons, one of them visible</h3>
+    <p>The side-by-side retrieval test (Plate 03), then the two Excel workbooks, then the two
+      research reports. The closing advice is to stop taking anyone's word for it and run the
+      comparison on your own workload -- which, given that the video's own strongest number is a
+      single unrepeated trial, is the right note to end on.</p>
+  </div>
+</section>
+
+<!-- ============================ PLATE 05 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 05</span><span>Narration vs screen</span></div>
+  <h2>Where the audio and the pixels disagree</h2>
+  <p class="lede">
+    Two substantive discrepancies, plus one class of transcription error that would mislead any
+    reader working from an auto-generated transcript of this video.
+  </p>
+
+  <div class="disc">
+    <h3>1. PTC mode is not the parallel mode <span class="tag t-corr">Corrected</span></h3>
+    <dl>
+      <dt>Narration</dt><dd>Described at 04:18 as suited to "a lot of stuff that I want to run in
+        parallel" and a "multi-chain", likened to dynamic workflows in Claude Code. Hedged with
+        "it's not exactly that", but no mechanism is given.</dd>
+      <dt>Screen</dt><dd>The dropdown at 04:11 defines PTC as tools exposed through a Code Mode SDK
+        so the model can combine multi-step operations in one TypeScript program. That is
+        code-as-tool-orchestration, not concurrency.</dd>
+      <dt>Settled by</dt><dd>The same settings panel at 09:05 shows parallelism as a separate and
+        orthogonal control -- <code>Parallel tool calls: 10</code> under the Agent loop plugin,
+        available in every mode.</dd>
+      <dt>Why it matters</dt><dd>Choosing PTC for a job that needs fan-out would select the wrong
+        mechanism. PTC is for collapsing a many-step sequence into one program; the parallelism
+        knob is elsewhere and is a number.</dd>
+    </dl>
+  </div>
+
+  <div class="disc">
+    <h3>2. "100 Hours" is a title template, not a measurement <span class="tag t-inf">Inferred</span></h3>
+    <dl>
+      <dt>Title</dt><dd>"100 Hours Testing Deepseek Harness vs. Claude Code."</dd>
+      <dt>Narration</dt><dd>The opening sentence says the harness has been in use "for the past
+        week". No hours figure appears anywhere in the narration or on screen. One hundred hours
+        across seven days would be over fourteen hours a day.</dd>
+      <dt>Settled by</dt><dd>At 15:29 the author's own video catalog is on screen in a spreadsheet.
+        It contains "100 Hours Testing Clawbot vs Claude Code (honest results)" and "100 Hours
+        Testing Claude Code vs Antigravity (honest results)" as separate earlier uploads.</dd>
+      <dt>Why it matters</dt><dd>The figure is a recurring channel construction, not a quantity the
+        video stands behind. It should not be cited as an effort or coverage figure. Nothing else
+        in the video depends on it, and the body of the review is more careful than its packaging.</dd>
+    </dl>
+  </div>
+
+  <div class="disc">
+    <h3>3. Both transcription engines mangle the product names <span class="tag t-corr">Corrected</span></h3>
+    <dl>
+      <dt>Heard</dt><dd>"Cloud Code", "Cloud Opus", "Cloud Fable", "cloud.md", "GBT 5.6 Sol",
+        "Deep Sea Karnas", and -- in the caption track only -- "Codeex" and "Kimmy".</dd>
+      <dt>Screen</dt><dd>Claude Code, Claude Opus, Claude Fable 5, <code>CLAUDE.md</code> and
+        <code>CLAUDE.local.md</code>, GPT 5.6 Sol, DeepSeek Harness, Codex.</dd>
+      <dt>Settled by</dt><dd>The comparison diagram (00:48), the model picker (03:10), the
+        context-injection lines (05:00), the landing page (01:58), and the author's own catalog
+        (15:29), which contains a video titled "I Tested GPT 5.6 Sol vs Fable 5".</dd>
+      <dt>Note</dt><dd>The verbatim engine was internally inconsistent, switching to the correct
+        spelling only past 10:49 -- which is the harder error to catch, because the right form is
+        also present. Kimi is the single fact-bearing term no frame could settle; the verbatim
+        reading is retained and marked unverified. One term the video itself flattens: the landing
+        page lists <code>scheduling</code> among plugin categories and the spoken read-back omits it.</dd>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================ PLATE 06 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 06</span><span>Key insights</span></div>
+  <h2>What is worth carrying out of this</h2>
+  <ul>
+    <li><strong>A benchmark that names a model but not a harness has measured a pair, not a
+      model.</strong> The same Opus 5 produced different completion times, different report
+      lengths, different source counts and different confidence calibration in two harnesses.
+      (00:35, 12:30, 16:41)</li>
+    <li><strong>Cost-to-completion, not cost-per-token.</strong> Cheap tokens spent inefficiently
+      are not cheap. The video argues this well and then never computes it once -- which is itself
+      the lesson about how rarely the right unit gets used. (07:03)</li>
+    <li><strong>Interoperability arrived by filename convergence.</strong> A competing harness
+      reading <code>AGENTS.md</code>, <code>CLAUDE.md</code> and <code>CLAUDE.local.md</code>
+      directly is a lower-friction path to portability than any migration tool would have been.
+      (05:00)</li>
+    <li><strong>Skills port in structure, not in yield.</strong> One skill file produced an
+      identically structured report in both harnesses and materially different research depth.
+      Treat a skill's procedural guarantees as unvalidated on a harness it was not written for.
+      (16:03)</li>
+    <li><strong>Customisation is worth paying for only against a felt constraint.</strong> The
+      author's own conclusion, and the most useful sentence in the video: he has never wished his
+      closed harness behaved differently, so unlimited configurability buys him nothing. (09:30)</li>
+    <li><strong>A self-modifying loop is the genuinely new capability.</strong> Creator mode plus a
+      downloadable session trajectory means a failure can become a plugin that prevents its
+      recurrence. That loop does not exist on a closed harness at all. (10:34, 13:01)</li>
+    <li><strong>Owning the model slot means owning modality risk.</strong> A vision-incapable model
+      silently cannot run a look-and-iterate loop; nothing warns you, the output just comes back
+      wrong. (06:44)</li>
+  </ul>
+</section>
+
+<!-- ============================ PLATE 07 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 07</span><span>Applicability &nbsp;/&nbsp; daily routine</span></div>
+  <h2>What this changes about how you work</h2>
+  <p>
+    Close to nothing, and that is the honest answer. One habit is worth adding and it costs
+    nothing: <strong>when you compare two agent configurations, record the harness as well as the
+    model.</strong> You already do exactly this for cores in [REDACTED: private
+    systems-performance track], where a number that does not name its binary is not a number.
+    This video is a demonstration that the same rule
+    binds one level up in the stack, and that omitting the harness makes an agent comparison
+    uninterpretable rather than merely imprecise.
+  </p>
+  <p>
+    There is no argument here for changing tools, changing routine, or adopting a mode. The one
+    concept worth keeping regardless of vendor is Creator mode's loop -- read the session
+    trajectory, author the fix, install it into the agent loop itself -- because it is structurally
+    the same observe-then-correct cycle you already run manually, and it is the only capability in
+    the video that a closed harness cannot offer at any price.
+  </p>
+</section>
+
+<!-- ============================ PLATE 08 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 08</span><span>Applicability &nbsp;/&nbsp; live projects</span></div>
+  <h2>Per project: adopt, ignore, and why</h2>
+
+  <div class="redaction-note"><p><b>Redaction note</b>Everything below that is derived from the
+  video is published in full. This plate also names the operator's own working projects; anywhere
+  an item would otherwise name or describe a private repository, file path, skill name, or
+  pipeline internal, that span is replaced in place with a <code>[REDACTED: ...]</code> marker,
+  and the surrounding reasoning is kept.</p></div>
+
+  <h3>[REDACTED: private systems-performance track]</h3>
+  <p><strong>Adopt: nothing. Use as a foil.</strong> This video is a compact catalogue of the
+    failures your own guardrails were written against: one trial per condition, no variance
+    estimate, a headline figure in the title with no measurement behind it, timings recalled rather
+    than recorded, and a self-named confound (skills authored for one side) that is acknowledged
+    and then not controlled. The three-versus-seventeen-minute claim is precisely the shape your
+    rules score as unquotable. Its one genuinely resolvable cell -- 52 s against 53 s still running
+    -- is a lower bound, and the video treats it as a result. Worth keeping as an illustration of
+    why the admissibility rules exist; worth nothing as evidence.</p>
+
+  <h3>[REDACTED: private ML pipeline]</h3>
+  <p><strong>Ignore.</strong> No mechanism connects. Leakage control, checkpoint freshness,
+    multi-offset correctness and Ray throughput are properties of the pipeline, not of the agent
+    scaffolding you author it with. Swapping harnesses would change none of them. The
+    cost-to-completion idea is already how you judge retrain and walkforward runs.</p>
+
+  <h3>Agent orchestration / the multi-model advisor pattern</h3>
+  <p><strong>Adopt the framing, not the tool.</strong> Your advisor workflow already routes by
+    model role. This video adds a dimension you are not varying -- the harness -- and shows it
+    dominating a same-model comparison on retrieval work. The concrete artifact worth noting is
+    that <code>Parallel tool calls</code> is an explicit integer field rather than vendor
+    behaviour you infer. Whether to act on that is answered by the video's own insight 6: your
+    binding constraint is measurement rigour and context budget, not harness expressiveness. Worth
+    knowing, not worth migrating for.</p>
+
+  <h3>Skills authoring (watch-video family, [REDACTED: private knowledge-graph tool], and other project skills)</h3>
+  <p><strong>Adopt, today.</strong> This is the finding with a real consequence for you. Your
+    skills are long procedural contracts that assume a reader which follows ordered steps and
+    honours "do not skip". The video shows a skill's structure surviving a harness change while
+    its behaviour did not. If any of these are ever run outside Claude Code, the procedural
+    guarantees are unvalidated until re-tested -- the same standard you would apply to a core
+    change. That is a caveat worth writing into the family's shared preamble rather than
+    discovering later.</p>
+
+  <h3>Lock-in assessment across your whole setup</h3>
+  <p><strong>Adopt as a distinction.</strong> On this evidence your context files are portable and
+    your enforcement is not. <code>CLAUDE.md</code>, the project instructions and the skills tree
+    are read verbatim by a competing harness; [REDACTED: private hook and enforcement mechanism
+    names] are harness-specific execution and would not survive. Your prose travels, your
+    guardrails do not -- which is a useful thing to know before it matters.</p>
+
+  <h3>Career track, [REDACTED: private trading-agent project], [REDACTED: private document-rendering project], [REDACTED: private simulation project]</h3>
+  <p><strong>Ignore.</strong> No mechanism. These are content and workflow surfaces that are
+    indifferent to which harness executes them.</p>
+</section>
+
+<!-- ============================ PLATE 09 ============================ -->
+<section class="plate">
+  <div class="plate-no"><span>Plate 09</span><span>Verdict</span></div>
+  <h2>Worth the watch, with the title discounted</h2>
+  <p class="lede">
+    Yes, at 18 minutes, for the architecture and the artifacts rather than for the benchmark. The
+    mode definitions, the context-injection lines and the agent-loop settings panel are the
+    durable content -- they are specific, they are on screen, and they explain what an open harness
+    actually buys. The reliability findings are the most perishable part, since a developer-preview
+    bug list ages in weeks.
+  </p>
+  <p>
+    It is aimed at people already running an agent harness daily who are wondering whether the
+    open-source entrant changes their setup. It answers that honestly and in the negative for its
+    own author, which is rarer than it should be in this genre and is the main reason to trust the
+    rest of it. What it is not is a benchmark: three tasks, one trial each, one of them visible,
+    with a self-named confound left uncontrolled. Read the scorecard as informed impressions from a
+    week of real use, which is what it is, and not as measurement.
+  </p>
+  <p>
+    <strong>Follow-ups named in the video worth chasing:</strong> the DSH developer docs and the
+    "Cordis paper" linked from the landing page, both of which would settle what the Code Mode SDK
+    behind PTC actually exposes; the community plugin registry, with the video's own warning
+    attached; and the author's earlier video on configuring a non-default model inside Claude Code,
+    which he flags as the relevant comparison for anyone who thinks DSH is the only way to run
+    cheap models.
+  </p>
+</section>
+
+<footer class="foot">
+  Teardown generated from a single verbatim pass: faster-whisper large-v3 on GPU, 5,408 frames at
+  5 fps, 11 upscaled artifact reads, cross-checked against the platform caption track.<br>
+  Claims marked On-screen were read from a named frame. Claims marked Stated were not verifiable
+  from the recording. Nothing on this page was taken from the video's description or title without
+  being checked against the video itself.
+</footer>
+
+</div>
+</body>
+</html>

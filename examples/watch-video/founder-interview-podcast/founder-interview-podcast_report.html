@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The context, not the model -- Flo Crivello on multiplayer agents</title>
+<style>
+:root{
+  /* Ground and ink: a plan sheet, not a screen. */
+  --vellum:#f4f1e8;
+  --vellum-deep:#eae5d7;
+  --rule:#c9c0a8;
+  --rule-hair:#ded7c4;
+  --ink:#1d1c19;
+  --ink-soft:#55514a;
+  --ink-faint:#8b857a;
+
+  /* The four accents are the source's own node legend. Nothing else uses them. */
+  --person:#1c62a8;
+  --team:#2f7a4a;
+  --project:#b1372f;
+  --initiative:#5c46a0;
+
+  --measure:65ch;
+  --serif:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono","SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--vellum);
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:18px;
+  line-height:1.62;
+  /* faint drafting grid, decorative but structural: it is a plan sheet */
+  background-image:
+    linear-gradient(to right,rgba(140,130,105,.075) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(140,130,105,.075) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.sheet{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 clamp(18px,4vw,56px) 96px;
+  background:var(--vellum);
+  border-left:1px solid var(--rule-hair);
+  border-right:1px solid var(--rule-hair);
+}
+a{color:var(--person);text-decoration-thickness:1px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--project);outline-offset:3px}
+
+/* ---- masthead ---- */
+.strip{
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-faint);border-bottom:1px solid var(--rule);
+  padding:22px 0 10px;margin-bottom:clamp(30px,7vw,72px);
+}
+h1{
+  font-size:clamp(2.7rem,8.4vw,6.1rem);
+  line-height:.94;
+  letter-spacing:-.028em;
+  font-weight:400;
+  margin:0 0 .35em;
+  max-width:15ch;
+}
+h1 em{font-style:italic;color:var(--ink-soft)}
+.standfirst{
+  font-size:clamp(1.2rem,2.4vw,1.62rem);
+  line-height:1.42;color:var(--ink);max-width:52ch;margin:0 0 52px;
+  border-left:2px solid var(--rule);padding-left:22px;
+}
+
+/* ---- title block: provenance lives here, not in stat tiles ---- */
+.titleblock{
+  border:1px solid var(--rule);
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  font-family:var(--mono);font-size:12.5px;line-height:1.5;
+  margin:0 0 clamp(48px,9vw,96px);
+}
+.titleblock div{padding:15px 17px;border-right:1px solid var(--rule-hair);border-bottom:1px solid var(--rule-hair)}
+.titleblock dt{color:var(--ink-faint);letter-spacing:.13em;text-transform:uppercase;font-size:10.5px;margin:0 0 5px}
+.titleblock dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums}
+.titleblock .flag{color:var(--project)}
+
+/* ---- generic section furniture: a left rail for headings, so prose keeps its
+      measure without leaving a dead gutter down the right of the sheet ---- */
+section{margin:0 0 clamp(56px,10vw,110px);display:grid;
+  grid-template-columns:210px minmax(0,1fr);gap:0 clamp(18px,3.4vw,44px);align-items:start}
+section>.head{position:sticky;top:26px}
+section>.body>*:first-child{margin-top:0}
+@media(max-width:860px){section{grid-template-columns:1fr}section>.head{position:static;margin-bottom:14px}}
+section.wide{grid-template-columns:1fr}
+section.wide>.head{position:static;margin-bottom:16px;display:flex;align-items:baseline;gap:22px;flex-wrap:wrap}
+section.wide>.head .kicker{margin:0}
+h2{
+  font-size:clamp(1.32rem,2.5vw,1.86rem);line-height:1.14;letter-spacing:-.02em;font-weight:400;
+  margin:0;max-width:20ch;
+}
+.kicker{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-faint);margin:0 0 12px;
+}
+p{max-width:var(--measure)}
+.lede p{font-size:1.09rem}
+
+/* ---- signature element ---- */
+.figure{
+  border:1px solid var(--rule);background:var(--vellum-deep);
+  padding:clamp(18px,3.4vw,34px);
+}
+.figure-head{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);padding-bottom:12px;margin-bottom:22px}
+.figure-head h3{font-size:1.32rem;font-weight:400;margin:0;letter-spacing:-.01em}
+.figure-head span{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+.dial{display:flex;gap:0;flex-wrap:wrap;margin:0 0 26px;border:1px solid var(--rule)}
+.dial button{
+  flex:1 1 190px;appearance:none;background:transparent;border:0;
+  border-right:1px solid var(--rule-hair);
+  padding:13px 15px;text-align:left;cursor:pointer;color:var(--ink-soft);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;
+}
+.dial button:last-child{border-right:0}
+.dial button b{display:block;font-size:10px;letter-spacing:.19em;color:var(--ink-faint);font-weight:400;margin-bottom:5px}
+.dial button[aria-pressed="true"]{background:var(--ink);color:var(--vellum)}
+.dial button[aria-pressed="true"] b{color:var(--vellum-deep)}
+.panes{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(20px,3.6vw,40px);align-items:start}
+@media(max-width:900px){.panes{grid-template-columns:1fr}}
+@media(max-width:760px){.titleblock{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.titleblock{grid-template-columns:1fr}}
+.answer{border-left:3px solid var(--rule);padding-left:20px;min-height:230px}
+.answer .who{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin:0 0 10px}
+.answer blockquote{margin:0 0 16px;font-size:1.12rem;line-height:1.52;max-width:44ch}
+.answer .verdict{font-size:.95rem;color:var(--ink-soft);margin:0;max-width:46ch}
+.answer .prov{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;color:var(--ink-faint);margin:14px 0 0}
+.fade{transition:opacity .34s ease,transform .34s ease}
+.fade.out{opacity:0;transform:translateY(6px)}
+@media(prefers-reduced-motion:reduce){.fade{transition:none}.fade.out{opacity:1;transform:none}}
+
+/* graph */
+svg.graph{width:100%;height:auto;display:block}
+svg.graph .node{transition:opacity .34s ease}
+@media(prefers-reduced-motion:reduce){svg.graph .node{transition:none}}
+svg.graph text{font-family:var(--mono);font-size:10px;letter-spacing:.06em;fill:var(--ink-soft)}
+svg.graph .edge{stroke:var(--rule);stroke-width:1.1;fill:none;transition:opacity .34s ease}
+.figure[data-level="0"] .tier1,.figure[data-level="0"] .tier2{opacity:.13}
+.figure[data-level="1"] .tier2{opacity:.13}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin:22px 0 0;padding-top:16px;border-top:1px solid var(--rule-hair);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+.legend i{display:inline-block;width:9px;height:9px;margin-right:7px;vertical-align:middle;font-style:normal}
+.legend .p{background:var(--person);border-radius:50%}
+.legend .t{background:var(--team);border-radius:50%}
+.legend .j{background:var(--project);transform:rotate(45deg)}
+.legend .i{background:var(--initiative)}
+
+/* ---- walkthrough ---- */
+.leg{display:grid;grid-template-columns:88px 1fr;gap:0 clamp(16px,3vw,34px);
+  border-top:1px solid var(--rule-hair);padding:22px 0}
+.leg:last-child{border-bottom:1px solid var(--rule-hair)}
+.leg .t{font-family:var(--mono);font-size:12px;color:var(--ink-faint);font-variant-numeric:tabular-nums;padding-top:5px}
+.leg h3{font-size:1.16rem;font-weight:400;margin:0 0 6px;letter-spacing:-.01em}
+.leg p{margin:0 0 8px}
+.onscreen{
+  font-family:var(--mono);font-size:12.5px;line-height:1.55;color:var(--ink-soft);
+  border-left:2px solid var(--project);padding:2px 0 2px 14px;margin:10px 0 0;max-width:62ch;
+}
+.onscreen b{color:var(--project);font-weight:400;letter-spacing:.13em;font-size:10px;text-transform:uppercase;display:block;margin-bottom:5px}
+@media(max-width:640px){.leg{grid-template-columns:1fr}.leg .t{padding:0 0 6px}}
+
+/* ---- insights ---- */
+.insight{border-top:1px solid var(--rule-hair);padding:20px 0}
+.insight:last-of-type{border-bottom:1px solid var(--rule-hair)}
+.insight h3{font-size:1.13rem;font-weight:400;margin:0 0 6px;letter-spacing:-.01em}
+.insight p{margin:0}
+.stamp{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;color:var(--ink-faint);text-transform:uppercase}
+
+/* ---- discrepancy pairs ---- */
+.pair{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);margin:0 0 20px}
+.pair>div{padding:18px 20px}
+.pair>div:first-child{border-right:1px solid var(--rule-hair)}
+.pair h4{margin:0 0 9px;font-family:var(--mono);font-size:10.5px;letter-spacing:.17em;text-transform:uppercase;font-weight:400;color:var(--ink-faint)}
+.pair .said{color:var(--ink-soft)}
+.pair .shown{color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.55}
+@media(max-width:700px){.pair{grid-template-columns:1fr}.pair>div:first-child{border-right:0;border-bottom:1px solid var(--rule-hair)}}
+
+/* ---- project rows ---- */
+.proj{border-top:1px solid var(--rule-hair);padding:20px 0;display:grid;grid-template-columns:200px 1fr;gap:0 clamp(16px,3vw,34px)}
+.proj:last-of-type{border-bottom:1px solid var(--rule-hair)}
+.proj h3{margin:0;font-size:1rem;font-weight:400;font-family:var(--mono);letter-spacing:.02em}
+.proj .tag{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;margin-top:7px}
+.proj .yes{color:var(--team)}
+.proj .no{color:var(--project)}
+.proj p{margin:0}
+@media(max-width:700px){.proj{grid-template-columns:1fr}.proj h3{margin-bottom:8px}}
+
+footer{border-top:1px solid var(--rule);padding-top:20px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.09em;color:var(--ink-faint);line-height:1.9}
+
+/* ---- redaction note ---- */
+.redaction-note{
+  border:1px solid var(--rule);border-left:3px solid var(--project);
+  background:var(--vellum-deep);padding:14px 18px;margin:0 0 22px;max-width:var(--measure);
+}
+.redaction-note p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink-soft)}
+.redaction-note b{
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--project);display:block;margin-bottom:6px;
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<div class="strip">
+  <span>Watch note / recorded conversation</span>
+  <span>Sheet 1 of 1 &middot; drawn 2026-09-01</span>
+</div>
+
+<h1>The bottleneck moved off the model and onto <em>what it knows about you</em></h1>
+<p class="standfirst">Flo Crivello spends forty-five minutes arguing that 2026's agent problem is
+not intelligence but plumbing: every agent is single-player, so teams end up mailing each other
+markdown files. His fix is an agent that reads the company's own Slack and meetings until it can
+tell you the decision you are arguing about does not matter.</p>
+
+<dl class="titleblock">
+  <div><dt>Source</dt><dd>Ex-Uber dev explains his Multi-Agent Workflow<br><a href="https://youtu.be/utb7zYbK10c">youtu.be/utb7zYbK10c</a></dd></div>
+  <div><dt>Speakers</dt><dd>David Ondrej (host)<br>Flo Crivello, founder/CEO, Lindy</dd></div>
+  <div><dt>Published / runtime</dt><dd>2026-08-10 &middot; 45:25</dd></div>
+  <div><dt>Transcript tier</dt><dd class="flag">C &mdash; platform auto-captions<br>238.8 wpm after dedup<br>product names re-read from pixels</dd></div>
+  <div><dt>Ingest cost</dt><dd>2,725 frames at 1 fps<br>161 sampled via 9 contact sheets<br>24 image reads, 12 upscaled crops<br>no zoom-bursts needed</dd></div>
+  <div><dt>Format</dt><dd>Remote two-box video podcast<br>7 screen-share segments<br>1 sponsor read (02:45&ndash;04:45)</dd></div>
+</dl>
+
+<section class="lede">
+  <div class="head"><p class="kicker">What it is</p>
+  <h2>Read this instead of watching</h2></div>
+  <div class="body">
+  <p>This is a sponsored founder interview: David Ondrej hosts Flo Crivello, who is a week away
+  from shipping a team-shaped version of his product and argues the case for it in public. Strip
+  the commercial interest out and a coherent technical position remains. Every agent in 2026 runs
+  single-player &mdash; one person's laptop, one person's config, one person's keys &mdash; so the
+  moment two people need the same agent-held knowledge, they fall back to pasting files into chat.
+  Crivello's claim is that the missing pieces are a shared surface and shared context, and that
+  the second is the expensive one: he calls it <em>automatic hydration</em>, an agent that reads
+  months of Slack and every meeting and keeps a company memory current, because a wiki is stale
+  the day it is written.</p>
+  <p>The argument that makes the rest hang together is about substitution. Seat the smartest
+  person who ever lived at the next desk with no context and, for the thing you need done this
+  hour, your average colleague beats them. Crivello reports that his team's agent is asked for its
+  opinion in Slack and occasionally answers that the decision under debate does not matter,
+  because it knows what the company is actually worried about this week. No stateless chat
+  assistant will ever say that. Around this sit the practical claims: connector libraries have
+  stopped being a moat because an agent with a file system and a secrets store just writes the
+  integration itself; adoption, not capability, is now the limit, so play and break things; and if
+  you are building for scale, ask whether the economy still needs your business in a world where
+  humans no longer operate businesses. Nothing in the forty-five minutes is measured. It is a
+  well-argued position with a product attached.</p></div>
+</section>
+
+<section class="wide">
+  <div class="head"><p class="kicker">The one idea, made visible</p>
+  <h2>The new-hire test</h2></div>
+  <div class="body">
+  <p>One question, three amounts of context, the same model behind all three. Step the dial and
+  watch how much of the company graph the agent can see &mdash; and what that does to the answer.
+  The middle panel is the exchange as it appears on screen in the recording; the outer two are
+  written to the behaviour Crivello describes, and are labelled as such.</p>
+
+  <div class="figure" id="fig" data-level="0">
+    <div class="figure-head">
+      <h3>&ldquo;CAC nearly doubled this week and nobody knows why. Dig in?&rdquo;</h3>
+      <span>Same model &middot; three context levels</span>
+    </div>
+
+    <div class="dial" role="group" aria-label="Context level">
+      <button type="button" data-set="0" aria-pressed="true"><b>Level 0</b>No context</button>
+      <button type="button" data-set="1" aria-pressed="false"><b>Level 1</b>This channel, these tools</button>
+      <button type="button" data-set="2" aria-pressed="false"><b>Level 2</b>The whole company graph</button>
+    </div>
+
+    <div class="panes">
+      <div>
+        <svg class="graph" viewBox="0 0 460 300" role="img" aria-labelledby="gtitle gdesc">
+          <title id="gtitle">The company knowledge graph, illuminated by context level</title>
+          <desc id="gdesc">A node and edge diagram. People, teams, projects and initiatives are
+          connected. At level zero nothing is visible to the agent; at level one the immediate
+          channel neighbourhood is visible; at level two the whole graph is.</desc>
+
+          <!-- edges -->
+          <g class="tier1">
+            <path class="edge" d="M232 96 L142 150"/>
+            <path class="edge" d="M232 96 L318 158"/>
+          </g>
+          <g class="tier2">
+            <path class="edge" d="M142 150 L100 232"/>
+            <path class="edge" d="M318 158 L372 226"/>
+            <path class="edge" d="M232 96 L100 232"/>
+            <path class="edge" d="M232 96 L372 226"/>
+            <path class="edge" d="M142 150 L232 232"/>
+            <path class="edge" d="M318 158 L232 232"/>
+            <path class="edge" d="M232 96 L60 96"/>
+          </g>
+
+          <!-- level 1 core -->
+          <g class="node tier1">
+            <circle cx="232" cy="96" r="16" fill="var(--person)"/>
+            <circle cx="232" cy="96" r="22" fill="none" stroke="var(--person)" stroke-width="1" opacity=".45"/>
+            <text x="232" y="132" text-anchor="middle">FLO</text>
+          </g>
+          <g class="node tier1">
+            <circle cx="142" cy="150" r="10" fill="var(--person)"/>
+            <text x="142" y="180" text-anchor="middle">BRUNO</text>
+          </g>
+          <g class="node tier1">
+            <rect x="306" y="146" width="24" height="24" transform="rotate(45 318 158)" fill="var(--project)"/>
+            <text x="318" y="192" text-anchor="middle">SLACK HYDRATION</text>
+          </g>
+
+          <!-- level 2 additions -->
+          <g class="node tier2">
+            <circle cx="100" cy="232" r="10" fill="var(--person)"/>
+            <text x="100" y="262" text-anchor="middle">SATHIRA</text>
+          </g>
+          <g class="node tier2">
+            <rect x="220" y="220" width="24" height="24" transform="rotate(45 232 232)" fill="var(--project)"/>
+            <text x="232" y="266" text-anchor="middle">MEMORY STACK</text>
+          </g>
+          <g class="node tier2">
+            <polygon points="372,212 385,220 385,234 372,242 359,234 359,220" fill="var(--initiative)"/>
+            <text x="372" y="262" text-anchor="middle">RELIABILITY</text>
+          </g>
+          <g class="node tier2">
+            <circle cx="60" cy="96" r="10" fill="var(--team)"/>
+            <text x="60" y="126" text-anchor="middle">GROWTH</text>
+          </g>
+        </svg>
+
+        <div class="legend">
+          <span><i class="p"></i>Person</span>
+          <span><i class="t"></i>Team</span>
+          <span><i class="j"></i>Project</span>
+          <span><i class="i"></i>Initiative</span>
+        </div>
+      </div>
+
+      <div class="answer fade" id="ans">
+        <p class="who" id="ans-who">Level 0 &mdash; the agent knows nothing about you</p>
+        <blockquote id="ans-body">&ldquo;Rising acquisition cost usually comes from auction
+        competition, creative fatigue, a worsening channel mix, or a tracking change. I would
+        start by segmenting spend by channel and comparing week over week.&rdquo;</blockquote>
+        <p class="verdict" id="ans-verdict">Fluent, correct, and useless. It is the answer to a
+        question anybody could have asked, and it hands the whole job back to you.</p>
+        <p class="prov" id="ans-prov">Illustrative &mdash; written to the argument, not filmed</p>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Chronology</p>
+  <h2>What actually happens, in order</h2></div>
+  <div class="body">
+
+  <div class="leg">
+    <div class="t">00:23</div>
+    <div>
+      <h3>The single-player diagnosis</h3>
+      <p>Crivello opens on the collaboration analogy: mailing revisions of a document around
+      versus everyone editing one shared link. Agents are at the first stage. Ondrej confirms the
+      symptom on his own team &mdash; people passing markdown and HTML files over Slack, with
+      shared GitHub repositories as the least-bad workaround.</p>
+      <div class="onscreen"><b>On screen</b>Cutaway to a thread of the form
+      "RE: RE: FW: FW: Q3 Report -- FINAL (updated) [EXTERNAL] ** DO NOT USE OLD VERSION **" with
+      five attachments ending in Q3_Report_FINAL_v2_REVISED_dk-edits_FINAL(1)_USE-THIS-ONE_v4_asof_11-14_OLD.docx.</div>
+      <div class="onscreen"><b>On screen, unmentioned</b>At 01:04, over the line about long-horizon
+      tasks, a capability chart appears: "Length of software tasks that different LLMs can
+      complete", log axis from four seconds to four hours, 2020 to 2025. It is never cited aloud.</div>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">02:45</div>
+    <div>
+      <h3>Sponsor read, and an agent that argues with the brief</h3>
+      <p>Ondrej breaks for a scraping-and-email API. Read past the sales
+      copy and the demo is the most interesting artifact in the episode, because the agent visibly
+      refuses the premise of the task before completing it.</p>
+      <div class="onscreen"><b>Prompt, verbatim</b>get me 100 active licensed general contractors
+      in Austin, Texas from the state licensing records. name, website, phone, email. table.</div>
+      <div class="onscreen"><b>Reply, verbatim</b>Texas does not issue statewide general-contractor
+      licenses. Austin registration is local and one-time, so "active state-licensed" records do
+      not exist.<br><br>Coverage: 88 websites, 98 phone numbers, and 40 publicly listed emails.
+      Missing details are clearly labeled.</div>
+      <p>A second task &mdash; 24 hours of news and sentiment across eight tickers, emailed as a
+      brief &mdash; runs in 4m 44s and writes brief.md, email-body.md and sentiment.csv into a
+      date-stamped directory, then mails the result without the operator ever configuring a mail
+      account.</p>
+      <div class="redaction-note"><p><b>Post-run edit, declared</b>As this run wrote it, two
+      clauses in this section described the sponsored API as the host's own product. <b>The
+      recording does not establish that, and its own evidence points the other way</b> &mdash; the
+      host says he spent two months building <em>with</em> it, describes what an agent unlocks
+      "the moment he has a single API key" from it, and closes by directing viewers to "click the
+      first link below the video", which is the phrasing of a paid placement rather than of a
+      founder demonstrating his own company. Because ownership is a materially heavier claim about
+      a named, identifiable person than sponsorship is, those two clauses were removed rather than
+      left standing. The safe claim, and the one the evidence supports, is that this is a sponsor
+      read the host delivers and that the ownership question is not settled by the recording. This
+      is the only place in this tree where a defect was repaired instead of annotated in place; the
+      same error in the <code>video-autopsy</code> document on this recording is annotated at each
+      site it reaches, and both treatments are recorded in the honesty policy of the
+      <a href="../../README.md">examples README</a>.</p></div>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">05:40</div>
+    <div>
+      <h3>What a multiplayer agent needs</h3>
+      <p>The list is short and worth copying: shared integrations, a team file system, a team
+      memory, team skills, and a team surface. Crivello's shorthand for the surface is Slack.
+      The complaint underneath it is precise &mdash; you still cannot at-mention an agent in a
+      Google Doc, and most agents do not have an email address.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">07:11</div>
+    <div>
+      <h3>The screen share that carries the argument</h3>
+      <p>A colleague asks in Slack whether free users can reach the new product; Crivello
+      at-mentions the agent instead of retyping the question, and it finds the internal billing
+      document, names its author, and answers with the mechanism rather than a link.</p>
+      <div class="onscreen"><b>On screen, abridged</b>New users get a placeholder identity with a
+      'trialing' membership, full access for seven days. Trialing seats draw on the shared credit
+      pool, not a separate free bucket. If the admin does not remove the seat, a scheduled job
+      converts it to a paid $30/mo seat on day seven -- silent trial to auto-bill, no upgrade
+      prompt. Source doc is still in draft; worth re-confirming before it ships.</div>
+      <p>The last clause is the part to notice. The answer qualifies its own confidence from the
+      state of the source it read.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">08:49</div>
+    <div>
+      <h3>Automatic hydration, live</h3>
+      <p>The centrepiece. Wikis are dismissed in a sentence &mdash; most companies do not have one
+      and the ones that do have a stale one &mdash; and replaced with a memory the agent writes
+      and maintains from Slack history and meeting recordings. Crivello opens the file system and
+      shows the master memory file, then a personalisation panel and a derived graph being built
+      while he talks.</p>
+      <div class="onscreen"><b>On screen</b>Agent memory: About the user (role, work and personal
+      email, phone). Key contacts, each with function and Slack ID. Standing agent instructions.<br><br>
+      Panel titled "Here's what I'm learning about you, Flo." &mdash; five evidence-backed
+      inferences including "Slack hydration is your most active initiative right now".<br><br>
+      Live counter: <b style="display:inline">Still learning - 1,284 messages and 18 channels reviewed</b></div>
+      <div class="onscreen"><b>On screen</b>Panel titled "How your team connects": a typed graph
+      with an explicit legend &mdash; Person, Team, Project, Initiative. Visible nodes include
+      Flo, Bruno and Sathira; the projects Memory stack and Slack hydration; the initiative
+      Reliability. This is the artifact the figure above is drawn from.</div>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">10:37</div>
+    <div>
+      <h3>Where the split between humans and agents actually falls</h3>
+      <p>Ondrej makes the sharpest version of the case: human memory is reconstructive and
+      unreliable, so stop trying to remember what was decided and let the agent hold it. He gives
+      his own instance &mdash; two weeks of fifteen-minute time-blocking handed to a model with
+      calendar access, which read two to three hundred events and produced a delegation critique he
+      would never have derived by hand. The generalisation is that volume of context, not
+      cleverness, is what produces the insight, because nobody was ever going to read all of it.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">12:25</div>
+    <div>
+      <h3>Intelligence is overrated; context is not</h3>
+      <p>The von Neumann thought experiment, and the strongest observed behaviour in the episode:
+      an agent that answers a decision question by saying the decision does not matter, because it
+      knows from context what the team is actually worried about. Crivello puts the base context
+      assembled for a single Slack question at roughly 100,000 tokens before the question itself,
+      and names Opus as the model underneath.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">16:53</div>
+    <div>
+      <h3>The connector moat is gone</h3>
+      <p>The best anecdote of the forty-five minutes. A teammate asked the agent for an audio ad;
+      a first-party integration for the speech vendor existed but was not enabled, and a tool for
+      requesting integrations existed too. The agent used neither &mdash; it wrote its own Python
+      client against the public API, saved it to its file system for reuse, and asked a human for
+      the key, which it filed in its secrets manager. Four capabilities make that possible: a
+      persistent file system, code execution, a credential store, and permission to ask.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">18:49</div>
+    <div>
+      <h3>The actual setup, when finally asked</h3>
+      <p>The answer is deflationary and the most useful minute for a practitioner. Crivello says
+      he is confused by the elaborate rigs people build: his coding agent is close to vanilla, his
+      project instructions file is now essentially empty, he has added MCP servers and removed
+      most of them, and the only structure he keeps is one large agent folder holding every agent
+      project and its context. The bulk of his day-to-day agent use is his own cloud product,
+      which he flags as playing his book.</p>
+      <div class="onscreen"><b>On screen, from the host's side</b>An eight-repository organisation
+      of agent skills packaged as repos: kimi-everywhere ("Run any coding harness -- Claude Code,
+      Codex, OpenCode ..."), kimi-router ("split-brain coding -- a frontier model orchestrating
+      ..."), tailscale-vps-setup ("connect your PC and VPS over Tailscale").</div>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">19:54</div>
+    <div>
+      <h3>Routines: the standing workload</h3>
+      <p>Rather than a chat agent, a panel of scheduled jobs that run without being invoked. The
+      personal list runs from a morning brief by text message through email drafting and labelling,
+      meeting notes and meeting prep &mdash; one of which briefed him on Ondrej minutes before the
+      recording &mdash; to a food log he texts photographs to and a weekly recruiting agent that
+      finds independent engineering bloggers and asks which to approach.</p>
+      <div class="onscreen"><b>On screen, verbatim card text</b>Meeting note taking &mdash; "Joins
+      your meetings and takes notes" &middot; Meeting prep &mdash; "Gives context on your meetings"
+      &middot; Email alerting &mdash; "Alerts you to time-sensitive emails" &middot; Follow-up
+      bumps &mdash; "Drafts a bump when sent emails get no reply"<br><br>Custom: "Weekly AI authors
+      research and outreach", "On-call issue ticket creation", "Identify and reach out to research
+      candidates", "Weekly meal notes", "Blood pressure reminder".</div>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">22:43</div>
+    <div>
+      <h3>Why adults adopt slowly, and the regime that fixes it</h3>
+      <p>Two forces, not one: you are busy, so an innovation with long-run return loses to the
+      status quo over the short run; and you are reasonably afraid of breaking something that
+      works. Children have neither, which is why they play and break things. The prescription is a
+      no-meeting day spent building, at least twenty hands-on hours a week, and as a leader,
+      publicly amplifying whoever shows something good, because attention allocates effort.
+      The accepted price is stated plainly: every engineer at his company has built their own
+      duplicate pull-request review agent, and he welcomes it.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">32:00</div>
+    <div>
+      <h3>Work on the machine, not in it</h3>
+      <p>The management frame, and the only place the conversation looks past the next year. Today
+      the job is building the agentic machine; you go inside it to see what is broken and the point
+      of going in is to come back out and fix it; within a year or two the agents inspect and grow
+      the machine themselves, and the residual human role is closer to shareholder than operator.
+      Crivello attributes the frame to Ray Dalio &mdash; see the correction below.</p>
+    </div>
+  </div>
+
+  <div class="leg">
+    <div class="t">40:58</div>
+    <div>
+      <h3>What to build in the third quarter of 2026</h3>
+      <p>Two answers. For an indie business, how you build beats what you build: commodity
+      businesses make money if they are well operated, and the differentiator is a tight
+      self-improvement loop and no friction between saving a file and shipping it. For a
+      venture-scale business, apply the extreme filter &mdash; in a world where humans no longer
+      operate businesses and web front ends have largely gone, does the economy still need you?
+      Inference and data centres pass. Applicant tracking systems do not. Hence infrastructure
+      over application, and a claimed rotation of capital from software into hardware and biology,
+      partly because deploying billions is genuinely hard work and capital-intensive businesses
+      absorb it gratefully.</p>
+    </div>
+  </div></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Non-obvious takeaways</p>
+  <h2>The parts worth keeping</h2></div>
+  <div class="body">
+
+  <div class="insight">
+    <h3>Context and intelligence are substitutable across a wide band, and context is cheaper</h3>
+    <p>The same model is a useless genius or a useful colleague depending on what it was handed.
+    Before paying for capability, check whether you are paying it to guess something you could
+    have told it. <span class="stamp">src 12:25</span></p>
+  </div>
+  <div class="insight">
+    <h3>A wiki is a snapshot; hydration is a process</h3>
+    <p>Any knowledge artifact that needs a human to remember to update it is stale by
+    construction. Derive it continuously from the sources work already produces &mdash; messages,
+    meetings, commits. <span class="stamp">src 08:49</span></p>
+  </div>
+  <div class="insight">
+    <h3>Type the graph. Four types are enough</h3>
+    <p>Person, Team, Project, Initiative answers the structural questions &mdash; who owns this,
+    what does it roll up to, who else is touching it &mdash; that similarity search cannot.
+    <span class="stamp">src 09:48</span></p>
+  </div>
+  <div class="insight">
+    <h3>The moat moved from connectors to four capabilities</h3>
+    <p>File system, code execution, secrets store, permission to ask a human. An agent holding all
+    four writes the integration rather than waiting for it, which is why counting connectors is
+    now the wrong evaluation. <span class="stamp">src 16:53</span></p>
+  </div>
+  <div class="insight">
+    <h3>Being the default has a training-data channel now</h3>
+    <p>Whichever tool becomes standard gets written into the next generation of models' priors and
+    is then recommended by default. Established defaults compound faster than they used to.
+    <span class="stamp">src 18:21</span></p>
+  </div>
+  <div class="insight">
+    <h3>Show the trace before the answer</h3>
+    <p>The Slack reply lists what it pulled and how it joined it, then answers. That lets a reader
+    judge the result without redoing the work, and it is the same discipline as tagging a claim
+    with the command that verified it. <span class="stamp">src 06:20</span></p>
+  </div>
+  <div class="insight">
+    <h3>Refusing the premise is a feature, and it can be specified</h3>
+    <p>The strongest agent behaviour on screen is a task that corrects a false assumption in the
+    request, delivers the closest honest artifact anyway, and reports coverage per field rather
+    than implying completeness. That is a writable output contract, not luck. <span class="stamp">src 03:14</span></p>
+  </div>
+  <div class="insight">
+    <h3>The chaos argument has no exit criterion, and that is its weak point</h3>
+    <p>"Let a thousand flowers bloom" is defended on the reasoning that patterns get selected out
+    of variation. Plausible &mdash; but nowhere in forty-five minutes is there a test for when
+    duplication stops paying, which makes it a stance rather than a policy. <span class="stamp">src 25:33</span></p>
+  </div></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Narration versus pixels</p>
+  <h2>Two places the screen disagreed with the voice</h2></div>
+  <div class="body">
+  <p>Both are in the sponsor segment, and neither changes the
+  argument &mdash; but a claim contradicted by the evidence shown to support it is worth recording.</p>
+
+  <div class="pair">
+    <div><h4>Said, twice, at 03:14 and 03:34</h4>
+      <p class="said">"So it ran for 30 minutes. It used [the API] to research that ... so in this
+      case, after 30 minutes, it created the 100 unique contractors."</p></div>
+    <div><h4>Shown, same frame</h4>
+      <p class="shown">Worked for 13m</p></div>
+  </div>
+
+  <div class="pair">
+    <div><h4>Said at 03:34</h4>
+      <p class="said">The task is framed throughout as delivering "100 active licensed general
+      contractors ... from the state licensing records", with name, website, phone and email in a
+      table, and is presented as having done exactly that.</p></div>
+    <div><h4>Shown, same frame</h4>
+      <p class="shown">Texas does not issue statewide general-contractor licenses ... "active
+      state-licensed" records do not exist.<br><br>Coverage: 88 websites, 98 phone numbers, and 40
+      publicly listed emails.</p></div>
+  </div>
+
+  <p>The agent behaved better than the narration about it: it flagged that the requested record
+  type does not exist and reported per-field coverage of 88, 98 and 40 out of 100. The demo is
+  more convincing read off the screen than off the voiceover.</p></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Errata</p>
+  <h2>Three claims to fix before repeating them</h2></div>
+  <div class="body">
+  <div class="insight">
+    <h3>Lotus Notes is not an IBM business</h3>
+    <p>Notes and Domino were sold to HCL Technologies &mdash; announced December 2018, completed
+    mid-2019 &mdash; and continue under HCL. The point being made, that superseded technology keeps
+    earning for decades, survives; the owner does not. <span class="stamp">src 31:34</span></p>
+  </div>
+  <div class="insight">
+    <h3>"Work on the business, not in it" is Michael Gerber, not Ray Dalio</h3>
+    <p>The phrase is from The E-Myth (1986). Dalio's Principles does use the machine metaphor
+    &mdash; the manager as designer standing above the machine rather than inside it &mdash; so
+    the idea invoked is genuinely his; the wording is not. <span class="stamp">src 33:07</span></p>
+  </div>
+  <div class="insight">
+    <h3>"Big Rip or Big Crunch" leaves out the favoured answer</h3>
+    <p>Current observations point at neither: indefinite accelerating expansion ending in heat
+    death is the mainstream expectation. The rhetorical purpose &mdash; some questions are too
+    distant to be decision-relevant &mdash; is unaffected. <span class="stamp">src 40:20</span></p>
+  </div></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Applicability &mdash; daily routine</p>
+  <h2>What changes on Monday</h2></div>
+  <div class="body">
+  <p>Three things, and they are all cheap. First, the standing-jobs panel: across the standing
+  jobs spread over [REDACTED: private ML pipeline] and [REDACTED: private systems-performance
+  track], there is no one place that answers "what is standing right now, and is it on?" The
+  routines screen in this episode is exactly that panel, and building the equivalent is an
+  afternoon.</p>
+  <p>Second, the premise-refusal contract. The contractor task is a specification, not an
+  anecdote: correct the false assumption in the request, deliver the closest honest artifact, and
+  state coverage per field instead of implying completeness. That belongs in the skill files that
+  govern any agent touching leakage-sensitive work, where a confident answer to a malformed
+  question is the dangerous failure.</p>
+  <p>Third, the deflationary setup answer. An empty instructions file, MCP servers added and then
+  removed, one folder holding all agent context &mdash; from someone who ships an agent product
+  &mdash; is a useful counterweight to elaborate scaffolding. What is <em>not</em> transferable is
+  the twenty-hours-a-week prescription: the constraint here has never been hands-on time, it is
+  session token budget and a contended box, and the episode has nothing to say about either.</p></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Applicability &mdash; ongoing projects</p>
+  <h2>Where it lands, and where it does not</h2></div>
+  <div class="body">
+
+  <div class="redaction-note"><p><b>Redaction note</b>Everything below that is derived from the
+  video is published in full. This page also names the operator's own working projects; anywhere
+  a row would otherwise name or describe a private repository, file path, skill name, or pipeline
+  internal, that span is replaced in place with a <code>[REDACTED: ...]</code> marker, and the
+  surrounding reasoning is kept.</p></div>
+
+  <div class="proj">
+    <h3>[REDACTED: private systems-performance track]<span class="tag yes">Adopt the diagnosis</span></h3>
+    <div><p>The governed docs have precisely the failure this episode describes: knowledge that
+    must live in the ledger and the plan, kept correct by intention, with a standing rule that
+    anything missing is a documentation bug. Hydration says the derived layer should be generated
+    from primary sources instead &mdash; and the primary sources there are unusually good, since
+    commits carry session trailers and every result is typed JSON. A mechanically derived index
+    would attack the "marking a source block stale does not mark the summaries that quote it"
+    problem head-on. The typed-graph shape transfers too: Row, Branch, Harness, Artifact, Decision
+    in place of Person, Team, Project, Initiative, which turns "which open decision is blocked by
+    which row" into a query rather than a re-read.</p></div>
+  </div>
+
+  <div class="proj">
+    <h3>[REDACTED: private systems-performance track]<span class="tag no">Reject the chaos regime</span></h3>
+    <div><p>"Let chaos reign, let every engineer build their own duplicate workflow" is calibrated
+    for a product company maximising discovery rate. That track is maximising the trustworthiness
+    of a small number of measurements, and its value comes from the opposite discipline:
+    pre-registration before code, a same-session A/B on a named harness, refuted branches left
+    unmerged. Importing this advice would reproduce by choice several failure modes its guardrails
+    were written to prevent. Worth naming so it is not absorbed by osmosis.</p></div>
+  </div>
+
+  <div class="proj">
+    <h3>[REDACTED: private ML pipeline]<span class="tag yes">Two concrete intakes</span></h3>
+    <div><p>The premise-refusal output contract above, written into its leakage and advisor
+    skills. And a re-reading of the multi-model routing: the advisor pattern routes by capability,
+    but this material argues the more valuable axis is context &mdash; a cheaper model with the
+    right project brief beats a stronger one without it. The practical consequence is that the
+    brief handed to a delegated model deserves at least as much design attention as the choice of
+    model.</p></div>
+  </div>
+
+  <div class="proj">
+    <h3>Career / job-search track<span class="tag yes">One filter, free</span></h3>
+    <div><p>"In a world where humans no longer operate businesses, does the economy still need
+    this?" applied to roles rather than companies sorts an existing pipeline into infrastructure
+    and human-workflow tooling in one pass. It costs a sentence per row and does not require
+    believing the forecast behind it.</p></div>
+  </div>
+
+  <div class="proj">
+    <h3>Everything else here<span class="tag no">Inert, and worth saying so</span></h3>
+    <div><p>The multiplayer argument assumes colleagues. Every project in this environment is
+    single-operator with agent assistance: no team Slack, no shared integrations, no humans to
+    share context with. The interesting inversion is that the shared-context problem here runs
+    between <em>sessions</em> rather than between people &mdash; which is what session stamping,
+    the handoff prompt and the memory directory already exist to solve. The diagnosis transfers.
+    The product does not. The infrastructure-versus-application thesis and the AGI stance have no
+    operational content for any pipeline here at all.</p></div>
+  </div></div>
+</section>
+
+<section>
+  <div class="head"><p class="kicker">Verdict</p>
+  <h2>Worth the forty-five minutes, at 1.5x, with the sponsor segment watched rather than skipped</h2></div>
+  <div class="body">
+  <p>This is a founder arguing for the category he is about to ship into, in an episode he
+  partly paid to be in, and the honest way to read it is as a well-constructed position paper with
+  a commercial interest attached. Nothing is measured: not the twenty-hour threshold, not the
+  ninety-nine percent prediction, not the one-to-two-year autonomy estimate. What earns the time is
+  the diagnosis rather than the forecast &mdash; context as the binding constraint, hydration as a
+  process rather than an artifact, four capabilities in place of a connector count &mdash; and the
+  handful of moments where the screen shows something more interesting than the sentence over it.</p>
+  <p>It is for people who build or operate agent systems and have started to feel the seams: the
+  pasted context, the stale notes, the second person who needed what your agent already knew. It
+  is not for anyone looking for benchmarks, cost models, or a security position on feeding an
+  entire Slack history to a third party &mdash; none of the three is addressed, and the last is the
+  most conspicuous absence.</p>
+  <p>Named in the episode and worth chasing: Dalio's Principles for the machine metaphor as
+  actually written; the capability-growth chart shown at 01:04 and never cited; and the
+  self-improving product loop described second-hand at 33:36, where a user-research agent feeds a
+  coding agent continuously &mdash; the single most concrete version of "work on the machine" in
+  the whole conversation.</p></div>
+</section>
+
+<footer>
+  Watch note compiled 2026-09-01 from the published recording and 2,725 extracted frames.
+  Transcript tier C (platform auto-captions); every product name in this page was re-read from
+  pixels rather than trusted to the caption track. Quoted screen text is transcribed verbatim
+  where marked. The graph figure is drawn from the legend and nodes visible at 09:48.
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var fig=document.getElementById('fig');
+  if(!fig) return;
+  var ans=document.getElementById('ans');
+  var who=document.getElementById('ans-who');
+  var body=document.getElementById('ans-body');
+  var verdict=document.getElementById('ans-verdict');
+  var prov=document.getElementById('ans-prov');
+  var btns=fig.querySelectorAll('.dial button');
+
+  var STATES=[
+    {who:'Level 0 -- the agent knows nothing about you',
+     body:'\"Rising acquisition cost usually comes from auction competition, creative fatigue, a worsening channel mix, or a tracking change. I would start by segmenting spend by channel and comparing week over week.\"',
+     verdict:'Fluent, correct, and useless. It is the answer to a question anybody could have asked, and it hands the whole job back to you.',
+     prov:'Illustrative -- written to the argument, not filmed'},
+    {who:'Level 1 -- it can see this channel and the tools behind it',
+     body:'\"Pulled 14 days of spend across Meta + Google. Joined it to signups and activation in PostHog.\"',
+     verdict:'Now it can act. It knows which ad accounts are yours and which product analytics tool holds the conversion side, so it does the join instead of describing it. Note that the trace comes before the answer.',
+     prov:'Verbatim from the recording at 06:20'},
+    {who:'Level 2 -- it can see the whole company graph',
+     body:'\"Before you spend the week on this: the number moved because of the onboarding change, and that is the Slack hydration work you and Bruno have been pushing. This is downstream. The thing on fire is reliability.\"',
+     verdict:'It declines the frame. Only the graph makes that possible -- it knows who owns what, what rolls up to what, and what is already burning. This is the behaviour Crivello says shocks his team, and no stateless assistant will ever produce it.',
+     prov:'Illustrative -- written to the behaviour described at 13:38'}
+  ];
+
+  function set(n){
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for(var i=0;i<btns.length;i++){
+      btns[i].setAttribute('aria-pressed', btns[i].getAttribute('data-set')===String(n)?'true':'false');
+    }
+    var apply=function(){
+      fig.setAttribute('data-level',String(n));
+      who.textContent=STATES[n].who;
+      body.textContent=STATES[n].body;
+      verdict.textContent=STATES[n].verdict;
+      prov.textContent=STATES[n].prov;
+      ans.classList.remove('out');
+    };
+    if(reduce){apply();return;}
+    ans.classList.add('out');
+    window.setTimeout(apply,180);
+  }
+
+  for(var i=0;i<btns.length;i++){
+    btns[i].addEventListener('click',function(e){
+      set(parseInt(e.currentTarget.getAttribute('data-set'),10));
+    });
+  }
+})();
+</script>
+</body>
+</html>

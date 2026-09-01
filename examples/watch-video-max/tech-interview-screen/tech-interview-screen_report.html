@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two readings of one call -- the Company, Lead AI Engineer screening (August 2026)</title>
+<style>
+  /* ---------------------------------------------------------------------
+     Art direction: "two-engine alignment ribbon".
+     Two other directions were considered and rejected -- a wire-bound field
+     notebook, and a 1960s technical manual with numbered plates. Both would
+     have been metaphors laid over the material. This one IS the material:
+     the load-bearing result of this run is a map of where two independent
+     readings of the same audio diverged, what adjudicated each divergence,
+     and the fact that the second reading covers only 78 per cent of the
+     runtime and stops dead at both language boundaries. A timeline whose
+     coverage band visibly stops is the one picture that carries that.
+     Palette and type scale were fixed AFTER the ribbon was built, not before.
+     --------------------------------------------------------------------- */
+  :root{
+    --paper:#f2efe7;
+    --paper-2:#e8e4d9;
+    --ink:#17150f;
+    --ink-soft:#4b463a;
+    --ink-faint:#8b8474;
+    --rule:#cdc7b6;
+
+    /* Each accent maps to ONE provenance class and is used for nothing else. */
+    --pixel:#b4541a;     /* read from pixels */
+    --stated:#2f5d7c;    /* a speaker's claim, one engine only */
+    --inferred:#3f6b3a;  /* this pipeline's synthesis */
+    --open:#8e2f3f;      /* heard, not settled */
+
+    --serif:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--serif);font-size:19px;line-height:1.62;
+    font-feature-settings:"kern" 1,"liga" 1;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px 96px}
+
+  /* ---------- masthead ---------- */
+  header.mast{padding:56px 0 34px;border-bottom:3px solid var(--ink)}
+  .meta{
+    font-family:var(--mono);font-size:12px;line-height:1.75;color:var(--ink-soft);
+    margin:0 0 30px;display:grid;grid-template-columns:max-content minmax(0,1fr);
+    gap:2px 18px;max-width:78ch;
+  }
+  .meta dt{letter-spacing:.13em;text-transform:uppercase;font-size:10px;color:var(--ink-faint);
+           padding-top:3px}
+  .meta dd{margin:0}
+  .meta b{color:var(--ink);font-weight:600}
+  h1{
+    font-size:clamp(40px,7.1vw,78px);line-height:.99;margin:0 0 22px;
+    font-weight:600;letter-spacing:-.022em;max-width:17ch;
+  }
+  h1 em{font-style:normal;color:var(--pixel)}
+  .stand{font-size:clamp(19px,2.1vw,24px);line-height:1.5;max-width:62ch;margin:0;color:var(--ink-soft)}
+
+  /* ---------- layout ---------- */
+  .cols{display:grid;grid-template-columns:minmax(0,66ch) minmax(0,1fr);gap:52px;align-items:start}
+  @media(max-width:980px){.cols{grid-template-columns:1fr;gap:26px}}
+  .rail{font-family:var(--mono);font-size:12.5px;line-height:1.68;color:var(--ink-soft);
+        border-left:1px solid var(--rule);padding-left:18px;position:sticky;top:26px}
+  @media(max-width:980px){.rail{position:static;border-left:0;border-top:1px solid var(--rule);
+        padding-left:0;padding-top:14px}}
+  .rail p{margin:0 0 15px}
+  .rail b{display:block;letter-spacing:.11em;text-transform:uppercase;font-size:10.5px;
+          color:var(--ink-faint);margin-bottom:3px}
+
+  section{padding-top:54px}
+  h2{
+    font-size:12px;font-family:var(--mono);letter-spacing:.19em;text-transform:uppercase;
+    color:var(--ink-faint);margin:0 0 6px;font-weight:600;
+  }
+  h2 + .h2sub{font-size:clamp(26px,3.4vw,38px);line-height:1.14;margin:0 0 26px;
+               font-weight:600;letter-spacing:-.017em;max-width:24ch}
+  h3{font-size:21px;margin:34px 0 8px;font-weight:600;letter-spacing:-.008em}
+  p{margin:0 0 17px;max-width:66ch}
+  a{color:var(--stated)}
+  a:focus-visible,button:focus-visible{outline:2.5px solid var(--pixel);outline-offset:3px}
+
+  /* ---------- provenance legend ---------- */
+  /* The provenance legend and the ribbon sit OUTSIDE the two-column body grid, at the page's
+     full width. The render pass caught the ribbon being clipped to a 66ch prose column, which
+     is the wrong place for the one element the page exists to carry. Prose inside these
+     sections is still held to the 66ch measure by the p{max-width} rule. */
+  section.full{max-width:none}
+  .legend{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 30px;margin:30px 0 0;
+          border-top:1px solid var(--rule);max-width:1180px}
+  @media(max-width:900px){.legend{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media(max-width:560px){.legend{grid-template-columns:1fr}}
+  .legend div{padding:14px 0 15px;border-bottom:1px solid var(--rule)}
+  .legend .k{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+             display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  .legend .k i{width:15px;height:15px;display:inline-block;flex:0 0 auto}
+  .legend .d{font-size:14.5px;line-height:1.45;color:var(--ink-soft);max-width:34ch}
+  .sw-pixel{background:var(--pixel)} .sw-stated{background:var(--stated)}
+  .sw-inferred{background:var(--inferred)} .sw-open{background:var(--open)}
+
+  /* ---------- SIGNATURE ELEMENT: the alignment ribbon ---------- */
+  .ribbon{margin:34px 0 0;background:var(--paper-2);padding:26px 24px 20px;
+          border:1px solid var(--rule);overflow-x:auto}
+  .ribbon-inner{min-width:820px}
+  .lane{position:relative;height:30px;margin-bottom:5px;background:
+        repeating-linear-gradient(to right,transparent 0,transparent 9.9%,var(--rule) 9.9%,var(--rule) 10%)}
+  .lane .bar{position:absolute;top:0;bottom:0;transform-origin:left center}
+  .lane .bar span{position:absolute;left:8px;top:50%;transform:translateY(-50%);
+        font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+        color:#fff;white-space:nowrap;pointer-events:none}
+  .lane-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+        color:var(--ink-faint);margin:0 0 4px}
+  /* Pins carry a --row (0,1,2). Three label rows exist because seven pins fall on a
+     31-minute axis with two of them 20 seconds apart; one row of labels collides and
+     becomes unreadable, which the render pass caught. Same-row pins are far apart by
+     construction. The stem length grows with the row so each label stays attached. */
+  /* Row pitch is 28px, not 16px: at 16px a row-N label sat at the same height as the
+     row-(N+1) dot and the two collided ("Claude Code" was pierced by the cron-job pin).
+     28px clears a 13px label plus a 10px dot with 3px to spare. */
+  .pinrow{position:relative;height:112px;margin-top:2px}
+  .pin{position:absolute;top:0;width:1px;background:var(--rule);
+       height:calc(16px + var(--row,0) * 28px)}
+  .pin b{position:absolute;top:calc(16px + var(--row,0) * 28px);left:50%;transform:translateX(-50%);
+         width:10px;height:10px;border-radius:50%;border:2px solid var(--paper-2)}
+  .pin i{position:absolute;top:calc(28px + var(--row,0) * 28px);left:50%;transform:translateX(-50%);
+         font-family:var(--mono);font-size:10.5px;font-style:normal;color:var(--ink-soft);
+         white-space:nowrap;background:var(--paper-2);padding:0 4px}
+  .axis{position:relative;height:20px;border-top:1.5px solid var(--ink);margin-top:8px}
+  .axis span{position:absolute;top:4px;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);
+             transform:translateX(-50%)}
+  .axis span:first-child{transform:none}
+  .axis span:last-child{transform:translateX(-100%)}
+  .ribbon-note{font-family:var(--mono);font-size:12px;line-height:1.65;color:var(--ink-soft);
+               margin:20px 0 0;max-width:88ch}
+
+  /* The one moment of motion on this page: the ribbon draws itself left to right, once.
+     Transform and opacity only. Under prefers-reduced-motion the rule never applies at all,
+     so the bars are simply present -- the motion is removed, not shortened, and the resting
+     state is the page's real state rather than an end-of-animation state. */
+  @media(prefers-reduced-motion:no-preference){
+    .lane .bar{animation:grow .5s cubic-bezier(.22,.61,.36,1) both}
+    .lane .bar[data-d="1"]{animation-delay:.04s}
+    .lane .bar[data-d="2"]{animation-delay:.09s}
+    .lane .bar[data-d="3"]{animation-delay:.14s}
+    .lane .bar[data-d="4"]{animation-delay:.19s}
+    @keyframes grow{from{transform:scaleX(0);opacity:.25}to{transform:scaleX(1);opacity:1}}
+  }
+
+  /* ---------- transcript quotes ---------- */
+  blockquote{margin:22px 0;padding:0 0 0 20px;border-left:3px solid var(--rule);max-width:64ch}
+  blockquote p{margin:0 0 7px;font-size:20px;line-height:1.5}
+  blockquote cite{font-family:var(--mono);font-size:11.5px;font-style:normal;color:var(--ink-faint);
+                  letter-spacing:.08em}
+
+  /* ---------- inline provenance chips ---------- */
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+       padding:2px 6px 3px;color:#fff;white-space:nowrap;vertical-align:.09em}
+  .t-pixel{background:var(--pixel)} .t-stated{background:var(--stated)}
+  .t-inferred{background:var(--inferred)} .t-open{background:var(--open)}
+
+  /* ---------- tables ---------- */
+  table{border-collapse:collapse;width:100%;margin:22px 0;font-size:16px}
+  th,td{text-align:left;padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+     color:var(--ink-faint);font-weight:600;border-bottom:1.5px solid var(--ink)}
+  td.mono,th.mono{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+
+  .walk{border-top:1px solid var(--rule);padding-top:18px;margin-top:26px}
+  .walk .ts{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--pixel);
+            margin:0 0 5px;font-weight:600}
+  .walk h3{margin-top:0}
+
+  /* ---------- redaction note ---------- */
+  /* Marks the hole this publication leaves in the value-map / Applicability material: private
+     repo paths and project names withheld, everything else in the item published in full. Uses
+     the page's own palette -- the open/not-settled accent, since a redaction is structurally the
+     same kind of thing as an unresolved reading: recorded rather than hidden. */
+  .redaction-note{font-family:var(--mono);font-size:12.5px;line-height:1.6;color:var(--ink-soft);
+      background:var(--paper-2);border:1px solid var(--rule);border-left:3px solid var(--open);
+      padding:14px 16px;margin:0 0 26px;max-width:66ch}
+  .redaction-note b{color:var(--ink);font-weight:600}
+
+  ul{max-width:66ch;padding-left:22px}
+  li{margin-bottom:11px}
+
+  footer{margin-top:74px;padding-top:22px;border-top:3px solid var(--ink);
+         font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--ink-soft)}
+  footer b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <dl class="meta">
+    <dt>source</dt><dd><b>[recording filename redacted]</b> -- local file, no URL. Google Meet,
+      recorded August 2026, <b>about 30 minutes</b></dd>
+    <dt>frames</dt><dd><b>5 fps</b>, extracted in one pass</dd>
+    <dt>transcript</dt><dd><b>faster-whisper large-v3, verbatim</b> -- three language-pinned regions,
+      three spans re-decoded and spliced</dd>
+    <dt>cross-check</dt><dd><b>about 80% of runtime</b> -- 14 terms compared, 9 agreed, 5 disagreed,
+      4 of 5 settled</dd>
+  </dl>
+  <h1>Two readings of<br>one call, and the<br><em>pixels that broke the tie</em></h1>
+  <p class="stand">A recording of about 30 minutes: a screening call for a Lead AI Engineer role. The audio was read twice
+  by two independent speech engines. Where they disagreed, the screen decided -- and where the screen
+  was silent, this page says so rather than picking a winner.</p>
+</header>
+
+<section class="full">
+  <h2>Provenance</h2>
+  <p class="h2sub">Four classes of evidence, four colours, used for nothing else</p>
+  <p>Every claim on this page carries one of four marks. The colours are not decoration and they are
+  not reused anywhere in the layout: each one names how a particular fact came to be known, and the
+  ribbon below is drawn in the same four colours for the same reason.</p>
+  <div class="legend">
+    <div><div class="k"><i class="sw-pixel"></i>read from pixels</div>
+      <div class="d">Recovered from the frames themselves -- a profile card, a message subject line,
+      a URL bar. The strongest evidence here.</div></div>
+    <div><div class="k"><i class="sw-stated"></i>stated, one engine</div>
+      <div class="d">Someone said it and it was transcribed once, with no second reading available to
+      corroborate the words.</div></div>
+    <div><div class="k"><i class="sw-inferred"></i>inferred</div>
+      <div class="d">Settled by this pipeline from surrounding context or from structure, where
+      neither engine was right.</div></div>
+    <div><div class="k"><i class="sw-open"></i>not settled</div>
+      <div class="d">Heard, disputed, and left open. The reading is kept as transcribed and the
+      question is recorded rather than closed.</div></div>
+  </div>
+</section>
+
+<section class="full">
+  <h2>The signature reading</h2>
+  <p class="h2sub">Where the second engine stops, and what had to stand in for it</p>
+
+  <p>The input is a local file, so there is no platform caption track and the package would normally
+  record the cross-check as unavailable. It was recoverable here by accident of format: Google Meet's
+  live captions are burned into the video, which makes them a genuine second speech engine reading
+  the same audio, retrievable from the frames.</p>
+
+  <p>That second engine, though, was pinned to English for the whole call, while the call itself is
+  bilingual -- Portuguese at the open and the close, English through the body. Across the two
+  Portuguese regions it emitted unrelated English words and contributed nothing. The band below shows
+  exactly where the corroboration exists and where it simply stops.</p>
+
+  <div class="ribbon">
+   <div class="ribbon-inner">
+    <p class="lane-label">Spoken language</p>
+    <div class="lane">
+      <div class="bar" data-d="1" style="left:0%;width:2.487%;background:var(--open)"></div>
+      <div class="bar" data-d="1" style="left:2.487%;width:78.242%;background:var(--stated)"><span>English -- about 80% of the call</span></div>
+      <div class="bar" data-d="1" style="left:80.729%;width:19.271%;background:var(--open)"><span>Portuguese -- about 20%</span></div>
+    </div>
+
+    <p class="lane-label" style="margin-top:16px">Second-engine coverage (burned-in Meet captions)</p>
+    <div class="lane">
+      <div class="bar" data-d="2" style="left:2.487%;width:78.242%;background:var(--inferred)"><span>corroborated -- about 80% of runtime</span></div>
+    </div>
+
+    <p class="lane-label" style="margin-top:16px">Transcript repairs &nbsp;--&nbsp; 44 s, 15 s, 27 s</p>
+    <div class="lane">
+      <div class="bar" data-d="3" style="left:42.29%;width:3.69%;background:var(--pixel)"></div>
+      <div class="bar" data-d="3" style="left:77.93%;width:0.79%;background:var(--pixel)"></div>
+      <div class="bar" data-d="3" style="left:86.36%;width:1.43%;background:var(--pixel)"></div>
+    </div>
+
+    <p class="lane-label" style="margin-top:16px">What was actually on screen</p>
+    <div class="lane">
+      <div class="bar" data-d="4" style="left:0%;width:100%;background:var(--rule)"><span style="color:var(--ink-soft);left:34px">Google Meet grid + live captions</span></div>
+      <div class="bar" data-d="4" style="left:1.744%;width:0.612%;background:var(--pixel)"></div>
+      <div class="bar" data-d="4" style="left:86.24%;width:0.94%;background:var(--pixel)"></div>
+      <div class="bar" data-d="4" style="left:99.68%;width:0.32%;background:var(--pixel)"></div>
+    </div>
+
+    <div class="pinrow">
+      <div class="pin" style="left:21.40%;--row:0"><b class="sw-stated"></b><i>Employer A</i></div>
+      <div class="pin" style="left:40.42%;--row:1"><b class="sw-inferred"></b><i>RAG</i></div>
+      <div class="pin" style="left:43.75%;--row:2"><b class="sw-open"></b><i>embedding model</i></div>
+      <div class="pin" style="left:51.20%;--row:0"><b class="sw-stated"></b><i>Claude Code</i></div>
+      <div class="pin" style="left:52.26%;--row:1"><b class="sw-inferred"></b><i>cron job</i></div>
+      <div class="pin" style="left:60.13%;--row:2"><b class="sw-inferred"></b><i>Opus 5 / Sonnet 5</i></div>
+      <div class="pin" style="left:86.60%;--row:0"><b class="sw-open"></b><i>Head of AI</i></div>
+    </div>
+
+    <div class="axis">
+      <span style="left:0%">start</span>
+      <span style="left:25%">25%</span>
+      <span style="left:50%">50%</span>
+      <span style="left:75%">75%</span>
+      <span style="left:100%">end</span>
+    </div>
+   </div>
+
+    <p class="ribbon-note">Reading the ribbon. The pins mark the seven terms where the two engines
+    parted company on something that could change a fact. Six of the seven sit inside the
+    corroborated band -- which is not a coincidence, because that band is where a disagreement can be
+    seen at all. The seventh, at 27:19, was caught only because the sentence around it did not parse,
+    and it needed a second decoding pass rather than a second engine. Everything to the right of
+    about 80% -- the compensation figure, the contract basis, the six-stage process -- rests on a
+    single reading of the audio with nothing to check it against.</p>
+  </div>
+</section>
+
+<div class="cols">
+<main>
+
+<section>
+  <h2>Executive summary</h2>
+  <p class="h2sub">What this recording is, and what is in it</p>
+
+  <p>This is the first-stage screening call for a Lead AI Engineer position at the Company, a
+  25-person AI engineering studio and startup incubator working between Brazil and the United States.
+  The interviewer is the recruiter, the company's Talent Acquisition and People Ops Manager,
+  who opened the conversation in Portuguese, asked whether it could continue in English, and closed
+  it in Portuguese again once the assessment portion was over. A third participant sits in the Meet
+  grid throughout, an automated note-taker displaying "Taking notes &amp; recording"; a second
+  transcription tool was also running on the candidate's side, which he mentions and she waves
+  through near the end.</p>
+
+  <p>Two thirds of the call is the company describing itself and the candidate describing his
+  background; the last six minutes are the commercial and procedural terms. The Company is funded
+  by its own profits rather than venture capital, runs a five-person AI team inside a 25-person
+  company, sells product work, AI-specific product work, staffing into Brazilian engineering talent,
+  and an Entrepreneur in Residence programme that is open to its own employees. The role is
+  explicitly 60 per cent hands-on. The engagement is as a Brazilian contractor, not an employee, and
+  the candidate names a specific monthly figure on the record [compensation figure redacted]. The process ahead of him has six stages, and
+  the second is a written take-home containing a section that asks him to critique agent code rather
+  than write any.</p>
+
+  <p>The technical content, all of it self-reported and none of it probed, is the more durable half.
+  The candidate describes producing reinforcement-learning training data for frontier AI labs at a
+  previous employer -- how such a project is scoped, how supervised fine-tuning and RLHF phases
+  alternate, and why several years of that work leaves you having never run a model in production. He
+  then describes the retrieval pipeline he built over his own project documentation specifically to
+  close that gap, and a multi-agent orchestration routine he runs daily. That last part contains an
+  unusual loop: the skill he describes building is a near-exact description of the pipeline that
+  produced this page.</p>
+</section>
+
+<section>
+  <h2>Walkthrough</h2>
+  <p class="h2sub">The call in order, with what the frames added</p>
+
+  <div class="walk">
+    <p class="ts">00:00 -- 00:47 &nbsp;|&nbsp; Portuguese open</p>
+    <h3>Introductions, and a language switch that shapes the whole record</h3>
+    <p>The recruiter introduces herself, apologises for a cat that will wander through frame, and sets the
+    agenda: explain the Company, give context on the role, take questions, hear his trajectory. She then
+    asks whether the rest can be in English. He says he prefers it, being used to giving interviews
+    that way. <span class="tag t-stated">stated</span></p>
+    <p>This switch, agreed in nine seconds, is the single most consequential thing in the recording
+    from an evidence point of view: the Meet caption engine stayed on English, so the two Portuguese
+    stretches lost their second reader, and a single pinned language would also have wrecked the
+    primary transcript. Both facts were found by measurement, not by ear.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">00:33 -- 00:44 &nbsp;|&nbsp; on screen, 11.6 seconds</p>
+    <h3>A LinkedIn tab that is not what it looks like</h3>
+    <p>The browser leaves Meet for eleven seconds and shows a LinkedIn company page. It is
+    <em>Familiar</em> -- "The duplex speech model for revenue calls. Formerly MetaVoice", Artificial
+    Intelligence, San Francisco, 5K followers, 11-50 employees, at
+    <span class="mono">linkedin.com/company/metavoiceio</span>. <span class="tag t-pixel">pixels</span></p>
+    <p>It has nothing to do with the interview. It is worth naming precisely because a reader skimming
+    frames would attach it to the call and conclude the wrong company. What that same frame
+    <em>does</em> settle sits in the messaging panel down the right edge, where an unread thread reads
+    "the recruiter -- Opportunity: Lead AI Engineer at the Company (Full remote,...", dated
+    four days before the call. <span class="tag t-pixel">pixels</span></p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">00:47 -- 05:27 &nbsp;|&nbsp; the company</p>
+    <h3>An AI studio that is also an incubator, and is nobody's portfolio company</h3>
+    <p>the Company builds products for customers and helps launch new companies. Founded 2021.
+    Twenty-five people across Brazil and the United States, fully remote, gathering in person at least
+    once a year. A dedicated AI team of five, plus a generalist full-stack team the AI engineers
+    intersect with. Clients in the US or Europe, usually startups or companies building something new
+    from scratch. <span class="tag t-stated">stated</span></p>
+    <blockquote>
+      <p>We are sustained by our own profits, so we don't have any type of venture capital hype or
+      pressure ... that gives us a lot of freedom, a lot of autonomy, but of course, a lot of
+      responsibility too.</p>
+      <cite>the recruiter, src 01:38</cite>
+    </blockquote>
+    <p>Two lines of business are easy to miss in the flow. The Company also does staffing, connecting
+    clients who want to grow their own teams with Brazilian candidates and acting as a headhunting
+    service. And it runs an Entrepreneur in Residence programme open to everyone including employees:
+    initial resources, a launchpad, community, introductions to other founders. Two projects are
+    advanced, one goes to market the following month, and it was born at the previous year's offsite
+    hackathon -- an engineer who had never expected to be an entrepreneur now runs it.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">04:27 -- 05:27 &nbsp;|&nbsp; the role</p>
+    <h3>Sixty per cent hands-on, stated twice</h3>
+    <p>The team is hiring because some existing AI engineers are shifting toward people development,
+    leaving a gap on the technical-leadership side. Staying purely technical is explicitly fine.
+    the recruiter then gives the number that turns out to matter most in the call: "it's a lead position, but
+    it's very much hands on too, so I would say that 60% of the time is hands on work".
+    <span class="tag t-stated">stated</span></p>
+    <p>Seventeen minutes later he recalls it as forty per cent, and she corrects it upward rather than
+    letting the lower number stand. Both engines carry the figure both times.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">06:23 -- 10:20 &nbsp;|&nbsp; background</p>
+    <h3>Four companies, and the one that matters</h3>
+    <p>Data scientist and machine learning engineer, six-plus years, four companies: Employer A, a large
+    vehicle-rental business; Employer B, which sells fraud detection and security to financial
+    institutions; then Employer C, over three years, IC to team lead to project lead. He
+    names Employer C as the experience that resonates with this role, having been among the first
+    developers hired to work on projects for top frontier AI labs.
+    <span class="tag t-stated">stated</span></p>
+    <p>What follows is the most transferable passage in the recording -- a description of how a vendor
+    actually produces reinforcement-learning data. Scoping settles the project's duration, deadline,
+    task count, resources, IC headcount, expected throughput, and, in the same breath, the written
+    guidelines defining what a high-quality task is. Every project is a reinforcement learning
+    environment. In the first phase the developers hand-build conversation trajectories themselves
+    using that environment's tools, each starting from a prompt that must be fulfilled by the
+    trajectory's end; the finished trajectory becomes a training task. In the second the model builds
+    the trajectory itself and the team evaluates it against the quality bar. The two alternate until
+    the client is satisfied on the target benchmark.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">12:45 -- 15:40 &nbsp;|&nbsp; the challenge question</p>
+    <h3>The gap that a frontier-lab contract creates, and the project built to close it</h3>
+    <p>Asked for his most challenging LLM project, he does not pick an Employer C one. He picks the
+    retrieval pipeline he built over a year of his own documentation, and the reason he gives is the
+    sharpest observation in the call: <span class="tag t-stated">stated</span></p>
+    <blockquote>
+      <p>We would work directly for the top frontier AI labs, so we would give them, produce them
+      high quality data, so we would never call a tool that would call them because we wouldn't need
+      this third party tool.</p>
+      <cite>src 15:21</cite>
+    </blockquote>
+    <p>When the deliverable <em>is</em> the data, the engagement never puts you in front of a model in
+    production. On the retrieval project he benchmarked the local models available to him, chose one
+    from the Qwen family for embedding <span class="tag t-open">not settled</span>, and found that the
+    two levers dominating accuracy and recall were both upstream of the model: which embedding to use,
+    and how many top-K chunks to retrieve.</p>
+    <p>This is the stretch where the primary transcript failed. Forty-four seconds of it came back as
+    a repeating backchannel token, and the failure is invisible from the transcript alone -- it reads
+    as a long pause. The burned-in captions had text there, which is what exposed it. Re-decoded in
+    isolation with conditioning off and a repetition penalty, the passage came back intact, and
+    incidentally resolved a word both engines had mangled: "locomotto" was "local model".
+    <span class="tag t-pixel">pixels</span> <span class="tag t-inferred">inferred</span></p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">16:04 -- 20:52 &nbsp;|&nbsp; staying current</p>
+    <h3>An orchestration routine, a hard context ceiling, and a self-describing loop</h3>
+    <p>Asked how he stays updated, he answers with infrastructure rather than sources. A cron job runs
+    daily to pull the last 24 hours from outlets he trusts. His multi-agent work runs in Claude Code:
+    one orchestration session, an Opus 5 or Fable 5 agent as orchestrator taking a dictated brief,
+    Sonnet 5 sub-agents doing micro-tasks, and an Opus 5 sub-agent reviewing their deliveries before
+    the orchestrator reviews them again. <span class="tag t-inferred">inferred</span></p>
+    <blockquote>
+      <p>I specifically defined that it can't cross 300 K tokens because it starts to diverge and not
+      answer so well.</p>
+      <cite>src 19:20</cite>
+    </blockquote>
+    <p>Then the loop. He describes writing a skill called "watch video" so he does not have to watch
+    them, and explains the reasoning: an assistant asked to watch a video will decline, but the same
+    assistant will do it if the request is decomposed into tool-shaped steps -- extract the audio, run
+    it through Whisper, transcribe, read the transcript, and pull a frame from the video whenever you
+    want to see what was on screen at that moment. That is, near-exactly, the pipeline that produced
+    this page. The description is also instructive by omission: it contains no second reading of the
+    audio, and every correction listed on this page came from having one.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">21:01 -- 25:27 &nbsp;|&nbsp; feedback and fit</p>
+    <h3>Why he left, and the number he was checking for</h3>
+    <p>The feedback he names is a superior at Employer C telling him he was good at leading -- something he
+    says he never expected of himself until he did it. The same person noticed he was less motivated
+    without hands-on work, and that is the reason he gives for leaving: the role had become one
+    hundred per cent leading. <span class="tag t-stated">stated</span></p>
+    <p>He then says he is glad at least forty per cent of this position is hands-on, because he needs
+    to feel he is contributing and that is how he quantifies his delivery and sees its impact. The recruiter
+    corrects him: sixty. This exchange is the clearest thing in the call about what he is optimising
+    for, and it is a number rather than a sentiment.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">25:28 -- end &nbsp;|&nbsp; Portuguese close</p>
+    <h3>The terms, in the region with no second reader</h3>
+    <p>The commercial content arrives after the switch back to Portuguese, which is precisely where the
+    caption engine stopped being useful. Engagement is as PJ, a Brazilian contractor arrangement, not
+    employment; he confirms it matches how his previous engagement worked. Asked for a monthly
+    expectation in dollars, he names a specific monthly figure [compensation figure redacted], describing it as what he has been asking across his
+    current processes. He is available immediately. <span class="tag t-stated">stated</span></p>
+    <table>
+      <tr><th class="mono">#</th><th>Stage</th><th>What it involves</th></tr>
+      <tr><td class="mono">1</td><td>Screening</td><td>This call</td></tr>
+      <tr><td class="mono">2</td><td>Take-home</td><td>Written reflection by email. No coding from
+        scratch. Questions elaborating on past projects, plus a section critiquing agent code and
+        proposing improvements. 24 hours, explicitly untimed and unenforced</td></tr>
+      <tr><td class="mono">3</td><td>Technical screening</td><td>30-minute technical conversation with
+        the Head of AI</td></tr>
+      <tr><td class="mono">4</td><td>Pair coding</td><td>--</td></tr>
+      <tr><td class="mono">5</td><td>System design</td><td>--</td></tr>
+      <tr><td class="mono">6</td><td>Executive interview</td><td>With the founder</td></tr>
+    </table>
+    <p>Asked what "lead" means in practice, the recruiter says that in the AI team effectively everyone
+    carries the Lead AI Engineer title, because each person may be leading a different project; some
+    lean IC, some are hands-on leads, and they want someone who can do both. No client is attached to
+    the role yet -- some start in September or early October, and allocation will depend on timing and
+    on which strengths they identify.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">27:14 -- 27:41 &nbsp;|&nbsp; a name that was not a name</p>
+    <h3>Caught by grammar, not by a second engine</h3>
+    <p>The first decoding of this span put a person called "RedJI" in stage three and a second contact
+    whose name is withheld here as a possible real third-party identifier. Neither parses cleanly.
+    Re-decoded alone at two temperature settings, the span came back stable and different: the
+    technical screening is with the <em>Head of AI</em>, a role rather than a person, and the second
+    contact's name reappears with a feminine article this time -- the gender-marking discrepancy
+    between the two decodings, not the name itself, is the settled part. The founder named a moment
+    later still decodes as "team" in both passes, which does not parse either, and is left open
+    rather than guessed. <span class="tag t-open">not settled</span></p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">27:12 -- 27:30 &nbsp;|&nbsp; on screen, 16 seconds</p>
+    <h3>The frame that settles everything the audio could not</h3>
+    <p>While the process is being described, the browser goes to LinkedIn again, this time to the recruiter's
+    own profile. It reads: <em>the recruiter</em>, verified, first-degree connection; "Talent
+    Acquisition &amp; People Ops Manager @the Company"; Rio de Janeiro, Brazil; 500+ connections;
+    Pontificia Universidade Catolica do Rio de Janeiro. Beside it the company card reads
+    <em>the Company</em>, its banner "live in the future then build what's miss[ing]". Below the
+    header, a hiring card: "Hiring: Lead AI Engineer &amp; 1 other -- the Company - Brazil
+    (Remote)". <span class="tag t-pixel">pixels</span></p>
+    <p>That single frame independently confirms the company name, the exact role title, its remote
+    status, and the interviewer's actual job title -- the last of which the audio had rendered as
+    "computadora", a word that does not exist in Portuguese.</p>
+  </div>
+
+  <div class="walk">
+    <p class="ts">near the end &nbsp;|&nbsp; after the call</p>
+    <h3>Six seconds that were not part of the interview</h3>
+    <p>The recording runs on past the call. For its final six seconds the screen shows Jobgether, at
+    <span class="mono">jobgether.com/talent/premium-match/results</span>, headed "Your Top Best Fit
+    Matches", with 99+ matches and 22 applications, and a saved search reading "Senior Data Scientist
+    or Machine Learning Engineer targeting full time, part time, or freelance roles, [compensation
+    figure redacted] plus salary, eligible to work in multiple countries including United States and
+    Europe."
+    <span class="tag t-pixel">pixels</span></p>
+    <p>Read against the call, that filter is a useful cross-reference rather than a curiosity: the
+    annualised form of the monthly figure named on the record matches the standing threshold in the
+    saved search, so the number was not improvised in the moment. Both figures are redacted here.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Key insights</h2>
+  <p class="h2sub">What is worth carrying out of this recording</p>
+  <ul>
+    <li><b>Producing data for a frontier lab and using a frontier model in production are disjoint
+    skill sets, and the contract structure is what makes them disjoint.</b> When the deliverable is
+    the data, nothing in the engagement ever calls the lab's product. Years of frontier-adjacent work
+    can leave no production LLM surface at all. <span class="mono">src 15:21</span></li>
+
+    <li><b>A written definition of "high-quality task" is a scoping artifact.</b> In the pipeline
+    described, quality guidelines are settled alongside scope, deadline, headcount and throughput --
+    before any data exists. That ordering is what makes throughput and quality plannable together.
+    <span class="mono">src 08:03-08:35</span></li>
+
+    <li><b>In the retrieval pipeline, both dominant quality levers were upstream of the model.</b>
+    Embedding choice and top-K chunk count drove accuracy and recall. Neither is a prompt and neither
+    is a model-size decision. <span class="mono">src 14:18-14:44</span></li>
+
+    <li><b>Two review passes by two different agents is a cheap and unusual orchestration
+    pattern.</b> A dedicated reviewer that did not plan the work, followed by the orchestrator that
+    did, covers two different failure modes without a human in the loop.
+    <span class="mono">src 19:07</span></li>
+
+    <li><b>A self-measured context ceiling beats a published one.</b> The 300k-token cap comes from
+    observed divergence in his own workload and is enforced as a hard rule on the session rather than
+    watched for. <span class="mono">src 19:20</span></li>
+
+    <li><b>"It will refuse the request but execute the decomposition."</b> The watch-video skill
+    exists because the ask was restated as a sequence of tool calls instead of a capability request.
+    The reframing, not any single tool, is the move. <span class="mono">src 20:08-20:52</span></li>
+
+    <li><b>A lead title can describe a role shape rather than a rank.</b> At the Company effectively the
+    whole AI team carries it, because each person may be leading a different project. The 60 per cent
+    figure, not the title, is the real job description. <span class="mono">src 30:22</span></li>
+
+    <li><b>The take-home tests critique rather than construction.</b> Reviewing someone else's agent
+    code and proposing improvements is a rarer skill than writing one, and a coherent filter for a
+    role that is 40 per cent leadership. <span class="mono">src 26:52</span></li>
+  </ul>
+</section>
+
+<section>
+  <h2>Narration versus screen</h2>
+  <p class="h2sub">Where the two disagreed, and how each was resolved</p>
+
+  <p>Nothing anyone said in this call was contradicted by the screen. The discrepancies are all of a
+  different kind -- between what the transcript recorded and what was actually spoken -- which is
+  exactly the class of error a single verbatim transcript cannot flag on its own.</p>
+
+  <table>
+    <tr><th>The fact</th><th>Meet captions heard</th><th>Verbatim whisper heard</th><th>Settled by</th></tr>
+    <tr><td><b>the Company</b></td><td>correct / "cieja"</td><td>correct (real name withheld)</td>
+      <td class="mono">pixels x3</td></tr>
+    <tr><td><b>Lead AI Engineer</b></td><td>"leader engineer"</td><td>"lead AI engineer"</td>
+      <td class="mono">pixels</td></tr>
+    <tr><td><b>the recruiter,<br>Talent Acquisition &amp; People Ops Manager</b></td>
+      <td>no coverage (Portuguese)</td><td>"a computadora aqui da [company name]" (not a real word)</td>
+      <td class="mono">pixels</td></tr>
+    <tr><td><b>Claude Code</b></td><td>"Cloud code"</td>
+      <td>"cloud code", then "Claude code session"</td>
+      <td class="mono">its own inconsistency</td></tr>
+    <tr><td><b>Opus 5 / Fable 5 / Sonnet 5</b></td><td>"oppos5 / fable 5 / Sona 5"</td>
+      <td>"Opus five / Fable five / SONF five"</td><td class="mono">two engines, same structure</td></tr>
+    <tr><td><b>a cron job</b></td><td>"Process Chrome, a chrome job"</td><td>"a Chrome job daily"</td>
+      <td class="mono">context -- both wrong</td></tr>
+    <tr><td><b>a RAG project</b></td><td>"Rec project"</td><td>"RAC" then "REC"</td>
+      <td class="mono">context -- both wrong</td></tr>
+    <tr><td><b>Employer A</b></td><td>mangled common noun</td><td>correct proper noun</td>
+      <td class="mono">whisper, real company</td></tr>
+    <tr><td><b>local model</b></td><td>"locomotto"</td><td>"locomotive"</td>
+      <td class="mono">re-decode</td></tr>
+    <tr><td><b>Head of AI</b></td><td>no coverage (Portuguese)</td><td>"o RedJI"</td>
+      <td class="mono">re-decode</td></tr>
+    <tr><td><b>embedding model version</b></td><td>"Queen 3.5"</td><td>"Queen 3.5" / "QAN 3.5"</td>
+      <td class="mono" style="color:var(--open)">unresolved</td></tr>
+    <tr><td><b>the founder's name</b></td><td>no coverage (Portuguese)</td><td>"o team"</td>
+      <td class="mono" style="color:var(--open)">unresolved</td></tr>
+  </table>
+
+  <p>Two results deserve emphasis. First, on the term "Claude Code" the <em>verbatim</em> engine was
+  the less reliable one, writing it correctly in one place and as "cloud" in another -- an
+  inconsistent error, which is the harder kind to notice, because the right spelling is also present.
+  Second, on "cron job" and "RAG" both engines were wrong in the same direction, which is a plain
+  demonstration that agreement between two readings is a floor and not a ceiling.</p>
+
+  <p>The one genuine screen-versus-expectation trap in the recording is the Familiar company page at
+  00:33. It is a stray tab, it is not the hiring company, and a frame-led reading that skipped the
+  audio would get the entire subject of this call wrong.</p>
+</section>
+
+<section>
+  <h2>Applicability -- daily routine</h2>
+  <p class="h2sub">What would actually change</p>
+  <p>Two items are directly adoptable and both come from the same passage. The 300k-token session cap
+  is worth taking as a hard rule rather than a thing to notice, on the stated grounds that answer
+  quality degrades past it. And the daily cron job that fetches the previous 24 hours from a fixed set
+  of trusted sources converts staying current from a browsing habit into a pipeline with an output you
+  can point at.</p>
+  <p>The orchestrator-plus-reviewer split described in the call is already the working pattern here,
+  so it is confirmatory rather than new -- with one exception worth lifting: having the review done
+  <em>twice</em>, once by an agent that did not plan the work and once by the agent that did.</p>
+  <p>The rest is not routine material. The compensation and process content belongs in a record, not
+  in a habit.</p>
+</section>
+
+<section>
+  <h2>Applicability -- ongoing projects</h2>
+  <p class="h2sub">Per project, including where the answer is none</p>
+
+  <p class="redaction-note"><b>Redaction note.</b> Each item below mixes the recording's own content
+  (published in full, because it was said in the recording) with the operator's private working
+  environment -- repo paths, private project names, private file references -- which is withheld and
+  marked inline as <b>[REDACTED: ...]</b>. The practice, reasoning and transfer described in each item
+  is unredacted.</p>
+
+  <h3>The crypto ML pipeline</h3>
+  <p>The most direct overlap, and the reader is describing his own work here. The promotion gate he
+  states aloud -- two weeks of paper trading, production inference running hourly, opening and closing
+  positions, no real money, and only then live capital -- is worth writing into the project's own
+  decision record as a precondition rather than leaving as an intention, precisely because he has now
+  committed to it out loud to a third party. The retrieval finding is the more actionable transfer: if
+  anything in that codebase does retrieval over its own documentation, the embedding model and the
+  top-K count are where tuning effort pays, and benchmarking across the available local models is how
+  to choose between them.</p>
+
+  <h3>[REDACTED: private trading-agent project]</h3>
+  <p>Partial. The staged promotion policy transfers intact -- a fixed-duration paper window with the
+  production inference path running at its real cadence before any capital is committed. The
+  RL-environment and task-quality material does not apply; that project is not producing training
+  data.</p>
+
+  <h3>[REDACTED: private performance-engineering track]</h3>
+  <p>Very little, and the reason is worth stating rather than reaching for a connection. That track
+  already runs on pre-registration, same-session A/B, and a refusal to claim anything the instrument
+  cannot resolve; a recruiter screening has nothing to add to that. The single transferable item is
+  the two-reviewer orchestration pattern, which rhymes with that track's insistence on controls that
+  can actually fail.</p>
+
+  <h3>The watch-video skill family</h3>
+  <p>The most interesting one, because this recording contains a description of the tool that
+  processed it. Two things in this run bear on it. The design holds: the frames settled the company,
+  the role, and the interviewer's identity, none of which the audio could. And it is incomplete in one
+  specific way: the decomposition as described has no second reading of the audio in it, and every
+  correction on this page came from having one. If that skill is maintained, the item to add is a
+  cross-check source -- and this recording demonstrates an unusually cheap one, since burned-in
+  meeting captions are a second speech engine sitting in the pixels of any recorded call. The other
+  lesson is that a single pinned language silently destroys a bilingual recording; detecting and
+  repairing that cost three extra passes here.</p>
+
+  <h3>The career and interview-preparation track</h3>
+  <p>Highest value, mostly as raw material. Concrete items to file: the six stages in order; that
+  stage two is a written take-home with an agent-code critique section and a soft 24-hour window, and
+  is therefore preparable in advance; that stage three is thirty minutes with the Head of AI; that the
+  engagement is PJ; that a specific monthly figure is now on the record [compensation figure redacted]; and that 60 per cent hands-on is the
+  attribute the whole conversation turned on.</p>
+
+  <h3>[REDACTED: private document-tooling project]</h3>
+  <p>None. Nothing in the source touches document rendering or viewer behaviour. Listed so the absence
+  is deliberate rather than an oversight.</p>
+</section>
+
+<section>
+  <h2>Verdict</h2>
+  <p class="h2sub">What this recording is good for</p>
+  <p>As a record of an interview it is complete and unusually well evidenced: the company, the role,
+  the interviewer and the terms are all pinned, most of them from more than one source. As a technical
+  document it is thinner than it first appears, and the reason is structural rather than a criticism
+  of anyone in it. This is a first-stage screening. Every technical claim is a candidate's
+  unchallenged self-report delivered in narrative form, nothing was probed, and no code, diagram,
+  benchmark or repository appeared on screen at any point in the recording. The stages where
+  those claims would be tested had not happened yet.</p>
+  <p>What survives that discount is worth keeping anyway. The account of how frontier-lab training
+  data actually gets scoped and produced is specific enough to reuse, and the observation about what
+  that contract structure costs the engineer doing it is the kind of thing that is obvious only once
+  someone says it. The two retrieval levers are a concrete, testable finding. The orchestration
+  pattern and its measured context ceiling are directly portable.</p>
+  <p>Follow-up material named in the call and worth chasing: the take-home itself, which is the first
+  artifact in this process with any technical content; and the Entrepreneur in Residence programme,
+  which was raised twice by the candidate and answered only in general terms.</p>
+  <p>One boundary, stated plainly because it is easy to want otherwise from a recording like this.
+  Nothing on this page assesses how anyone performed -- no talk-share, no pacing, no delivery, no
+  read on how the round is likely to have landed. That is a different instrument entirely, and for a
+  recording of two people talking it is the sibling package <span class="mono">video-autopsy</span>,
+  not a lighter version of this one.</p>
+</section>
+
+<footer>
+  <p><b>Ingest cost.</b> About 30 minutes of source at 5 fps, extracted in one pass. (The total
+  frame count this run reported here has been removed in sanitization: divided by the frame rate it
+  recovers the recording's exact duration, a declared quasi-identifier for this private source.)
+  8 survey contact sheets read for the blind visual sweep; 2 caption-crop sheets of 6 panels each
+  built for the cross-check; 6 individual full-resolution frames opened; 5 crop-and-upscale reads at
+  2.6x to 4x LANCZOS. No dense bursts were cut -- the source carries no fast screen transition that
+  would need one. One whisper pass over the full audio in three language-pinned regions, plus three
+  short re-decode passes for repair. GPU float16 throughout.</p>
+  <p><b>Transcript provenance.</b> faster-whisper large-v3, verbatim, beam 5, VAD on. Quality gate
+  passed on coverage (full duration, no gap over 5 s) and failed on repetition, which the recovery
+  chain repaired. Speaker attribution in this report is read from the Meet caption labels in the
+  frames; this package performs no diarization.</p>
+  <p><b>Cross-check.</b> No platform caption track exists for a local file. The burned-in Google Meet
+  live captions were used instead, as a second speech engine recovered from pixels, covering about 80%
+  of the runtime. 14 terms compared, 9 agreed, 5 disagreed, 4 of 5 settled, 2 further items left open.</p>
+  <p><b>Generated by</b> watch-video-max &nbsp;/&nbsp; slug <b>tech-interview-screen</b>
+  &nbsp;/&nbsp; companion documents: <b>tech-interview-screen_knowledge.md</b> (agent-ingestible),
+  <b>tech-interview-screen_transcript.txt</b> (verbatim) -- <em>withheld from this
+  published copy; the source is a private recording</em>.</p>
+</footer>
+
+</main>
+
+<aside class="rail">
+  <p><b>Source</b>[recording filename redacted]<br>1280 x 1392, H.264, 30 fps<br>1,459,081,878 bytes</p>
+  <p><b>Audio</b>mean -14.0 dB / max 0.0 dB<br>live track, full duration</p>
+  <p><b>Language regions</b>PT 00:00-00:47<br>EN 00:47-25:28<br>PT 25:28-end<br>boundaries cut at
+  measured silence</p>
+  <p><b>On screen</b>Meet grid 00:00-end<br>LinkedIn 00:33-00:44<br>LinkedIn 27:12-27:30<br>Jobgether --
+  final ~6s</p>
+  <p><b>Participants</b>the recruiter<br>the candidate<br>Fellow note taker (bot)</p>
+  <p><b>Company</b>the Company<br>founded 2021 / 25 people<br>AI team of 5</p>
+  <p><b>Role</b>Lead AI Engineer<br>Brazil, remote, PJ<br>60% hands-on</p>
+  <p><b>Open questions</b>embedding model version<br>the founder's name</p>
+</aside>
+</div>
+
+</div>
+</body>
+</html>

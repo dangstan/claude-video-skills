@@ -1,0 +1,1774 @@
+VERBATIM TRANSCRIPT OF RECORD -- founder-interview-podcast
+================================================================================
+Source            : https://youtu.be/utb7zYbK10c  (PUBLISHED)
+Title             : "Ex-Uber dev explains his Multi-Agent Workflow"
+Channel           : David Ondrej   Uploaded: 2026-08-10   Duration: 45m 25s (2725.094 s)
+Container         : 1920x1080, 24 fps, AV1 video; AAC stereo 44.1 kHz
+Recording platform: Riverside (riverside.com window visible on the shared screen at 09:42)
+
+TRANSCRIPTION
+  Engine          : faster-whisper 1.2.1, model large-v3
+  Device / compute: cuda (NVIDIA RTX 3060 Ti) / float16, sequential (not batched, not distilled)
+  Parameters      : language="en", vad_filter=True, condition_on_previous_text=True,
+                    word_timestamps=False, temperature default
+  Output          : 1694 segments, 10637 words, coverage 0.08 s to 2724.94 s
+  Quality gate    : PASSED. Full-duration coverage; largest inter-segment gap 1.3 s;
+                    mean avg_logprob -0.123 (min -0.314); max compression_ratio 2.17.
+                    No fallback path used; this is the first-pass verbatim output.
+  Language check  : language identification over the OUTPUT TEXT, per window -- English
+                    throughout, no code-switching span. (Confidence was NOT used as the
+                    detector; it is not sensitive to that axis.)
+
+AUDIO-CAPTURE CHECK (run before any talk-time number)
+  Mono downmix    : mean_volume -28.4 dB, max_volume -3.0 dB -- healthy, both parties present.
+  Multi-channel   : stereo. Measured BEFORE any preprocessing.
+                    rms(L) 1243.19, rms(R) 1243.21, rms(L-R) 21.24 [int16 scale]
+                    difference ratio rms(L-R)/rms(L) = 1.7084%
+                    correlation at lag 0 = 0.999854
+                    cross-correlation peak lag = 0 samples over a +/-100 ms search
+  BRANCH TAKEN    : ordered test branch 1 -- correlation >= 0.999 AND peak lag 0, so the two
+                    channels are the SAME SIGNAL whatever the ratio says. The 1.71% difference
+                    ratio is stereo width / lossy channel coupling, not a second source.
+                    Plain -ac 1 downmix; no alignment or subtraction performed.
+                    (This file lands in the documented dead zone between the two naive
+                    thresholds; the ratio alone would have wrongly said "channels differ".)
+
+SPEAKER ATTRIBUTION
+  No speaker-separated export exists for this recording, so attribution was BUILT and
+  CONTROLLED rather than read off a transcript. Two independent signals:
+    (A) AUDIO  -- 13-coefficient MFCC mean+std per whisper segment over voiced frames,
+        2-means clustering (sklearn, n_init=25). 1676 of 1694 segments clustered.
+    (B) FRAMES -- layout classification over all 13625 frames at 5 fps. Where the editor cut
+        to a CONTINUOUS single-speaker full-frame shot (384.8 s), the person on screen is
+        identified from background (studio wall vs bay window; blueness medians -3.7 vs 75.7).
+  FUSION          : the frame signal overrides where available (223 segments), the audio
+                    cluster carries the rest (1457 segments), 14 segments UNRESOLVED.
+  CONTROL         : signal (B) never consulted signal (A). Over 219 segments lying wholly
+                    inside single-speaker full-frame footage (268.8 s), the two agree on
+                    212 -- AGREEMENT 96.8%. Stratified by segment length: 94.7% under 1 s,
+                    98.6% at 1-2 s, 100% above 2 s.
+  KNOWN ERROR     : the segment at 32:20 ("the bottleneck at this point") is attributed to
+                    DAVID by the mechanical fusion and is WRONG -- the cold-open montage
+                    replays the same audio as one continuous FLO utterance at 00:12. It is
+                    left uncorrected below so the transcript remains the mechanical record;
+                    see the autopsy's limitations section for the fragmentation measurement.
+
+FACE-TO-NAME MAP (both panels are visible at once; the layout is a persistent side-by-side
+composite separated by a white divider, 79.6% of frames)
+  LEFT panel  = DAVID ONDREJ (host)  -- studio wall, over-ear headphones, nose strip
+  RIGHT panel = FLO / Florent Crivello (guest, Lindy) -- bay window, rimless glasses
+  Bound from TWO DISJOINT sources, re-verified 44 minutes apart:
+    1. Editor's speaker-inset over B-roll. At 00:19-00:22 a circular inset of the RIGHT-panel
+       person carries burned-in captions matching the transcript line assigned to cluster 1;
+       at 00:26 the inset shows the LEFT-panel person over the line assigned to cluster 0.
+    2. Aggregate mouth-region motion per panel, per cluster (Welch t = 14.3, p = 6.0e-41):
+       cluster 0 -> LEFT, cluster 1 -> RIGHT.
+    Names attach to clusters by direct address: cluster 0 says "All right Flo" (00:23);
+    cluster 1 says "David" at 00:37, 01:20 and 20:20. Corroborated at 09:42 by the shared
+    screen addressing the sharer as "Flo".
+    Re-verified at 30:00 / 35:00 / 40:00 / 43:20 / 44:40 / 45:00 -- sides never swap.
+
+CAPTION CROSS-CHECK
+  A second ASR reading (YouTube auto-captions, en-orig, 749 cues) was fetched and used ONLY
+  as a cross-check. It is not a transcript tier and no caption span replaces a whisper span.
+
+CONVENTIONS
+  [hh:mm:ss.ss] SPEAKER  text
+  Text is verbatim whisper output, unedited. Whisper's VAD strips most "um"/"uh", so this
+  transcript UNDER-REPORTS filler; disfluency counts taken from it are a FLOOR, not a count.
+================================================================================
+
+[00:00:00.08] FLO        Fuck your calendar, fuck your meetings, like this thing is going to eat your lunch.
+[00:00:03.54] FLO        You have to reinvent your company from scratch right now.
+[00:00:06.10] FLO        Like we don't know what's going to be on the other side of AGI,
+[00:00:08.70] FLO        but like what we do know is that your company is going to be nothing like what it was.
+[00:00:12.94] FLO        The bottleneck at this point is no longer the technology, it's you, it's your own adoption.
+[00:00:16.48] FLO        I think at some point it's also just a decision people have to make for themselves,
+[00:00:19.60] FLO        like do you want to be a business of the future or a business of the past?
+[00:00:23.58] DAVID      All right Flo, so far AI has been more single player.
+[00:00:26.66] DAVID      How is it going to change as we work with AI more closely and agents in everything?
+[00:00:31.06] FLO        I think like literally right now, like we are starting to see the advent of much more multiplayer AI products.
+[00:00:37.98] FLO        I compare it all the time to like, you know, I don't know if you're old enough David,
+[00:00:41.20] FLO        but like we used to send each other like weird documents back and forth by email.
+[00:00:45.08] FLO        Like you still do it sometimes when you have like a legal deal, it's really annoying.
+[00:00:47.90] FLO        I don't know why you don't do that.
+[00:00:48.96] FLO        You know, it's the same difference as between like sending each other weird documents by email
+[00:00:52.42] FLO        or like sending each other like a Google Doc link.
+[00:00:54.30] FLO        And then you can collaborate together on the same.
+[00:00:56.66] FLO        I think it's the exact same thing.
+[00:00:59.28] FLO        I think like 2025, 2026 was about like, okay, agents are really working now.
+[00:01:04.30] FLO        It's really impressive.
+[00:01:05.30] FLO        They can do like long time horizon tasks and all of that stuff.
+[00:01:08.58] FLO        But it's still like everyone's got like their own little like cloud code or like co-work or codex
+[00:01:14.44] FLO        or like whatever you use.
+[00:01:15.98] FLO        I'm more of a cloud code guy myself.
+[00:01:17.40] FLO        Like everyone's got their own agent set up on their own computer.
+[00:01:20.64] FLO        Do you have a team David?
+[00:01:22.22] DAVID      Yes.
+[00:01:22.70] FLO        Are you experiencing the same thing?
+[00:01:24.38] FLO        Like now like people send each other like that.
+[00:01:26.66] FLO        The files and that HTML files are back and forth all the time on Slack.
+[00:01:30.10] FLO        Like it's a mess.
+[00:01:31.50] DAVID      Yeah, it's a mess.
+[00:01:32.24] DAVID      The best solution like we have right now is just GitHub repos.
+[00:01:35.00] DAVID      And it's not optimal, you know?
+[00:01:36.24] FLO        A hundred percent.
+[00:01:36.92] FLO        I think everyone is just hacking something together.
+[00:01:39.58] FLO        And none of those tools were designed for the new use case we have now,
+[00:01:43.58] FLO        which is like, hey, we have a new teammate.
+[00:01:45.24] FLO        You know, it's fundamentally that's what it is, is we have a new teammate.
+[00:01:47.68] FLO        That teammate is AI.
+[00:01:48.68] FLO        And we must make that teammate work with us in exactly the same way as any other human teammate.
+[00:01:53.58] FLO        So that's, I think, the huge transition that's happening now.
+[00:01:56.74] DAVID      Yeah, I think like that stems from the fact that like basically all the softwares that we use
+[00:02:00.44] DAVID      has been created pre-agents, right?
+[00:02:02.38] DAVID      It's been created for humans only, which means it's probably not optimal for agents, right?
+[00:02:06.70] DAVID      Like they're completely different entity than humans.
+[00:02:08.68] DAVID      They have different strengths and different weaknesses.
+[00:02:10.62] DAVID      Maybe I should ask you, but like I hold the belief that soon enough,
+[00:02:13.36] DAVID      99% of all software usage and tools will be done by agents.
+[00:02:17.50] DAVID      Like it's just more convenient for me to ask my personal agent,
+[00:02:20.74] DAVID      whether it's Pi, OpenClaw, Hermes, just like, hey, track my calories
+[00:02:24.72] DAVID      and like figure out how much I have.
+[00:02:26.66] DAVID      Let's rest for the day and just order something, you know, something healthy, high protein.
+[00:02:30.64] DAVID      I don't want to think about it, right?
+[00:02:31.92] DAVID      And now DoorDash released their CLI.
+[00:02:33.74] DAVID      So it's going there.
+[00:02:34.96] FLO        1,000%.
+[00:02:35.74] DAVID      So given that the future is agentic and that soon enough,
+[00:02:38.86] DAVID      99% of tasks will be done by our agents.
+[00:02:41.96] DAVID      We need to make sure that whatever agent you're running is as powerful as possible.
+[00:02:46.02] DAVID      And this is exactly what I spent the last two months building with Deep API.
+[00:02:49.98] DAVID      This is the first API key I give to any agent I create
+[00:02:53.36] DAVID      because it instantly gives it world class scraping for anyone.
+[00:02:56.66] DAVID      It gives it deep research that's better than perplexity,
+[00:03:01.42] DAVID      ability to use browser use, its own email address, and so much more.
+[00:03:04.58] DAVID      Let me just show you.
+[00:03:05.24] DAVID      So let's jump into Codex right here, where I have three completely different tasks
+[00:03:09.12] DAVID      that showcase the power of Deep API.
+[00:03:11.54] DAVID      First one is to get me a hundred active licensed general contractors in Austin, Texas
+[00:03:16.16] DAVID      from the state licensing records, name, website, phone, email, and table, right?
+[00:03:20.00] DAVID      So it ran for 30 minutes.
+[00:03:21.22] DAVID      It used Deep API to research that.
+[00:03:22.78] DAVID      These are the things that Anthropic doesn't give you into Cloud Code.
+[00:03:26.66] DAVID      Or OpenAI doesn't give you into Codex, but with Deep API,
+[00:03:29.70] DAVID      it's a single API key that allows the agent to basically do anything
+[00:03:33.28] DAVID      that a competent human can do on the web.
+[00:03:35.28] DAVID      So in this case, after 30 minutes, it created a hundred unique contractors.
+[00:03:39.24] DAVID      It outputted a markdown table.
+[00:03:40.42] DAVID      You can see very clearly, boom, all hundred contractors.
+[00:03:43.24] DAVID      The amount of use cases is literally thousands.
+[00:03:45.66] DAVID      Let me show you a different test.
+[00:03:46.58] DAVID      This one is eight different stock tickers.
+[00:03:49.12] DAVID      So check the last 24 hours of news and sentiment of these eight tickers,
+[00:03:51.92] DAVID      Nvidia, Tesla, AMD, blah, blah, blah.
+[00:03:54.08] DAVID      Ran for four minutes.
+[00:03:55.42] DAVID      It was faster.
+[00:03:56.66] DAVID      And then also email it to me, right?
+[00:03:58.36] DAVID      So this is the crazy part.
+[00:03:59.50] DAVID      The agent can send emails without you doing any authentication or any config.
+[00:04:04.46] DAVID      The agent can scrape some addresses, find contacts for you and email them
+[00:04:08.96] DAVID      themselves, all with a single Deep API API key.
+[00:04:12.74] DAVID      And let me check my email address actually.
+[00:04:14.24] DAVID      So we can see right here, we got the email from Deep API and yeah,
+[00:04:17.16] DAVID      the agent sent me everything that he promised as a single email without me
+[00:04:21.46] DAVID      having to configure him, set him up.
+[00:04:23.82] DAVID      Again, it comes inside of Deep API.
+[00:04:26.66] DAVID      All of these capabilities, your agent instantly unlocks the moment he has a
+[00:04:30.96] DAVID      single API key from Deep API.
+[00:04:33.12] DAVID      And by the way, our pricing is fully transparent.
+[00:04:35.16] DAVID      If we go to docs and pricing, you can see that even if you buy just $30,
+[00:04:38.96] DAVID      you can get thousands and thousands of different API calls for your agent.
+[00:04:43.00] DAVID      So go ahead and go to deepapi.co or click the first link below the video and try it yourself.
+[00:04:48.08] FLO        Even the laptop, even like the computer is going to disappear.
+[00:04:52.24] FLO        And I say that as like, I'm the guy with like a 49 inch, like Samsung monitor and all of that.
+[00:04:56.46] FLO        But I really think increasingly as like a keyboard and a mouse or just tools you use
+[00:05:02.46] FLO        to micromanage your computer because it's too fast.
+[00:05:05.16] DAVID      Output tokens.
+[00:05:06.08] DAVID      You're outputting tokens through them.
+[00:05:07.12] FLO        That's all I care about.
+[00:05:08.18] FLO        And so if my computer was smart enough, I would just be able to give it a goal.
+[00:05:12.04] FLO        And that doesn't take a massive keyboard and a mouse and a 49 inch monitor.
+[00:05:15.40] FLO        It just takes whisper flow like a keyboard.
+[00:05:17.30] FLO        And I can just like dictate and be like, hey, computer, I want you to do X, Y, and Z.
+[00:05:20.92] FLO        And you figure it out.
+[00:05:21.70] FLO        I don't know what you use under the hood.
+[00:05:23.10] FLO        I don't know how you chain it together.
+[00:05:24.42] FLO        Like you figure out how to achieve.
+[00:05:26.46] FLO        My goal.
+[00:05:27.80] FLO        So 100%, I think like the software we have and the workflows and even the hardware we have,
+[00:05:34.04] FLO        computers, has been built for like a pre-agent era.
+[00:05:37.34] FLO        That said, like even the software we have right now is, you know, we have collaboration tools.
+[00:05:43.22] FLO        It's not like multiplayer is a new thing.
+[00:05:44.90] FLO        It's not like no one was working together before.
+[00:05:47.08] FLO        Like we are used to working in teams.
+[00:05:49.28] FLO        Even that today, like agents are not currently plugged into that.
+[00:05:52.66] FLO        Like so, for example, we're releasing this new product in a week.
+[00:05:56.08] FLO        It's called.
+[00:05:56.46] FLO        It's basically, again, it's a multiplayer agent.
+[00:05:59.50] UNRESOLVED Okay.
+[00:05:59.70] FLO        So it's like you have an agent, you have integrations like tools and actions that are like shared with the teams.
+[00:06:05.60] FLO        You have like a team computer, like a team file system and like a team memory.
+[00:06:09.56] FLO        You have team skills.
+[00:06:11.04] UNRESOLVED Okay.
+[00:06:11.24] FLO        And then you have a team surface, which is just Slack, you know, but like it's just a team surface where you collaborate with your agent.
+[00:06:19.20] FLO        Right now, it's so weird.
+[00:06:19.88] FLO        It's like we have this like common room where we all get to talk and AI is not in the room somehow.
+[00:06:25.00] FLO        And like we all have to like talk to.
+[00:06:26.46] FLO        We go on AI outside the room and then go back into the room.
+[00:06:28.58] FLO        So the moment you can like invoke your agent in a collaborative environment, it changes everything.
+[00:06:34.88] FLO        Like, for example, right now, shocking that I still cannot at mention an agent on Google Doc.
+[00:06:40.02] FLO        Right.
+[00:06:40.80] FLO        It's shocking that most agents still don't have an email address.
+[00:06:44.26] FLO        Like just imagine like something as simple as an email address.
+[00:06:46.82] UNRESOLVED Right.
+[00:06:47.02] UNRESOLVED So.
+[00:06:47.42] FLO        Yes.
+[00:06:47.64] FLO        Your AI teammate should have a Slack account.
+[00:06:50.58] FLO        You should be able to at mention it on Google Docs.
+[00:06:52.42] FLO        You should be able to send it emails and it should just be like a normal member of the team.
+[00:06:56.46] DAVID      Yes, absolutely.
+[00:06:57.36] DAVID      I mean, yesterday, I literally realized this in the evening.
+[00:06:59.36] DAVID      We had like a pretty intense discussion about go to market and, you know, different opinions flying around.
+[00:07:03.38] DAVID      And I was like, why didn't we like involve GBD 5.6 Pro?
+[00:07:07.26] DAVID      Why didn't we involve Fable 5?
+[00:07:08.68] DAVID      Like this should have been like a central participant in the conversation.
+[00:07:13.48] FLO        Yes.
+[00:07:13.96] FLO        It happened to me literally last night.
+[00:07:15.82] FLO        Can I share my screen real quick?
+[00:07:16.96] DAVID      Yeah, of course.
+[00:07:17.96] FLO        Teammate was asking me, this is on Slack.
+[00:07:19.46] FLO        It's like, oh, do we allow free users to use Lindy Teammate via Slack?
+[00:07:22.68] FLO        And then I was like, oh, add Lindy, you know, which is the Lindy Teammate we're releasing.
+[00:07:26.22] FLO        I see.
+[00:07:26.46] FLO        I think we wrote a doc about billing recently.
+[00:07:28.00] FLO        She's like, yep, I found it.
+[00:07:29.06] FLO        It wasn't Lindy, it was Jeremy.
+[00:07:30.94] FLO        This is how it works, right?
+[00:07:32.90] FLO        And so you'll notice I didn't have to retype the entire prompt because the prompt exists in context, right?
+[00:07:39.90] FLO        That is the ability to invoke your agent in a context where like a lot of information and queries already exist makes a huge difference.
+[00:07:47.08] DAVID      Yes.
+[00:07:47.42] DAVID      I think with the skills, like that alone is huge because, you know, if you have people on the team, whoever is best at something, that should be the person creating the skills for that, right?
+[00:07:54.90] DAVID      And also, like, it's...
+[00:07:56.46] DAVID      It's not even about the expertise.
+[00:07:58.08] DAVID      Like, if somebody is working on something, like, literally, I'm like, like, can we just have, like, some either, like, voice transcription, record a loom, have some note taker, like, document this into tokens, then tell Fable 5 to, like, create it into structured markdown files and push it to a shared GitHub repo.
+[00:08:13.74] DAVID      We have a specific, you know, David internal GitHub org.
+[00:08:16.82] DAVID      It's like all these different areas of the business.
+[00:08:18.78] DAVID      We need to have a GitHub repo on it.
+[00:08:20.14] DAVID      That needs to be, like, all the knowledge.
+[00:08:21.46] DAVID      Because before, it was like, okay, we had to do a task, you know, like, create an SOP, create a playbook.
+[00:08:25.66] DAVID      And, like, nobody wants to, like, take their time and, like, teach, you know, more junior people on the team.
+[00:08:29.60] DAVID      But, like, if you're already on a Google Meet or already on a, you know, Zoom call and, like, there's, like, a note taker, suddenly you're, like, developing training materials not only for new humans on the team but for the Asians but, like, all the time.
+[00:08:40.18] FLO        I promise to your viewers this isn't set up.
+[00:08:42.50] FLO        But this is, again, exactly what I am obsessing about these days is, like, multiplayer experience.
+[00:08:48.44] FLO        And I totally agree with you that, like, the bedrock of a multiplayer experience is, like, shared context, right?
+[00:08:55.66] FLO        I see people underestimate how hard it is to build that shared context, right?
+[00:08:59.56] FLO        And the first thing people think about when they think shared context is, like, the wiki, you know?
+[00:09:04.22] FLO        But, like, most companies, like, they don't even have a wiki.
+[00:09:06.92] FLO        And, like, wikis suck.
+[00:09:08.50] FLO        Like, the moment you write a wiki, it's out of date.
+[00:09:10.74] FLO        The way we've resolved this here internally, let me show you.
+[00:09:13.46] FLO        I'm obsessed about this idea.
+[00:09:14.56] FLO        We call it, like, automatic hydration, okay?
+[00:09:16.40] FLO        So we have this file system.
+[00:09:17.44] FLO        And if I go to my file system, I can see my master memory file.
+[00:09:21.32] FLO        This was not brought together by me.
+[00:09:23.52] FLO        This was brought together by my agent.
+[00:09:25.66] FLO        And my agent keeps it up to date continuously as I have meetings, as I receive emails, as I do all of that.
+[00:09:31.42] FLO        You can see here, Lindy looked at months and months of history of our Slack workspace.
+[00:09:37.04] FLO        So it ingested something like 20,000 messages here.
+[00:09:39.96] FLO        And you can see it's updating its learnings live.
+[00:09:42.26] FLO        So at this point of the video, it's only looked at, like, 1,200 messages.
+[00:09:45.34] FLO        And it's telling us what's going on in the company.
+[00:09:47.32] FLO        So you're focused on the teammate experience.
+[00:09:49.54] FLO        And then you can see on the right, it's building this graph of what's going on in the company.
+[00:09:54.44] FLO        It's keeping up to date.
+[00:09:55.66] FLO        It's this team repository of knowledge.
+[00:09:57.94] FLO        Two big data sources that it's using to do that are Slack and meetings.
+[00:10:02.84] FLO        I was asking Lindy, catch me up on the highlights from Lindy teammate onboardings this week.
+[00:10:07.82] FLO        You know, or people sometimes say, like, hey, like, what did we decide about this project again?
+[00:10:12.54] FLO        Or, like, what's the latest shipping date?
+[00:10:13.98] FLO        And Lindy was in the meeting.
+[00:10:15.82] FLO        And she can basically, oh, like, during the latest project sync, Flo said that we were pushing the launch date by a week.
+[00:10:21.60] FLO        So it becomes almost just, like, it's like a teammate that's been in, like, every meeting in the company.
+[00:10:25.66] FLO        It becomes irreplaceable.
+[00:10:26.66] FLO        So I do agree.
+[00:10:27.98] FLO        Like, if you take that multiplayer experience seriously, half the job is just making sure you have this self-building.
+[00:10:35.30] FLO        You know, Kapasi was talking about this, like, self-building wiki.
+[00:10:38.38] FLO        That's basically what it is.
+[00:10:39.32] FLO        It's like a self-building company wiki.
+[00:10:41.24] DAVID      I have so many thoughts on this.
+[00:10:42.32] DAVID      First, I would say, like, humans, like, are great at some things.
+[00:10:45.92] DAVID      Agents are great at others, right?
+[00:10:47.02] DAVID      And, like, so many humans, they try to, like, remember things.
+[00:10:49.76] DAVID      They try to be like, okay, what did we say in the last meeting?
+[00:10:52.14] DAVID      What was the thing that we said we were going to do?
+[00:10:54.64] DAVID      But, like, we are terrible.
+[00:10:55.50] DAVID      We are terrible at memory.
+[00:10:56.26] DAVID      This is literally, like, in court, you know, like, eyewitnesses are, like, the least credible source of information.
+[00:11:01.10] DAVID      Our memory is, like, so easy.
+[00:11:02.58] DAVID      Like, a lot of our childhood memories are fake or either heavily distilled.
+[00:11:05.40] DAVID      There have been many studies on this.
+[00:11:06.50] DAVID      So instead of, like, that, just, like, use a task list.
+[00:11:08.94] DAVID      You know, like, it's the same thing with the context.
+[00:11:10.88] DAVID      Instead of trying to remember all the context, like, what did that person say?
+[00:11:13.70] DAVID      What did we chat on this last Thursday meeting?
+[00:11:16.36] DAVID      It's just, like, let agents handle this, okay?
+[00:11:18.28] DAVID      Some things, agents are clearly better at humans.
+[00:11:21.42] DAVID      And, like, some things are worse.
+[00:11:22.56] DAVID      Like, I believe, like, genuine creative thoughts.
+[00:11:25.18] DAVID      Humans are much better, you know?
+[00:11:26.76] DAVID      Like, seeing, having that intuition, humans are better.
+[00:11:29.52] DAVID      But, like, distilling, you know, 50-plus meetings, you would have to spend, like, half of your day doing that.
+[00:11:34.20] DAVID      For example, for me, I had a similar experience where I track every 15 minutes, which is, like, a productivity technique.
+[00:11:39.94] DAVID      It sounds crazy for people.
+[00:11:40.92] DAVID      But, like, after doing it for two weeks, it's normal.
+[00:11:43.72] DAVID      And basically, I have, like, you know, every day tracked every waking hour 15-minute blocks.
+[00:11:48.46] DAVID      And then I was, like, yo, I'm just getting overwhelmed, you know?
+[00:11:51.78] DAVID      Like, I need to delegate better to my team and stuff like that.
+[00:11:54.24] DAVID      So I took Fable.
+[00:11:55.44] DAVID      I just gave it access to my Google Calendar.
+[00:11:57.48] DAVID      It analyzed, like, the last week or two.
+[00:11:59.34] DAVID      And it produced insight.
+[00:12:00.26] DAVID      I was, like, wow, this is, like, so true.
+[00:12:02.22] DAVID      And, like, it was so clear because it was, like, 250 or 300 different events.
+[00:12:05.92] DAVID      You know, I would never do that manually.
+[00:12:07.34] DAVID      I would never spend those hours, like, going through it.
+[00:12:09.56] DAVID      But the data was there.
+[00:12:10.52] DAVID      And, like, it's the same concept, as you said, with the 50 meetings, you know?
+[00:12:13.20] DAVID      Nobody would, like, go through these transcripts.
+[00:12:15.02] DAVID      But when you chat with 50-plus meetings, there's, like, something magical just having that loads of context and a frontier model and just produces the insights.
+[00:12:22.44] FLO        A hundred percent.
+[00:12:23.02] FLO        And, like, the agents surprise you.
+[00:12:25.18] FLO        When you give them so much context.
+[00:12:26.86] FLO        And I am so happy we have basically infinite context windows now because, like, right now, like, the base context, when we ask a question to Lindy on Slack, we can look in, like, the debug logs.
+[00:12:37.70] FLO        Like, the base context, just like you say, hello, world, that's 100,000 tokens.
+[00:12:41.84] FLO        Like, we just right off the bat feed 100,000 tokens to the model.
+[00:12:44.94] FLO        And so sometimes, like, one thing that surprised me is the way we use multiplayer agents is, like, let's not forget, like, you can also just, like, talk to agents.
+[00:12:52.36] FLO        Just, like, tokens in and out, right?
+[00:12:54.04] FLO        Like, all of us, like, we use.
+[00:12:55.18] FLO        We use cloud all day to just brainstorm and ask for its opinion and all of that stuff.
+[00:12:59.46] FLO        And so we do the same with our Lindy teammate.
+[00:13:01.52] FLO        Now, more and more, we're actually asking Lindy for her opinion.
+[00:13:04.68] FLO        You know, so under the hood, it's Opus.
+[00:13:06.26] FLO        It's a really good model.
+[00:13:07.00] FLO        It's really smart.
+[00:13:07.80] FLO        But most importantly, I think, like, I actually think intelligence is slightly overrated.
+[00:13:13.50] FLO        I think intelligence, sure, it matters.
+[00:13:15.50] FLO        But, like, imagine if you were inviting Albert Einstein, you know, like, the smartest guy in the world, like John von Neumann.
+[00:13:21.36] FLO        You know, you invite John von Neumann to your office.
+[00:13:24.10] FLO        And he sits next to you.
+[00:13:24.94] FLO        And he has zero context.
+[00:13:26.48] FLO        He's kind of useless.
+[00:13:27.70] FLO        Like, he's not going to do a lot for you.
+[00:13:29.26] FLO        You know, like, if you have, like, a quick thing you really need done, John von Neumann is not your guy.
+[00:13:34.14] FLO        Like, your guy, actually, like, your average, like, normal coworker who's not John von Neumann is actually a lot more useful in that moment than John von Neumann.
+[00:13:41.20] FLO        Because he has all of the context about the company.
+[00:13:42.96] FLO        And so very often, like, we're, like, at Lindy, like, in Australia.
+[00:13:46.32] FLO        Like, ah, what do you think we should do here?
+[00:13:48.18] FLO        And sometimes it shocks us because because it has all of this context, it doesn't just chime in, like, oh.
+[00:13:54.94] FLO        I think this is a good decision.
+[00:13:56.40] FLO        It says, guys.
+[00:13:57.20] FLO        Sometimes it literally tells us, like, hey, guys, I don't think this matters, actually.
+[00:14:00.64] FLO        I think, like, none of the whole decision matters at all.
+[00:14:03.12] FLO        Because from the context I have, I know that what you actually care about is this other thing over there.
+[00:14:07.64] FLO        And, like, why are you spending so much time talking about this right now?
+[00:14:10.76] FLO        Like, that is not something that cloud can do if you just ask it a question in a vacuum.
+[00:14:14.98] FLO        It's never going to tell you it doesn't matter.
+[00:14:16.52] FLO        You know, but if you have the context about, hey, guys, like, this other thing is on fire right now.
+[00:14:20.58] FLO        I think this is a distraction.
+[00:14:21.96] FLO        That's the kind of thing an agent can do for you.
+[00:14:24.02] DAVID      Yeah.
+[00:14:24.94] DAVID      There is going to be, like, a big moment similar to, you know, January, February when OpenCloud blew up massively.
+[00:14:30.64] DAVID      That was basically that, but single player, right?
+[00:14:32.78] DAVID      It's like, okay, suddenly this one agent can connect to WhatsApp, to Slack, to Discord, to Calendar or whatever, email.
+[00:14:39.36] DAVID      And, like, it can have all these contexts and I can interact from the apps I already use.
+[00:14:43.14] DAVID      The question is, like, who's going to crack that on the team layer and on the company's layer efficiently, but really in a way that's, like, smooth.
+[00:14:49.94] DAVID      Because nobody wants to, like, my belief is that, like, the web UI is dying.
+[00:14:54.44] DAVID      Nobody wants to, like.
+[00:14:54.96] DAVID      Learn a new app.
+[00:14:56.14] DAVID      Nobody wants to, like, adopt a new tool.
+[00:14:58.22] DAVID      You know, it's already, like, friction.
+[00:14:59.48] FLO        Like, it's just friction.
+[00:15:00.46] DAVID      Switching things.
+[00:15:01.28] DAVID      Even, like, high power humans, they have their own tech stack.
+[00:15:04.16] DAVID      They like to work from their own familiar interfaces.
+[00:15:06.88] DAVID      So, like, it needs to be a smooth way.
+[00:15:08.46] DAVID      It needs to be non-intrusive.
+[00:15:09.96] DAVID      And, yeah, like you said, it needs to, like, be efficient when it surprises you.
+[00:15:13.40] FLO        It's like, wow.
+[00:15:14.16] DAVID      You know, I said, like, I'm going to focus on not overthinking and not adding any more features.
+[00:15:18.34] DAVID      And now I, like, I caught myself, you know, being stuck on, like, adding this fifth feature where we still are in the early.
+[00:15:24.82] DAVID      Stages.
+[00:15:25.28] DAVID      Stuff like that.
+[00:15:26.48] FLO        100%.
+[00:15:26.84] FLO        Which, again, I think this is why I am so bullish on Slack.
+[00:15:31.16] FLO        In a way, it breaks my heart because I actually don't love Slack as a product too much.
+[00:15:34.86] FLO        But I think at this point it's, like, undislogable.
+[00:15:37.34] FLO        But I am so bullish on Slack.
+[00:15:39.08] FLO        I really do think, like, Slack is going to be the place where AI agents collaborate together.
+[00:15:43.92] FLO        Because I agree.
+[00:15:44.68] FLO        I think at the end of the day, it's got to be magical.
+[00:15:46.80] FLO        And, you know, we went through this phase.
+[00:15:48.26] FLO        And you had some videos as well, like, NA10, you know, was, like, all the rage last year.
+[00:15:52.30] FLO        You know, like, we don't hear, like, too much about NA10 anymore.
+[00:15:54.82] FLO        And I think one reason is, like, it's just too hard to use.
+[00:15:57.64] FLO        It's just too complex.
+[00:15:58.58] FLO        Nothing against them.
+[00:15:59.46] FLO        I think it's, like, an awesome company, you know.
+[00:16:01.24] FLO        But I think people really crave something that is just so, so, so easy to use.
+[00:16:06.04] FLO        And, like, they don't even have the time to connect their tools and to give it the context and to give it the instructions.
+[00:16:12.08] FLO        Like, they just want it to work, you know.
+[00:16:14.18] FLO        And so, again, I think this is why if you have a multiplayer scaffold, you don't need, you can join a company.
+[00:16:18.32] FLO        You don't need to connect the tools because, like, the team already did it for you.
+[00:16:21.02] FLO        You don't need to, like, worry about the context because it just builds itself.
+[00:16:23.82] FLO        You don't need to worry about the.
+[00:16:24.92] FLO        Because same, like, the team created all of those skills for you.
+[00:16:28.06] FLO        And then you can just go ahead and ask it stuff.
+[00:16:30.02] DAVID      You shared a great point.
+[00:16:30.98] DAVID      It's, like, people just want things that work, you know.
+[00:16:33.00] DAVID      Nobody wants to, like, configure 20 different things, 10 different API keys.
+[00:16:37.04] DAVID      It was, like you said, you know, with the NA10s, the make.coms, really the competing, like, who has really, like, the raw number of connectors.
+[00:16:44.84] DAVID      But now that agents can do all of this, like, people just want efficiency.
+[00:16:49.30] DAVID      They want something that works.
+[00:16:50.32] DAVID      People want, like, zero setup things, reliability, high uptime, predictable.
+[00:16:54.82] DAVID      User interface, all these things.
+[00:16:56.54] FLO        It's actually shocking because, yes, like, agents can do all those things.
+[00:16:59.48] FLO        I do agree.
+[00:17:00.38] FLO        Like, the mode of Zapier is, like, for the longest time, it was the integrations.
+[00:17:03.92] FLO        I'm sorry, but it's worth nothing.
+[00:17:05.42] FLO        Like, agents can just figure it all out on their own, like, on the fly.
+[00:17:08.70] FLO        Something interesting happened.
+[00:17:10.22] FLO        It was, I think, two days ago.
+[00:17:11.72] FLO        A teammate on Slack mentioned Lindy and was, like, hey, I want to create, like, an audio ad.
+[00:17:17.90] FLO        I don't even know why he was doing that.
+[00:17:19.12] FLO        But he wanted to create, like, an audio ad about Lindy.
+[00:17:21.28] FLO        And so he was, like, connect with, like, the 11 Labs API.
+[00:17:24.06] FLO        Like, come up.
+[00:17:24.52] FLO        Come up.
+[00:17:24.82] FLO        Come up with, like, the script and then create a web page that I can use to, like, play all
+[00:17:29.28] FLO        of those files you've created all of those.
+[00:17:30.76] FLO        We actually have an 11 Labs integration that the agent can invoke via a tool call.
+[00:17:35.80] FLO        But we hadn't added it to the agent.
+[00:17:37.52] FLO        The agent can also, like, request integrations.
+[00:17:39.70] FLO        It's got to invoke another tool to search integrations.
+[00:17:41.80] FLO        Okay?
+[00:17:42.28] FLO        It didn't bother doing that.
+[00:17:43.54] FLO        It was just like, hey, I'm just going to play with, like, the 11 Labs API and I'm going
+[00:17:47.20] FLO        to create my own integration.
+[00:17:49.38] FLO        Again, it's got a computer.
+[00:17:50.46] FLO        It's got a file system.
+[00:17:51.40] FLO        So it literally wrote a Python script that it saved.
+[00:17:54.52] FLO        It's in its file system for future use.
+[00:17:56.40] FLO        It asks us for, like, the 11 Labs API keys.
+[00:17:58.52] FLO        It's got, like, a secrets manager that it uses to store that.
+[00:18:01.74] FLO        And I was like, oh, fuck.
+[00:18:03.08] FLO        You didn't even bother to use the 11 Labs integration we created.
+[00:18:05.80] FLO        Like, you're just, like, building it yourself.
+[00:18:07.46] FLO        So I agree.
+[00:18:08.64] FLO        I think, like, basically, right now, there is a race.
+[00:18:11.58] FLO        Like, whoever becomes this nexus that accumulates all of the context and all the skills and
+[00:18:17.90] FLO        all the integrations of a team can build this ultimate AI teammate that you can just, like,
+[00:18:24.68] FLO        offload work to all day.
+[00:18:26.32] DAVID      And I think another reason why it matters, being first mover, is for the training data.
+[00:18:31.46] DAVID      Like, whoever is really established as the first player gets baked into the training
+[00:18:34.64] DAVID      data of the next generation of models.
+[00:18:36.52] DAVID      And then they're going to default to that.
+[00:18:38.32] UNRESOLVED Right?
+[00:18:38.50] DAVID      Like, we can see it with building, with AI.
+[00:18:40.80] DAVID      Like, there's a certain tech stack.
+[00:18:42.02] DAVID      Everybody knows it.
+[00:18:43.00] DAVID      We're just, like, you just start building with AI and they recommend certain tools because,
+[00:18:46.92] DAVID      you know, people have been building on top of them so much.
+[00:18:48.98] DAVID      And I think it's going to be the same for, like, all aspects.
+[00:18:51.78] DAVID      100%.
+[00:18:52.18] DAVID      You mentioned, like, you're a cloud.
+[00:18:54.48] UNRESOLVED Yeah.
+[00:18:54.52] DAVID      You're a cloud code, more of a cloud code person than Codex.
+[00:18:56.94] DAVID      Can you, like, describe or share, like, your current setup?
+[00:18:59.52] DAVID      How do you work?
+[00:19:00.12] DAVID      How many agents are you running usually?
+[00:19:01.62] DAVID      I mean, on cloud code, I'm always, I don't know about you, like, I'm always a bit confused
+[00:19:05.32] FLO        to see everyone who is those, like, super complex setups.
+[00:19:08.18] FLO        I find, like, cloud code just works out of the box for me.
+[00:19:11.02] FLO        And I've tried all the things.
+[00:19:12.68] FLO        I've added a bunch of MCPs, obviously, like, that you do have to do.
+[00:19:15.88] FLO        But I've removed, like, my cloud.md file is now basically empty.
+[00:19:20.42] FLO        Like, there's nothing in here.
+[00:19:21.30] FLO        All I do is I just have, like, one main, like,
+[00:19:24.48] FLO        massive agent folder on my computer that I use for, like, all of my agent projects
+[00:19:28.56] FLO        and, like, all of my agent Codex.
+[00:19:30.08] FLO        But otherwise, it's basically vanilla cloud code.
+[00:19:32.94] FLO        I think, like, the bulk of my agent usage these days, it's going to sound like I'm playing
+[00:19:38.32] FLO        my book, but it truly is Lindy, you know, because I do find, I find it easier to use.
+[00:19:43.28] FLO        It's in the cloud.
+[00:19:44.26] FLO        You know, I do like that.
+[00:19:45.64] FLO        It's connected to all of my integrations.
+[00:19:47.18] FLO        And so I, you know, and I can have those, I think, routines is a thing we've not talked about.
+[00:19:52.66] FLO        It's basically those recurring.
+[00:19:54.48] FLO        workflows that happen and that tap into all of my integrations.
+[00:19:57.72] FLO        And again, because we have, like, 3,000 integrations, and even if we don't have one, like,
+[00:20:01.54] FLO        Lindy will just build it itself anyway.
+[00:20:03.54] FLO        This is how I use agents now.
+[00:20:04.96] FLO        This is every morning I have an agent send me a daily brief by text, you know.
+[00:20:09.98] FLO        I have an agent draft replies to my emails.
+[00:20:12.56] FLO        I have an agent label the emails that they receive.
+[00:20:14.62] FLO        I have an agent take notes for my meetings, prepare me for my meetings.
+[00:20:17.32] FLO        It sends me a message right before this podcast right now.
+[00:20:20.48] FLO        It's like, oh, you're meeting with David.
+[00:20:21.62] FLO        Like, this is what's been on his mind and so forth.
+[00:20:24.48] FLO        I, what do I have here?
+[00:20:25.64] FLO        I have, maybe it's TMI.
+[00:20:26.86] FLO        I have like an agent that, uh, my agents got like, uh, an iMessage number so I can just like text it all day.
+[00:20:33.66] FLO        Every time I eat something, I send you the picture.
+[00:20:36.10] DAVID      Yeah.
+[00:20:36.32] DAVID      Same.
+[00:20:36.92] FLO        You, do you have like an iMessage as well?
+[00:20:38.56] DAVID      No, not for iMessage.
+[00:20:39.74] DAVID      I have to do it for Discord, but I, yeah, I track all my calories for agent.
+[00:20:42.72] FLO        Yeah.
+[00:20:43.24] FLO        Uh, and then I have these agents just like log that somewhere.
+[00:20:46.00] FLO        And then at the end of the week, it's like shaming me.
+[00:20:48.04] FLO        It sends me a text with, uh, you know, this is your school for the, for the week.
+[00:20:51.80] FLO        Oh, this agent I love.
+[00:20:52.90] FLO        We, we are recruiting engineers.
+[00:20:54.88] FLO        Um, where is it?
+[00:20:56.24] FLO        Weekly AI authors.
+[00:20:57.96] FLO        And so it's, it's finding, I find like a really good source to recruit engineers is to find people who've written really good blog posts.
+[00:21:05.44] FLO        Like if you, if you have a blog and, and if you write it, it means, I think right here, you're like in the top 5% most passionate, uh, engineers.
+[00:21:12.66] FLO        And so I have an agent every week, uh, research new blog posts, like indie blog posts that were written by, by engineers and then send me a list and then offer me like, Hey, which ones should I reach out to?
+[00:21:24.30] FLO        I have.
+[00:21:24.54] FLO        I have this one that, uh, finds like identifies like interesting signups.
+[00:21:28.48] FLO        Like, Oh my God, like the CEO, I can't say who, but like, this is the CEO of like a pretty big company that signed up to us recently.
+[00:21:34.78] FLO        Uh, it intercepted it immediately.
+[00:21:36.30] FLO        It was like, Hey, like this guy just signed up.
+[00:21:38.24] FLO        Do you want me to reach out?
+[00:21:39.16] DAVID      I'm like, Oh, fuck.
+[00:21:39.66] FLO        Yeah.
+[00:21:39.96] FLO        You know?
+[00:21:40.34] FLO        So right here, I'm like super reactive.
+[00:21:41.70] FLO        It's like within like 20 minutes of signing up, the CEO is receiving like a personal outreach for me.
+[00:21:46.10] FLO        That's like actually real.
+[00:21:47.22] FLO        It's not like completely automated.
+[00:21:48.52] FLO        I mean, at this point, like my entire life is powered by agents.
+[00:21:51.14] FLO        I'm like, that's, that's what I use for it.
+[00:21:52.78] DAVID      Like right now, you know, just using.
+[00:21:54.44] DAVID      It for coding.
+[00:21:55.02] DAVID      It's almost shame.
+[00:21:55.62] DAVID      Like Claude code and codex have the word code baked into them because people don't think about other things.
+[00:22:01.28] DAVID      Right?
+[00:22:01.50] DAVID      Like you mentioned someone on your team using it for marketing.
+[00:22:04.34] DAVID      You yourself mentioned the use case that you did like before this podcast, there's so many different ways to like use these agents that like, we still need to figure out.
+[00:22:12.22] DAVID      And also like, this is both on the personal side, like trying to give it more and more ambitious prompts, more and more ambitious tasks to see like what it really can do, but also on the company side.
+[00:22:21.46] DAVID      I mean, that's my belief.
+[00:22:22.28] DAVID      Like as a startup, you have to be.
+[00:22:24.32] DAVID      Yeah.
+[00:22:24.44] DAVID      Willing to completely reinvent yourself like every couple of months, because like things are changing so fast.
+[00:22:29.44] DAVID      And if you're like, no, we're this type of company that does things this way, it's like, okay, but maybe, you know, the next generation of models, maybe it can do it, or maybe people don't want to use it that way anymore.
+[00:22:38.68] DAVID      You know, maybe they just want to use it through WhatsApp or iMessage.
+[00:22:41.18] DAVID      So can you speak more about this?
+[00:22:42.38] DAVID      Like needs to just reinvent whether it's on the personal, you know, how you work with AI or as a company.
+[00:22:47.62] DAVID      100%.
+[00:22:48.52] FLO        I often think of the experience that a kid has learning and adopting new technologies.
+[00:22:53.96] DAVID      You know?
+[00:22:54.26] FLO        Like it's kind of strange, isn't it?
+[00:22:55.98] FLO        That like as a kid, you can learn faster than as an adult, like you adopt new technologies faster.
+[00:23:01.34] FLO        Like what's going on here, you know, and there is something about the brain and all of that stuff, but I think there's something else at play here.
+[00:23:07.10] FLO        I think there's a couple of forces, like you get busy.
+[00:23:10.50] FLO        And so even if the innovation over the long term has ROI, over the short term, it's less effective than the status quo because you're going to have to learn and experiment.
+[00:23:18.76] DAVID      Okay.
+[00:23:18.98] FLO        So you're busy.
+[00:23:20.00] DAVID      Okay.
+[00:23:20.54] FLO        You're kind of afraid, honestly, that it's going to break.
+[00:23:24.14] FLO        You're going to have to do something, you know, so there's the comfort, there's the fear, and I think it is more important than ever to just fuck around.
+[00:23:32.90] FLO        I think, you know, that's what kids do.
+[00:23:34.52] FLO        Like they just fuck around, they play, right?
+[00:23:36.70] FLO        I think it is more important than ever to just play with this technology, and that's another thing that kids do is like they break that stuff all the time, you know?
+[00:23:44.02] FLO        Like I was coding when I was 11.
+[00:23:46.06] FLO        I've been steeped in computers my entire life, and one thing I've done, as many kids like me who were like playing with computers my entire life, is I have broken.
+[00:23:54.14] FLO        So many computers.
+[00:23:55.50] FLO        Every time I would go to a friend's place, I'm like, oh my God, you have a computer.
+[00:23:58.38] FLO        Let me go to the computer and play with it all the time, and I would break everything.
+[00:24:02.00] FLO        You know, you go to like program files on Windows, you're like, this is useless.
+[00:24:05.52] FLO        Delete, delete, delete, delete.
+[00:24:06.78] FLO        Next thing you know, nothing works.
+[00:24:08.40] FLO        And look, it sucks to break stuff, but that's how you learn.
+[00:24:12.74] FLO        I always urge people, I'm like, you've got to right now, you've got to break stuff.
+[00:24:18.64] FLO        You've got to play.
+[00:24:19.38] FLO        You've got to waste time.
+[00:24:21.52] FLO        You know, you've got to clear your calendar.
+[00:24:23.38] FLO        And you can't let it go.
+[00:24:23.80] UNRESOLVED You've got to play.
+[00:24:23.90] DAVID      You've got to waste time.
+[00:24:24.06] UNRESOLVED You've got to play.
+[00:24:24.10] UNRESOLVED You've got to play.
+[00:24:24.14] FLO        You've got to let the urgent crowd out the important.
+[00:24:27.26] FLO        Fuck your calendar.
+[00:24:28.26] FLO        Fuck your meetings.
+[00:24:29.26] FLO        Like this thing is going to eat your lunch.
+[00:24:30.90] FLO        Like you have to reinvent your company from scratch right now.
+[00:24:33.82] FLO        Like we don't know what's going to be on the other side of AGI, but like what we do know
+[00:24:37.12] FLO        is that your company is going to be nothing like what it was, like two years from now.
+[00:24:42.76] FLO        My father had, he had a magazine company.
+[00:24:45.64] FLO        He was like a magazine publisher, you know?
+[00:24:47.72] FLO        And when the internet came about in like the early 2000s, it was sort of similar to what's
+[00:24:52.04] FLO        happening right now in AI.
+[00:24:53.36] FLO        It was kind of scary.
+[00:24:54.06] FLO        It was kind of exciting.
+[00:24:55.06] FLO        And it was very confusing.
+[00:24:56.06] FLO        It was like, what's going to happen?
+[00:24:57.36] FLO        Like no one quite knows how it's going to shake out.
+[00:24:59.60] FLO        What he did know is that his company would completely change.
+[00:25:03.58] FLO        And so, I mean, he basically rebooted his entire company, you know, and like he made
+[00:25:07.16] FLO        a ton of mistakes.
+[00:25:08.16] FLO        He fired a ton of people.
+[00:25:09.16] FLO        He, like the company almost died multiple times, but now, now the company is actually
+[00:25:13.48] FLO        doing well.
+[00:25:14.48] FLO        He transformed his business for like the internet era and all his competitors who didn't do
+[00:25:19.06] FLO        that and they didn't take the risk and they didn't make the mistakes is just a slow death.
+[00:25:23.98] FLO        You just descend into death little by little.
+[00:25:26.48] DAVID      So how do you think about that?
+[00:25:27.80] DAVID      Like running a company on a practical, what are some practical things you guys are doing
+[00:25:31.18] DAVID      or not doing?
+[00:25:32.18] FLO        Oh boy.
+[00:25:33.18] FLO        I think right now we're very much in like the let a thousand flowers bloom phase.
+[00:25:38.10] FLO        You have to embrace chaos right now.
+[00:25:40.12] FLO        It's super chaotic right now.
+[00:25:41.34] FLO        Because again, like I think the very fact that right now, unfortunately, AI tools are
+[00:25:45.30] FLO        single player means that everyone's doing their own thing.
+[00:25:49.06] FLO        So right now, for example, we have a problem where it's like engineers, each engineer has
+[00:25:53.98] FLO        basically created their own PR review workflow, their own AI agent PR review workflow.
+[00:25:58.76] FLO        So we also have like a PR review agent for the company and then like engineers have like
+[00:26:02.48] FLO        their own agents, like add stuff to it.
+[00:26:04.16] FLO        It's a total mess.
+[00:26:05.16] FLO        It's a total mess.
+[00:26:06.22] FLO        And I love it and I totally welcome it.
+[00:26:07.98] FLO        I think right now is the time to lay, to let chaos reign.
+[00:26:10.96] FLO        And I think once like out of that chaos, patterns are going to emerge.
+[00:26:15.74] FLO        It's just, it's, it's natural selection.
+[00:26:17.20] FLO        You know, like the jungle is a chaotic system, but like there's beautiful, very complicated
+[00:26:22.14] FLO        organisms that emerge.
+[00:26:23.68] FLO        Out of that chaotic system.
+[00:26:26.14] FLO        So I think right now that's just the mood we're in, in 2026 is like, you've got to let
+[00:26:29.90] FLO        chaos reign and you've got to embrace just breaking stuff.
+[00:26:33.64] DAVID      So as a founder, just run experiments, observe, talk to the users, see what resonates, see
+[00:26:39.20] DAVID      like you really try to be like the finger spitting a feel, you know, try to get the
+[00:26:43.56] DAVID      feel of like where people are turning away, you know, like this agent is no longer popular
+[00:26:47.52] DAVID      or like this family of models is becoming popular.
+[00:26:50.32] DAVID      People are using it that way.
+[00:26:51.32] DAVID      You know, people are using more and more tokens.
+[00:26:53.56] DAVID      People are becoming more aware of their token spend that they want to see what they get
+[00:26:56.42] DAVID      before buying, you know, maybe six months ago where it was like spending as much as
+[00:26:59.92] DAVID      possible on subscriptions.
+[00:27:00.92] DAVID      Now people are like, okay, this plan gives me that much.
+[00:27:03.20] DAVID      This company does resets, you know, this company requires your backend enterprise data.
+[00:27:07.40] DAVID      This company doesn't.
+[00:27:08.40] DAVID      So I think there are a lot of different trends.
+[00:27:10.86] DAVID      How are you like doing this?
+[00:27:12.20] DAVID      You know, you mentioned like clearing your calendar, experimenting with new tools.
+[00:27:15.68] DAVID      Like when you see a new, interesting tool, do you just like block out some time to test
+[00:27:18.68] DAVID      it?
+[00:27:19.68] DAVID      Like personally, what are some of your ways you try to be on the cutting edge?
+[00:27:22.52] FLO        Yeah.
+[00:27:23.56] FLO        So like my next days are like, like my, my no meeting days and like I basically spend
+[00:27:28.08] FLO        them like, like building with AI at this point.
+[00:27:30.44] FLO        I'm with AI all the time.
+[00:27:31.70] FLO        Like any, any waking minute I have, like again, I was at the office last night at 2 AM and
+[00:27:35.66] FLO        that, that's what I was doing.
+[00:27:36.66] FLO        I was just like, like I was, I was working, but I was working with like that playful intention
+[00:27:41.00] FLO        because I had the space and I had the time and I'm just going to spend more time to actually
+[00:27:44.74] FLO        do new things with AI.
+[00:27:46.32] FLO        I spend all of my weekends with AI and like all day at, at, at work, I'm, I'm telling
+[00:27:51.00] FLO        the team again, I'm urging the team.
+[00:27:52.72] FLO        I'm like, hey, you know what?
+[00:27:53.56] FLO        Agent, agent, agent, this has got to be an agent.
+[00:27:55.98] FLO        You know, I think the team, especially if you're like a leader, I think the team feeds
+[00:28:00.00] FLO        off like the attention that you give to different initiatives.
+[00:28:04.12] FLO        And so I think like, it's very simple.
+[00:28:05.76] FLO        It's like, you've got to ask all the time people about their AI workflows and you've
+[00:28:08.94] FLO        got to reward people.
+[00:28:10.48] FLO        Like you've got to notice people on Slack and during meetings like, oh my God, this
+[00:28:13.58] FLO        is so cool.
+[00:28:14.58] FLO        And then you've got to uplift them.
+[00:28:15.58] FLO        It's like, oh my God, look at, look at what Ali did.
+[00:28:17.86] FLO        Like fuck yeah, like show us Ali, right?
+[00:28:19.34] FLO        Like if you reward that, if you shine a light on that, that's what people are going to do
+[00:28:22.90] FLO        as well.
+[00:28:23.56] FLO        I think of it almost as like, um, is the invention of electricity.
+[00:28:27.12] FLO        Like imagine you're like a factory, right?
+[00:28:28.80] FLO        You're like a shoemaker before the electricity or whatever, or before even the industrial
+[00:28:33.18] FLO        revolution.
+[00:28:34.18] FLO        Okay.
+[00:28:35.18] FLO        And like you're making shoes by hand and it's a mess.
+[00:28:36.56] FLO        It's just like two dudes in a small workshop making shoes by hand.
+[00:28:40.06] FLO        Okay.
+[00:28:41.06] FLO        Now the factory comes in, right?
+[00:28:42.62] FLO        And maybe it's not even the electricity, maybe it's like a coal engine or whatever, right?
+[00:28:47.32] FLO        The ultimate shape of this new business is like the Nike factory, right?
+[00:28:51.90] FLO        So it's like a whole floor.
+[00:28:52.90] FLO        It's like a lot of machines and all of that stuff.
+[00:28:55.52] FLO        Okay.
+[00:28:56.52] FLO        You've got two choices.
+[00:28:57.52] FLO        You can keep doing what you were doing and it's going to be very tidy and you're going
+[00:29:00.96] FLO        to die, you know, or you can move on to the new way and it's going to be an absolute mess,
+[00:29:06.52] FLO        right?
+[00:29:07.52] FLO        Like this factory that's transforming itself from this like 1700s like workshop to like
+[00:29:12.44] FLO        the modern like factory floor with machines, like the transition isn't pretty.
+[00:29:16.94] FLO        Like it's going to be an absolute mess, you know?
+[00:29:19.16] FLO        And so I think right now if your company isn't a shit show, you're falling behind.
+[00:29:22.52] FLO        And you're not, you're not really adapting this.
+[00:29:24.60] FLO        And I think right now if you're not spending, I want to say at least 20 hours a week directly
+[00:29:29.40] FLO        hands on keyboard using those AI systems and breaking stuff and making a mess, you're going
+[00:29:35.14] FLO        to die.
+[00:29:36.14] FLO        Like I don't think your company is going to make it.
+[00:29:37.14] FLO        Yeah.
+[00:29:38.14] DAVID      I would say even more than that because like it's just, there is so much, I think like
+[00:29:42.64] DAVID      to distill it for people, like I think about it a lot and I think it's two things, right?
+[00:29:46.14] DAVID      The AI agents, they're just going to be like a lot smarter and a lot of things and way
+[00:29:50.14] DAVID      more efficient.
+[00:29:51.14] DAVID      So like ultimately it's like, how well can you use the agents and do you have the money
+[00:29:55.48] DAVID      to use them?
+[00:29:56.48] DAVID      Bigger models are more expensive and people are burning more tokens.
+[00:29:58.72] DAVID      So like, do you have the skillset?
+[00:29:59.72] DAVID      Do you have the setup?
+[00:30:00.72] DAVID      Do you have the technical ability, the knowledge, the vocabulary to command these agents well?
+[00:30:06.34] DAVID      And can you actually afford to burn billions of tokens per day?
+[00:30:09.38] FLO        That's exactly right.
+[00:30:10.38] DAVID      That's exactly right.
+[00:30:11.38] FLO        And by the way, it's not rocket science.
+[00:30:12.56] FLO        And I think a lot of people, they're afraid of like dipping their toes in and like once
+[00:30:16.40] FLO        you do it, it's, it's fun.
+[00:30:18.06] FLO        It's just so much fun.
+[00:30:19.06] FLO        These systems are so awesome.
+[00:30:20.30] DAVID      Yeah.
+[00:30:21.14] DAVID      You mentioned, you know, the shoe factory where like people are stitching everything
+[00:30:24.24] DAVID      by hand.
+[00:30:25.24] DAVID      Now in retrospect, it looks like middle ages, but I think like the current way of working
+[00:30:28.80] DAVID      where like humans have to be involved with everything and like human is the bottleneck
+[00:30:31.92] DAVID      and everything.
+[00:30:32.92] DAVID      I think even in 10 to 15 years from now, that will look even more like the middle ages compared
+[00:30:37.84] DAVID      to like the agentic future where we have super intelligent models commanding everything and
+[00:30:42.86] DAVID      the humans are doing the things that are truly great at, but like all the other things, whether
+[00:30:46.28] DAVID      it's like robotics or, you know, parsing thousands of documents.
+[00:30:50.30] DAVID      It's like, this is like a big legal case, whatever does will be done by AI.
+[00:30:53.86] DAVID      And I think, oh yeah, soon enough, we'll look back and see like, it's crazy how slow everything
+[00:30:57.98] DAVID      was moving.
+[00:30:58.98] DAVID      It's crazy that people used to read meeting transcripts or there was like, this is still
+[00:31:02.90] DAVID      a paid position.
+[00:31:03.90] DAVID      Like, you know, like you obviously has one of the most cutting edge transcription tools
+[00:31:08.14] DAVID      out there when it comes to AI, but like there's still a physical job where somebody like sits
+[00:31:12.66] DAVID      in a courtroom or whatever and like trans, transcribes, you know, like translators as
+[00:31:17.40] DAVID      well.
+[00:31:18.40] DAVID      There's people like literally my age.
+[00:31:19.46] DAVID      I speak.
+[00:31:20.18] DAVID      both men and women
+[00:31:21.36] DAVID      that like go to school
+[00:31:22.28] DAVID      to become a translator
+[00:31:23.04] FLO        I'm like guys
+[00:31:24.00] DAVID      have you not spoken
+[00:31:25.38] FLO        to Chair GBD voice
+[00:31:26.38] DAVID      like what are you doing
+[00:31:27.78] FLO        well for what it's worth
+[00:31:29.32] FLO        I have this friend
+[00:31:30.00] FLO        Zach Hargett
+[00:31:30.90] FLO        he said this thing
+[00:31:31.88] FLO        I love
+[00:31:32.40] FLO        he said
+[00:31:33.12] FLO        yesterday lasts
+[00:31:34.88] FLO        a long time
+[00:31:35.64] FLO        I don't know if you know
+[00:31:36.30] FLO        like Lotus Notes
+[00:31:38.08] FLO        which is like
+[00:31:39.06] FLO        for people who don't know
+[00:31:39.94] FLO        it was like
+[00:31:40.34] FLO        I think 80s
+[00:31:41.62] FLO        maybe 90s era
+[00:31:42.66] FLO        like world predecessor
+[00:31:44.36] FLO        and Lotus Notes
+[00:31:46.94] FLO        is a 1 billion dollars
+[00:31:47.82] FLO        a year business
+[00:31:48.60] FLO        for IBM
+[00:31:49.08] FLO        right now
+[00:31:49.74] FLO        so it's just
+[00:31:50.94] FLO        I actually think
+[00:31:51.58] FLO        unfortunately
+[00:31:52.18] FLO        the diffusion of innovation
+[00:31:53.20] FLO        is really slow
+[00:31:54.70] FLO        but I think at some point
+[00:31:55.94] FLO        it's also just a decision
+[00:31:56.92] FLO        people have to make
+[00:31:57.72] FLO        for themselves
+[00:31:58.22] FLO        like do you want to be
+[00:31:59.06] FLO        a business of the future
+[00:31:59.94] FLO        or a business of the past
+[00:32:01.06] FLO        right now
+[00:32:01.80] FLO        you mentioned in 10 or 15 years
+[00:32:03.18] FLO        we're going to have
+[00:32:03.92] FLO        those like
+[00:32:04.36] FLO        supercharged AI organizations
+[00:32:06.40] FLO        like it's happening right now
+[00:32:08.24] FLO        you know
+[00:32:08.66] FLO        like if you're just
+[00:32:09.26] FLO        if you're starting a business
+[00:32:10.50] FLO        from scratch right now
+[00:32:11.26] FLO        it's actually really easy
+[00:32:12.12] FLO        to just hire zero people
+[00:32:13.76] FLO        and sell everything
+[00:32:14.86] FLO        and it's harder
+[00:32:16.02] FLO        the bigger you are
+[00:32:17.02] FLO        and the more
+[00:32:17.40] FLO        the more transformation
+[00:32:18.22] FLO        you have to do
+[00:32:18.82] FLO        the harder it is
+[00:32:19.64] UNRESOLVED right
+[00:32:19.72] FLO        but it's
+[00:32:20.52] DAVID      the bottleneck at this point
+[00:32:21.72] FLO        is no longer the technology
+[00:32:22.86] FLO        it's you
+[00:32:23.42] FLO        it's your own adoption
+[00:32:24.58] DAVID      yeah I literally spoke about this
+[00:32:25.94] DAVID      with people on my team today
+[00:32:26.76] DAVID      it's like anybody
+[00:32:27.48] DAVID      has an engineering team right now
+[00:32:29.04] DAVID      like your codex
+[00:32:30.10] DAVID      your cloud code
+[00:32:30.64] DAVID      your cursor
+[00:32:31.06] DAVID      you have a world-class
+[00:32:32.46] DAVID      engineering team
+[00:32:33.08] DAVID      the question is
+[00:32:33.84] DAVID      do you know how to use it
+[00:32:34.90] DAVID      you know
+[00:32:35.52] DAVID      do you have the right idea
+[00:32:36.40] DAVID      can you build it
+[00:32:37.70] DAVID      do you have the initiative
+[00:32:38.36] DAVID      do you have the work ethic
+[00:32:39.14] DAVID      all these other variables
+[00:32:40.24] DAVID      you know
+[00:32:40.52] DAVID      do you know how to take this to market
+[00:32:41.86] DAVID      go to market marketing
+[00:32:42.78] DAVID      people don't want to talk about it
+[00:32:44.28] DAVID      but like
+[00:32:44.62] DAVID      this is a huge unlock
+[00:32:46.58] DAVID      and it's just like
+[00:32:47.46] DAVID      so many people
+[00:32:48.22] DAVID      and again
+[00:32:48.76] DAVID      I have this controversial belief
+[00:32:49.72] DAVID      that like
+[00:32:50.08] DAVID      99% of slop
+[00:32:51.36] DAVID      comes from humans
+[00:32:52.54] DAVID      because like
+[00:32:53.06] DAVID      people say like
+[00:32:53.60] DAVID      AI slop
+[00:32:54.22] DAVID      this and that
+[00:32:54.70] DAVID      but like
+[00:32:55.28] DAVID      if you have the bad input
+[00:32:56.82] DAVID      if you tell it to build a shitty product
+[00:32:58.18] DAVID      it will gladly build a shitty product
+[00:32:59.72] DAVID      the hard part is
+[00:33:00.70] DAVID      knowing what's a great product
+[00:33:01.86] FLO        yes
+[00:33:02.56] FLO        100%
+[00:33:03.42] DAVID      but look
+[00:33:03.96] FLO        I think honestly
+[00:33:04.78] FLO        even that is going to
+[00:33:06.08] FLO        go away soon
+[00:33:07.60] FLO        I think like
+[00:33:08.14] FLO        the job is just going to
+[00:33:09.72] FLO        set up the agent
+[00:33:10.70] FLO        right now
+[00:33:11.32] FLO        the job is
+[00:33:12.52] FLO        just to set up
+[00:33:13.40] FLO        the agentic machine
+[00:33:14.20] FLO        if you've read
+[00:33:15.26] FLO        you know Ray Dalio
+[00:33:16.20] FLO        like he wrote
+[00:33:16.90] FLO        the book Principles
+[00:33:17.80] FLO        one thing I love
+[00:33:19.22] FLO        in that book
+[00:33:19.66] FLO        that idea that I love
+[00:33:20.98] FLO        you know they always say like
+[00:33:21.80] FLO        don't work in your company
+[00:33:23.24] FLO        work on your company
+[00:33:24.36] FLO        you're not supposed to
+[00:33:25.10] FLO        operate the machine
+[00:33:26.06] FLO        you're supposed to work
+[00:33:26.86] FLO        on the machine
+[00:33:27.42] FLO        you know
+[00:33:28.18] FLO        and every so often
+[00:33:29.02] FLO        you go into the machine
+[00:33:30.00] FLO        to see what's going wrong
+[00:33:31.26] FLO        but then your objective
+[00:33:32.26] FLO        is to get out of the machine
+[00:33:33.28] FLO        to fix it
+[00:33:33.80] FLO        and I think it's the same thing
+[00:33:35.34] FLO        with the AI agents right now
+[00:33:36.36] FLO        I think you want to work
+[00:33:37.62] FLO        on the machine
+[00:33:38.52] FLO        that does the things
+[00:33:39.60] FLO        Listen Labs
+[00:33:40.96] FLO        I don't know if you saw
+[00:33:41.66] FLO        recently had this awesome tweet
+[00:33:42.84] FLO        they had an intern
+[00:33:43.66] FLO        build like
+[00:33:44.84] FLO        an app
+[00:33:45.54] FLO        and they had like
+[00:33:46.40] FLO        well obviously
+[00:33:46.90] FLO        you have a coding agent
+[00:33:47.64] FLO        build the app
+[00:33:48.30] FLO        but then you have
+[00:33:49.06] FLO        a user research
+[00:33:49.66] FLO        agent that continuously
+[00:33:51.04] FLO        gathers feedback
+[00:33:51.94] FLO        from users about the app
+[00:33:53.18] FLO        and then talks to
+[00:33:54.44] FLO        the coding agent
+[00:33:55.10] FLO        to ask it what to change
+[00:33:56.12] FLO        and like the app
+[00:33:56.88] FLO        is basically completely
+[00:33:57.80] FLO        self-improving right now
+[00:33:58.82] FLO        you know so I think
+[00:33:59.92] FLO        that's the current job
+[00:34:01.52] FLO        I think is just to
+[00:34:02.28] FLO        set up this machine
+[00:34:03.36] FLO        and then like
+[00:34:03.98] FLO        you know in so far
+[00:34:05.68] FLO        as humans have a job
+[00:34:06.90] FLO        in the future
+[00:34:07.46] FLO        and like their knowledge
+[00:34:08.32] FLO        work like I don't think
+[00:34:09.72] DAVID      they will
+[00:34:10.04] FLO        but like I think
+[00:34:11.24] FLO        the last job
+[00:34:12.12] FLO        we're going to have
+[00:34:12.78] FLO        is going to be like
+[00:34:13.56] FLO        to just look at this machine
+[00:34:15.28] FLO        and like
+[00:34:15.76] FLO        and scratch off things
+[00:34:16.78] FLO        and ask ourselves
+[00:34:17.34] FLO        like how can we keep
+[00:34:18.08] FLO        optimizing the machines
+[00:34:18.90] FLO        and that's
+[00:34:19.48] FLO        obviously until like
+[00:34:20.44] FLO        the machine optimizes itself
+[00:34:22.54] FLO        like I actually think
+[00:34:23.46] FLO        soon
+[00:34:24.42] FLO        I don't think
+[00:34:24.96] FLO        it's a distant future thing
+[00:34:26.82] FLO        I think like in a year
+[00:34:27.62] FLO        or two
+[00:34:27.94] FLO        I think like
+[00:34:28.44] FLO        the agents are going to be
+[00:34:29.82] FLO        more than capable enough
+[00:34:30.82] FLO        to like look at the machine
+[00:34:31.70] FLO        themselves
+[00:34:32.12] FLO        and just keep growing
+[00:34:33.16] FLO        it themselves
+[00:34:33.60] FLO        and I think at this point
+[00:34:34.56] FLO        all you become
+[00:34:35.22] FLO        is you become like
+[00:34:35.94] FLO        a passive shareholder
+[00:34:37.40] FLO        I think you own shares
+[00:34:38.98] FLO        in the company
+[00:34:39.42] FLO        and maybe you pay
+[00:34:40.32] FLO        yourself dividends
+[00:34:40.96] FLO        but you're not really
+[00:34:42.12] FLO        doing anything
+[00:34:42.64] FLO        as a business anymore
+[00:34:43.48] DAVID      I mean when you break it
+[00:34:44.44] DAVID      down to first principles
+[00:34:45.24] DAVID      like it's not that
+[00:34:46.28] DAVID      hard to figure out
+[00:34:47.42] DAVID      what we need right
+[00:34:48.24] DAVID      like you said
+[00:34:48.98] DAVID      contact
+[00:34:49.44] UNRESOLVED contact
+[00:34:49.46] UNRESOLVED contact
+[00:34:49.48] DAVID      with the customer
+[00:34:50.08] DAVID      it needs to do some
+[00:34:51.42] DAVID      marketing to get more
+[00:34:52.18] DAVID      customers
+[00:34:52.62] DAVID      if you want to figure
+[00:34:53.66] DAVID      out like best principles
+[00:34:54.52] DAVID      like okay there's
+[00:34:55.32] DAVID      successful startup stories
+[00:34:56.44] DAVID      you do some deep research
+[00:34:57.56] DAVID      to get that
+[00:34:58.06] DAVID      like all of these
+[00:34:59.66] DAVID      are just like different
+[00:35:00.32] DAVID      tools connected to a
+[00:35:01.74] DAVID      smart model
+[00:35:02.44] DAVID      smart brain
+[00:35:02.96] DAVID      and again
+[00:35:03.34] DAVID      question is
+[00:35:04.06] DAVID      can the current
+[00:35:05.08] DAVID      models do that
+[00:35:05.74] DAVID      maybe probably
+[00:35:07.20] DAVID      maybe the next
+[00:35:08.02] DAVID      generation or
+[00:35:09.48] DAVID      the generation after
+[00:35:10.32] DAVID      that will probably can
+[00:35:11.08] DAVID      you know it's all
+[00:35:12.12] DAVID      about like
+[00:35:12.52] DAVID      the term harness
+[00:35:13.88] DAVID      the term environment
+[00:35:15.38] DAVID      like the right tools
+[00:35:17.16] DAVID      a lot of people
+[00:35:18.02] DAVID      we don't even know
+[00:35:18.84] DAVID      what these models can
+[00:35:19.46] DAVID      do right
+[00:35:19.98] DAVID      like people start
+[00:35:20.64] DAVID      still figuring out
+[00:35:21.38] DAVID      every month
+[00:35:21.90] DAVID      every other month
+[00:35:22.48] DAVID      how to use them
+[00:35:23.44] DAVID      like with the right
+[00:35:25.08] DAVID      APIs with the right
+[00:35:25.78] DAVID      tools you can have
+[00:35:26.50] DAVID      the same model
+[00:35:27.06] DAVID      be completely different
+[00:35:28.04] DAVID      and as you said
+[00:35:29.02] DAVID      context is another
+[00:35:30.08] DAVID      huge variable
+[00:35:30.56] DAVID      you can have the
+[00:35:31.24] DAVID      same model
+[00:35:31.68] DAVID      Opus if somebody
+[00:35:33.04] DAVID      creates a new
+[00:35:33.54] DAVID      cloud account
+[00:35:34.02] DAVID      could be like a
+[00:35:35.32] DAVID      you know okay-ish
+[00:35:36.24] DAVID      assistant but if you
+[00:35:37.34] DAVID      give it all your
+[00:35:37.80] DAVID      company context
+[00:35:38.50] DAVID      then suddenly it
+[00:35:39.84] DAVID      could be superhuman
+[00:35:40.50] FLO        100%
+[00:35:41.64] DAVID      so how are you
+[00:35:42.82] DAVID      thinking about like
+[00:35:43.52] DAVID      you know AGI
+[00:35:44.36] DAVID      AI improving
+[00:35:45.16] DAVID      how much are you
+[00:35:45.84] DAVID      worried about that
+[00:35:46.30] DAVID      do you think it's
+[00:35:46.66] DAVID      outside of our
+[00:35:47.24] DAVID      control how are you
+[00:35:48.20] DAVID      preparing for that
+[00:35:48.88] DAVID      both as a
+[00:35:49.44] DAVID      personally and like
+[00:35:50.32] DAVID      as a company
+[00:35:50.86] FLO        I almost try to
+[00:35:52.00] FLO        not think about it
+[00:35:52.96] FLO        too much anymore
+[00:35:53.52] FLO        because I you know
+[00:35:54.82] FLO        I live in San
+[00:35:55.46] FLO        Francisco and I'm
+[00:35:56.42] DAVID      I'm tired
+[00:35:57.26] FLO        I am so tired
+[00:35:59.62] FLO        you know it's like
+[00:36:00.12] FLO        I've been I've been
+[00:36:00.94] FLO        the AGI guy since
+[00:36:02.12] FLO        2015 okay I read
+[00:36:03.48] FLO        I read like Ray
+[00:36:04.22] FLO        Keltzville in 2015
+[00:36:05.48] FLO        and he's the guy
+[00:36:06.20] FLO        who like AI
+[00:36:06.82] FLO        killed me at the
+[00:36:07.54] FLO        time which was
+[00:36:08.10] FLO        like it was very
+[00:36:08.94] FLO        early you know
+[00:36:09.52] FLO        and now I'm like
+[00:36:10.90] FLO        this is all everyone
+[00:36:12.30] FLO        I know is talking
+[00:36:13.30] FLO        about and for good
+[00:36:13.94] FLO        reason this is like
+[00:36:14.66] FLO        I think the biggest
+[00:36:15.66] FLO        topic in human
+[00:36:16.46] FLO        history you know
+[00:36:17.24] FLO        but I think on some
+[00:36:18.80] FLO        level I'm like
+[00:36:19.38] FLO        look it's coming
+[00:36:20.62] FLO        I am I am worried
+[00:36:21.64] FLO        about existential
+[00:36:22.28] FLO        risk you know I
+[00:36:23.38] FLO        think there's only
+[00:36:24.18] FLO        two potential
+[00:36:24.96] FLO        outcomes in the
+[00:36:26.62] FLO        end and I call
+[00:36:27.26] FLO        them like death
+[00:36:27.90] FLO        or house cat
+[00:36:28.54] FLO        right so death
+[00:36:30.04] FLO        is we all die
+[00:36:30.66] FLO        you know man and
+[00:36:31.74] FLO        house cat is like
+[00:36:32.60] FLO        well just you know
+[00:36:33.36] FLO        if you have a cat
+[00:36:34.28] FLO        like they don't do
+[00:36:34.86] FLO        much all day
+[00:36:35.70] FLO        and so I think
+[00:36:38.14] FLO        I think those are
+[00:36:38.80] FLO        the and even
+[00:36:39.54] FLO        the the the
+[00:36:40.72] FLO        the upside like
+[00:36:42.52] FLO        even the best
+[00:36:43.34] FLO        case scenario
+[00:36:44.12] FLO        which is the
+[00:36:44.62] FLO        house cat
+[00:36:45.32] FLO        even that upside
+[00:36:46.98] FLO        is is going to
+[00:36:49.06] FLO        be a shit
+[00:36:49.38] FLO        show on the
+[00:36:50.12] FLO        way there it's
+[00:36:51.10] FLO        it's not going
+[00:36:51.74] FLO        to be a smooth
+[00:36:52.30] FLO        transition you
+[00:36:53.38] FLO        know that's
+[00:36:55.28] FLO        that's my take
+[00:36:55.82] FLO        on AGI I think
+[00:36:56.80] FLO        it's going to
+[00:36:57.56] FLO        take a while
+[00:36:58.04] FLO        but like does
+[00:36:58.66] FLO        it matter I
+[00:36:59.24] FLO        feel like at
+[00:36:59.56] FLO        this point people
+[00:36:59.96] FLO        are bickering
+[00:37:00.46] FLO        about like is
+[00:37:01.30] FLO        it going to be
+[00:37:01.82] FLO        two years or
+[00:37:02.44] FLO        20 years I'm
+[00:37:03.08] FLO        like I don't
+[00:37:03.42] FLO        care 20 years
+[00:37:04.02] FLO        is nothing even
+[00:37:04.94] FLO        if it's 20
+[00:37:05.48] FLO        years I think
+[00:37:06.16] FLO        20 years at
+[00:37:06.86] FLO        this point is
+[00:37:07.30] FLO        like it's like
+[00:37:07.72] FLO        the maximum
+[00:37:08.54] FLO        that anyone
+[00:37:09.20] FLO        can can
+[00:37:09.68] FLO        agree like
+[00:37:10.28] FLO        it's not
+[00:37:10.62] FLO        going to be
+[00:37:10.86] FLO        more than
+[00:37:11.22] FLO        20 years
+[00:37:11.70] FLO        and so I'm
+[00:37:12.64] FLO        like okay
+[00:37:13.14] FLO        even if it's
+[00:37:13.86] FLO        20 years I
+[00:37:14.24] FLO        don't care it's
+[00:37:14.78] FLO        just happening
+[00:37:15.30] FLO        right so like
+[00:37:15.84] FLO        this is like
+[00:37:16.22] FLO        such an insane
+[00:37:16.76] FLO        transformation
+[00:37:17.32] FLO        that said I
+[00:37:19.30] FLO        try to focus
+[00:37:20.30] FLO        on what I
+[00:37:20.68] FLO        can control
+[00:37:21.34] FLO        and I
+[00:37:21.88] FLO        don't know
+[00:37:22.68] FLO        about you
+[00:37:23.04] FLO        like maybe
+[00:37:23.40] FLO        again it's
+[00:37:23.82] FLO        because I'm
+[00:37:24.20] FLO        so I've
+[00:37:25.02] DAVID      talked so
+[00:37:25.72] FLO        much about
+[00:37:26.10] FLO        this like I
+[00:37:26.66] FLO        more and more
+[00:37:27.60] FLO        I find joy
+[00:37:28.68] FLO        in the
+[00:37:30.04] FLO        present and
+[00:37:31.38] FLO        in like okay
+[00:37:31.88] FLO        well you know
+[00:37:32.46] FLO        we're in for
+[00:37:32.92] FLO        the ride let's
+[00:37:33.86] FLO        do it you know
+[00:37:34.80] FLO        let's fucking
+[00:37:35.16] FLO        do it and I
+[00:37:36.16] FLO        think like right
+[00:37:36.82] FLO        now the
+[00:37:37.16] FLO        transformation is
+[00:37:37.66] FLO        happening like
+[00:37:38.14] FLO        it's everything
+[00:37:38.66] FLO        we've just
+[00:37:39.02] FLO        talked about
+[00:37:39.46] FLO        right like we
+[00:37:39.96] FLO        are going
+[00:37:40.38] FLO        through that
+[00:37:40.80] FLO        AGI
+[00:37:41.06] FLO        transformation
+[00:37:41.56] FLO        right now
+[00:37:42.12] FLO        it's like okay
+[00:37:42.52] FLO        the company
+[00:37:43.26] FLO        can ride
+[00:37:43.64] FLO        itself what
+[00:37:44.08] UNRESOLVED are you
+[00:37:44.16] DAVID      going to
+[00:37:44.32] FLO        do you
+[00:37:45.22] FLO        know are
+[00:37:45.48] FLO        you going
+[00:37:45.66] FLO        to let
+[00:37:45.90] FLO        yourself be
+[00:37:46.34] FLO        run over or
+[00:37:46.92] FLO        are you going
+[00:37:47.26] FLO        to transform
+[00:37:47.72] FLO        your own
+[00:37:48.02] FLO        company like
+[00:37:49.00] FLO        those tools
+[00:37:49.68] FLO        exist right
+[00:37:50.34] FLO        now well
+[00:37:50.96] FLO        they're starting
+[00:37:51.54] DAVID      to like the
+[00:37:51.96] FLO        multiplayer ones
+[00:37:52.68] FLO        are starting
+[00:37:53.04] FLO        to like what
+[00:37:53.88] FLO        you're going
+[00:37:54.10] FLO        to do you
+[00:37:54.54] FLO        know let's
+[00:37:54.86] FLO        let's use
+[00:37:55.26] FLO        them let's
+[00:37:55.64] FLO        just ride
+[00:37:56.08] FLO        this wave
+[00:37:56.52] FLO        baby so I
+[00:37:58.34] FLO        think that's
+[00:37:58.90] FLO        how I
+[00:37:59.34] FLO        adapt right
+[00:37:59.92] FLO        now is like
+[00:38:00.52] FLO        I'm trying
+[00:38:01.24] FLO        to ride the
+[00:38:01.68] FLO        wave I'm
+[00:38:01.96] FLO        trying to
+[00:38:02.28] FLO        have fun
+[00:38:02.62] FLO        along the
+[00:38:02.94] FLO        way and I
+[00:38:03.82] FLO        try not to
+[00:38:04.64] FLO        think too much
+[00:38:05.12] FLO        about you know
+[00:38:06.20] FLO        the other
+[00:38:06.54] FLO        scenarios because
+[00:38:07.54] FLO        they are they
+[00:38:08.12] FLO        are scary
+[00:38:08.52] DAVID      yeah I think
+[00:38:09.44] DAVID      that like
+[00:38:09.84] DAVID      personally I
+[00:38:10.66] DAVID      absolutely despise
+[00:38:11.58] DAVID      the kind of
+[00:38:12.18] DAVID      like wait
+[00:38:12.70] DAVID      people it's
+[00:38:13.38] DAVID      like wait
+[00:38:13.72] DAVID      until AGI
+[00:38:14.38] DAVID      or like oh
+[00:38:14.98] DAVID      I'm going
+[00:38:15.22] DAVID      to wait
+[00:38:15.56] DAVID      until the
+[00:38:15.96] DAVID      next generation
+[00:38:16.50] DAVID      of models
+[00:38:16.98] DAVID      what kind
+[00:38:17.92] DAVID      of a mindset
+[00:38:18.36] DAVID      is that you
+[00:38:18.94] DAVID      know this
+[00:38:19.48] DAVID      is like we're
+[00:38:20.38] DAVID      living in the
+[00:38:20.82] DAVID      greatest technological
+[00:38:21.92] DAVID      time in the
+[00:38:22.58] DAVID      world like so
+[00:38:24.26] DAVID      many arguments
+[00:38:24.78] DAVID      this is the
+[00:38:25.16] DAVID      greatest time
+[00:38:25.60] DAVID      ever it's like
+[00:38:26.38] DAVID      what do you
+[00:38:26.64] DAVID      mean you're
+[00:38:26.90] DAVID      going to
+[00:38:27.10] DAVID      wait you
+[00:38:27.64] DAVID      know it's
+[00:38:28.00] DAVID      like no
+[00:38:28.36] DAVID      you just do
+[00:38:28.82] DAVID      something like
+[00:38:29.58] DAVID      you said
+[00:38:29.84] DAVID      experiment try
+[00:38:30.80] DAVID      stuff I
+[00:38:31.62] DAVID      mean a lot
+[00:38:32.32] FLO        of people
+[00:38:32.66] DAVID      maybe that's
+[00:38:33.26] DAVID      a good
+[00:38:33.56] DAVID      question like
+[00:38:34.00] DAVID      a lot of
+[00:38:34.22] DAVID      people want
+[00:38:34.88] DAVID      to try you
+[00:38:35.92] DAVID      know starting
+[00:38:36.24] DAVID      a business
+[00:38:36.56] DAVID      starting a
+[00:38:36.94] DAVID      startup but
+[00:38:37.74] DAVID      they don't
+[00:38:37.94] DAVID      know like how
+[00:38:38.44] DAVID      to think
+[00:38:38.74] DAVID      about it so
+[00:38:39.26] DAVID      if you had
+[00:38:39.92] DAVID      no business
+[00:38:40.56] DAVID      no team
+[00:38:41.08] DAVID      no connections
+[00:38:41.64] DAVID      what type
+[00:38:43.06] DAVID      of company
+[00:38:43.46] DAVID      would you
+[00:38:43.70] DAVID      build in
+[00:38:44.12] DAVID      Q3 of
+[00:38:44.76] DAVID      2026
+[00:38:45.28] FLO        and it's
+[00:38:46.02] FLO        fun I
+[00:38:46.38] DAVID      think what
+[00:38:46.62] FLO        people miss
+[00:38:47.12] FLO        is like it's
+[00:38:47.58] FLO        a lot more
+[00:38:47.98] FLO        fun to be
+[00:38:48.36] FLO        riding the
+[00:38:48.86] FLO        wave than
+[00:38:49.32] FLO        to be crushed
+[00:38:49.86] FLO        by it like
+[00:38:50.68] FLO        if you wait
+[00:38:51.54] FLO        till like oh
+[00:38:51.96] FLO        my god it's
+[00:38:52.38] FLO        coming what
+[00:38:52.88] FLO        am I going
+[00:38:53.12] FLO        to do if
+[00:38:53.76] FLO        you're surfing
+[00:38:55.04] FLO        it it's like
+[00:38:55.58] FLO        you know you
+[00:38:55.86] FLO        may fall once
+[00:38:56.72] FLO        or twice but
+[00:38:57.32] FLO        it's fun you
+[00:38:58.32] DAVID      know it's a
+[00:38:58.64] FLO        lot of fun to
+[00:38:59.26] FLO        build with the
+[00:38:59.72] FLO        system so I
+[00:39:00.62] FLO        at this point
+[00:39:01.38] FLO        I'm like when
+[00:39:02.46] DAVID      the conversation
+[00:39:03.32] FLO        comes at
+[00:39:04.22] FLO        dinner parties
+[00:39:04.78] FLO        like AGI
+[00:39:05.66] FLO        risk and all
+[00:39:06.38] FLO        that stuff I'm
+[00:39:06.66] FLO        like hey guys
+[00:39:07.08] FLO        can we sure
+[00:39:08.34] FLO        you know let's
+[00:39:08.90] FLO        talk about that
+[00:39:09.28] FLO        but honestly at
+[00:39:09.94] FLO        this point unless
+[00:39:10.98] FLO        anyone has
+[00:39:11.60] FLO        something original
+[00:39:12.26] FLO        to say like
+[00:39:13.48] FLO        basically what I
+[00:39:14.20] FLO        said is the
+[00:39:14.72] FLO        conclusion it's
+[00:39:15.28] FLO        like death or
+[00:39:15.80] FLO        house cat and
+[00:39:16.46] FLO        then those like
+[00:39:17.04] FLO        misuse and
+[00:39:18.38] FLO        terrorism and
+[00:39:19.24] FLO        open source like
+[00:39:20.22] FLO        all of that
+[00:39:20.74] FLO        stuff sure but
+[00:39:21.38] FLO        like it's just
+[00:39:21.80] FLO        like a painting
+[00:39:22.52] FLO        along the way
+[00:39:23.26] FLO        of like those
+[00:39:23.74] FLO        two end
+[00:39:24.16] FLO        outcomes and
+[00:39:25.38] FLO        like unless
+[00:39:25.80] FLO        anyone has
+[00:39:26.28] FLO        anything original
+[00:39:26.86] FLO        to say like
+[00:39:27.46] FLO        let's talk
+[00:39:27.88] FLO        about you
+[00:39:28.66] FLO        know that
+[00:39:28.94] FLO        saying it's
+[00:39:29.44] FLO        like when art
+[00:39:30.42] FLO        critics meet
+[00:39:31.52] FLO        they talk about
+[00:39:32.44] FLO        like history the
+[00:39:34.04] FLO        history of art or
+[00:39:35.06] FLO        something and
+[00:39:35.68] FLO        when artists meet
+[00:39:36.68] FLO        they talk
+[00:39:37.06] FLO        about where to
+[00:39:37.56] FLO        find a cheap
+[00:39:38.62] FLO        top and
+[00:39:38.94] FLO        dine like cheap
+[00:39:39.70] FLO        paint you know
+[00:39:40.50] FLO        I'm like can we
+[00:39:40.94] DAVID      talk about top
+[00:39:41.40] FLO        and dine for a
+[00:39:42.00] FLO        minute let's
+[00:39:42.48] FLO        talk about the
+[00:39:42.86] FLO        paint like what
+[00:39:43.44] FLO        are you guys
+[00:39:43.84] FLO        doing all day
+[00:39:44.30] FLO        at work like
+[00:39:44.74] FLO        what tools are
+[00:39:45.20] FLO        you using like
+[00:39:45.84] FLO        how are you
+[00:39:46.20] FLO        doing this
+[00:39:46.56] DAVID      stuff yeah I
+[00:39:47.44] DAVID      mean you can
+[00:39:48.24] DAVID      definitely drive
+[00:39:48.86] DAVID      yourself crazy
+[00:39:49.54] DAVID      thinking about it
+[00:39:50.22] DAVID      too much but
+[00:39:50.96] DAVID      it's saying like
+[00:39:51.78] DAVID      ignorance is bliss
+[00:39:52.50] DAVID      you know like in
+[00:39:53.34] DAVID      some ways that the
+[00:39:53.98] FLO        people who don't
+[00:39:54.44] DAVID      really know what's
+[00:39:55.38] DAVID      happening and you
+[00:39:56.40] DAVID      know who still
+[00:39:56.96] DAVID      have their job and
+[00:39:57.58] DAVID      like aren't paying
+[00:39:58.36] DAVID      attention to
+[00:39:58.92] DAVID      the cutting edge
+[00:39:59.26] DAVID      AI in some ways
+[00:40:00.32] DAVID      that they are like
+[00:40:01.10] DAVID      happier you know
+[00:40:02.10] DAVID      they don't have to
+[00:40:02.58] DAVID      worry about these
+[00:40:03.34] DAVID      things that comes
+[00:40:04.74] DAVID      with like I
+[00:40:05.28] DAVID      guess like you
+[00:40:06.10] DAVID      know intelligence
+[00:40:06.78] DAVID      and like insight
+[00:40:07.66] DAVID      and being on the
+[00:40:08.70] DAVID      cutting edge where
+[00:40:09.18] DAVID      you see like these
+[00:40:10.14] DAVID      potential risks
+[00:40:10.76] DAVID      potential worries
+[00:40:11.48] DAVID      and like you know
+[00:40:12.32] DAVID      then we feel like
+[00:40:13.52] DAVID      it's some part of
+[00:40:14.06] DAVID      responsibility either
+[00:40:14.84] DAVID      like trying to
+[00:40:16.10] DAVID      remedy that or
+[00:40:16.76] DAVID      like educate people
+[00:40:17.48] DAVID      about that but as
+[00:40:18.30] DAVID      you said like if
+[00:40:19.02] DAVID      you go too hard on
+[00:40:19.84] DAVID      that you can
+[00:40:20.24] DAVID      definitely drive
+[00:40:20.82] DAVID      yourself crazy
+[00:40:21.30] FLO        yes I sometimes
+[00:40:23.00] DAVID      compare it to
+[00:40:23.52] FLO        like cosmology you
+[00:40:24.54] FLO        know if you if you
+[00:40:25.16] FLO        study like the
+[00:40:25.90] FLO        evolution of the
+[00:40:26.90] FLO        universe it's like
+[00:40:27.70] FLO        there's only two
+[00:40:28.14] FLO        possible outcomes
+[00:40:28.86] FLO        like the great the
+[00:40:29.70] FLO        big the big rip
+[00:40:30.78] FLO        or the big crunch
+[00:40:32.00] FLO        like either the
+[00:40:33.04] FLO        universe completely
+[00:40:33.76] FLO        expands so
+[00:40:34.64] FLO        much or the
+[00:40:34.72] FLO        universe collapses
+[00:40:37.82] FLO        back onto itself
+[00:40:38.56] FLO        and so it's like
+[00:40:39.44] FLO        okay we know that
+[00:40:40.16] FLO        that's a pretty big
+[00:40:40.80] FLO        deal that's literally
+[00:40:41.50] FLO        the biggest deal ever
+[00:40:42.36] FLO        you know it's gonna
+[00:40:42.88] FLO        happen over trillions
+[00:40:43.58] FLO        and trillions of
+[00:40:44.18] FLO        years like there's
+[00:40:45.04] FLO        not that much like
+[00:40:46.06] FLO        point talking about
+[00:40:47.20] FLO        that you know you
+[00:40:47.88] FLO        can just like come
+[00:40:48.52] FLO        up at dinner parties
+[00:40:49.20] FLO        and be like oh big
+[00:40:49.90] FLO        rich or big crunch
+[00:40:50.72] FLO        you know I don't
+[00:40:51.12] FLO        know I can be like
+[00:40:52.08] FLO        hey do you want to
+[00:40:52.50] FLO        just join us and
+[00:40:53.28] FLO        play video games with
+[00:40:54.02] FLO        us like let's let's
+[00:40:54.80] FLO        have fun until until
+[00:40:55.74] DAVID      then in terms of
+[00:40:56.56] DAVID      like the starting a
+[00:40:57.20] DAVID      startup right like
+[00:40:57.78] DAVID      for the people who
+[00:40:58.36] DAVID      actually want to ride
+[00:40:59.46] DAVID      the wave serve the
+[00:41:00.06] DAVID      wave how would you
+[00:41:00.88] DAVID      advise them about
+[00:41:01.48] DAVID      like what not to
+[00:41:02.50] DAVID      build and what to
+[00:41:03.02] DAVID      build in the third
+[00:41:04.62] DAVID      quarter of this year
+[00:41:05.42] FLO        oh boy I think it
+[00:41:07.48] DAVID      depends if you're like
+[00:41:08.18] FLO        building a lifestyle
+[00:41:09.04] FLO        business like an indie
+[00:41:10.20] FLO        business it depends
+[00:41:10.98] FLO        or if you want to
+[00:41:11.52] FLO        build like a VC
+[00:41:12.14] FLO        backed business you
+[00:41:13.54] FLO        know if you want to
+[00:41:13.96] FLO        build an indie
+[00:41:14.50] FLO        business I actually
+[00:41:15.22] FLO        think like what you
+[00:41:16.18] FLO        build doesn't matter
+[00:41:16.94] FLO        as much as like how
+[00:41:18.84] FLO        you build it
+[00:41:19.44] FLO        obviously you don't
+[00:41:20.48] FLO        want to build
+[00:41:20.80] FLO        nonsensical stuff but
+[00:41:21.74] FLO        if you build
+[00:41:22.10] FLO        nonsensical stuff and
+[00:41:22.94] FLO        you build it in like
+[00:41:24.10] FLO        an AI native way
+[00:41:25.18] FLO        using like this like
+[00:41:26.20] FLO        autonomous self
+[00:41:27.08] FLO        improvement loop and
+[00:41:27.74] FLO        all of that that I
+[00:41:28.34] FLO        just mentioned like
+[00:41:28.98] FLO        you know yes all
+[00:41:30.90] FLO        things equal you don't
+[00:41:31.70] FLO        want to be building a
+[00:41:32.44] FLO        commodity but like
+[00:41:33.30] FLO        look commodity
+[00:41:33.84] FLO        businesses exist
+[00:41:34.62] FLO        and they're huge and
+[00:41:35.58] FLO        as long as they're
+[00:41:36.18] FLO        well operated like
+[00:41:37.14] FLO        Nike does make money
+[00:41:38.24] FLO        you know like
+[00:41:39.34] FLO        shipyards do make
+[00:41:41.40] FLO        money right like you
+[00:41:42.26] FLO        can build these
+[00:41:42.82] FLO        businesses and as
+[00:41:43.54] DAVID      long as you're
+[00:41:43.84] FLO        building them in a
+[00:41:44.38] FLO        modern way and you're
+[00:41:45.50] FLO        operating you're
+[00:41:46.40] FLO        running your ship
+[00:41:47.12] FLO        well you're gonna
+[00:41:48.14] FLO        you're gonna make a
+[00:41:48.60] FLO        lot of money you
+[00:41:49.54] FLO        know so you're
+[00:41:50.30] FLO        always seeing those
+[00:41:51.12] FLO        indie hackers like
+[00:41:52.06] FLO        make money with like
+[00:41:52.74] FLO        the ideas are kind of
+[00:41:53.64] FLO        dumb right they're
+[00:41:54.48] FLO        very simple it's not
+[00:41:55.26] FLO        a crazy idea I think
+[00:41:56.20] FLO        what really matters is
+[00:41:57.02] FLO        how they do it and
+[00:41:58.00] FLO        it's basically there's
+[00:41:58.54] FLO        no fact they just
+[00:41:59.58] FLO        build super fast like
+[00:42:00.52] FLO        levels right it's just
+[00:42:01.88] FLO        like every time he
+[00:42:02.62] FLO        presses command S he
+[00:42:03.72] FLO        saves the
+[00:42:04.56] FLO        file on his
+[00:42:04.94] FLO        computer it
+[00:42:05.94] FLO        literally commits
+[00:42:07.54] FLO        pushes and so
+[00:42:08.76] FLO        deploys and so
+[00:42:11.26] FLO        that's that's awesome
+[00:42:12.52] FLO        you know like that
+[00:42:13.44] FLO        that the how you
+[00:42:14.66] FLO        know as a result he
+[00:42:15.54] FLO        basically is like as
+[00:42:16.38] FLO        productive as like a
+[00:42:17.38] FLO        startup of 20 people
+[00:42:18.32] FLO        and you know he's
+[00:42:20.24] FLO        making like seven or
+[00:42:21.14] FLO        eight million ARR
+[00:42:22.02] FLO        like if he was a
+[00:42:22.62] FLO        startup of 20 people
+[00:42:23.48] FLO        it'd be kind of not
+[00:42:24.36] FLO        great as a one
+[00:42:25.66] FLO        person operation it's
+[00:42:27.00] FLO        freaking awesome you
+[00:42:27.90] FLO        know yeah so yeah I
+[00:42:30.98] FLO        think I think the
+[00:42:31.92] FLO        how matters more
+[00:42:32.66] FLO        than the what and
+[00:42:33.30] FLO        the how is everything
+[00:42:34.12] DAVID      we've talked about
+[00:42:34.56] FLO        is just use AI all
+[00:42:35.68] FLO        day and try to
+[00:42:36.62] FLO        remove yourself from
+[00:42:37.64] FLO        the machine day after
+[00:42:38.52] DAVID      day so what is the
+[00:42:40.00] DAVID      second part you know
+[00:42:40.66] DAVID      if you want to build
+[00:42:41.26] DAVID      like a hyperscaling
+[00:42:42.06] FLO        VC backed unique
+[00:42:43.74] DAVID      generational business
+[00:42:44.94] FLO        ask yourself about
+[00:42:46.62] FLO        that AI future where
+[00:42:48.28] FLO        humans don't operate
+[00:42:49.42] FLO        businesses anymore I
+[00:42:50.74] FLO        love what you said
+[00:42:51.62] FLO        earlier like it is
+[00:42:52.36] FLO        true I think like web
+[00:42:53.16] FLO        front end is
+[00:42:53.78] FLO        disappearing because
+[00:42:54.56] FLO        obviously web front
+[00:42:55.34] FLO        ends are meant to be
+[00:42:56.18] FLO        used by humans and I
+[00:42:57.24] FLO        think humans might not
+[00:42:58.56] FLO        even have a role to
+[00:42:59.38] FLO        play in that like
+[00:43:00.46] FLO        knowledge economy of
+[00:43:01.34] FLO        the future so ask
+[00:43:02.80] FLO        yourself like in that
+[00:43:04.10] FLO        extreme scenario where
+[00:43:05.36] FLO        humans aren't doing
+[00:43:06.12] FLO        anything anymore is
+[00:43:07.34] FLO        your business still
+[00:43:08.36] FLO        valuable does the
+[00:43:09.24] FLO        economy still need your
+[00:43:09.98] FLO        business so for example
+[00:43:10.76] FLO        in France businesses
+[00:43:12.64] FLO        like Baystan and
+[00:43:13.82] FLO        fireworks and all
+[00:43:15.08] FLO        together and all of
+[00:43:16.14] FLO        that all of these
+[00:43:17.04] FLO        folks like the answer
+[00:43:18.16] FLO        is yes you know we
+[00:43:19.66] FLO        we're going to need
+[00:43:20.38] FLO        data centers we're
+[00:43:21.16] FLO        going to need like more
+[00:43:21.90] FLO        GPUs than we could
+[00:43:22.76] FLO        possibly imagine
+[00:43:23.48] FLO        ATS is like you know
+[00:43:25.10] FLO        applicants tracking
+[00:43:25.82] FLO        systems it's like a
+[00:43:27.82] FLO        CRM to like track
+[00:43:28.72] FLO        your tickets like I
+[00:43:29.58] FLO        don't think so I think
+[00:43:30.34] FLO        those guys are in
+[00:43:30.82] FLO        trouble that's the
+[00:43:32.50] FLO        frame I would apply
+[00:43:33.22] FLO        to the thing and so
+[00:43:33.82] FLO        I think I think this
+[00:43:34.64] FLO        is why the
+[00:43:35.26] FLO        infrastructure layer is
+[00:43:37.16] FLO        is going to be much
+[00:43:37.98] FLO        healthier for a long
+[00:43:39.00] FLO        time and then the
+[00:43:39.72] DAVID      application layer and
+[00:43:40.80] DAVID      when you say
+[00:43:41.12] DAVID      infrastructure do you
+[00:43:41.96] DAVID      mean like both the
+[00:43:42.86] DAVID      software and hardware
+[00:43:43.48] DAVID      side like what is what
+[00:43:44.74] DAVID      are all the things
+[00:43:45.22] DAVID      included in the term
+[00:43:46.16] DAVID      infrastructure layer I
+[00:43:47.12] FLO        do mean both software
+[00:43:47.98] FLO        and hardware I do
+[00:43:48.88] FLO        believe like hardware
+[00:43:49.82] FLO        is becoming more and
+[00:43:50.62] FLO        more defensible because
+[00:43:51.44] FLO        software you can just
+[00:43:52.12] FLO        build like that right
+[00:43:52.78] DAVID      now so I think there's
+[00:43:53.50] FLO        going to be a great
+[00:43:54.16] FLO        rotation of capital and
+[00:43:55.48] FLO        it's happening right
+[00:43:56.12] FLO        now actually away from
+[00:43:58.12] FLO        software and two
+[00:43:58.88] FLO        wheels hardware some of
+[00:43:59.90] FLO        that is also just the
+[00:44:00.70] FLO        labs like sucking the
+[00:44:01.60] FLO        oxygen out of the room
+[00:44:02.70] FLO        like if you're like a
+[00:44:03.60] FLO        rose guy or like a
+[00:44:04.60] FLO        hedge fund guy if you're
+[00:44:05.34] FLO        like an investor people
+[00:44:06.60] FLO        underestimate the extent
+[00:44:07.84] FLO        to which it is hard for
+[00:44:09.24] FLO        an investor to invest
+[00:44:10.62] FLO        all of their money it's
+[00:44:12.06] FLO        their job like it's like
+[00:44:12.96] FLO        when they give you
+[00:44:14.04] FLO        money it's not they
+[00:44:14.76] FLO        don't do it out of the
+[00:44:15.50] FLO        goodness of their heart
+[00:44:16.28] FLO        like they want to
+[00:44:16.78] FLO        return it's really hard
+[00:44:18.42] FLO        to invest capital at
+[00:44:20.24] FLO        scale and get returns
+[00:44:22.00] FLO        from it so in a way
+[00:44:22.84] FLO        when they stumble upon
+[00:44:24.10] FLO        an operation a business
+[00:44:25.32] FLO        that is very capital
+[00:44:26.94] FLO        intensive and is
+[00:44:28.18] FLO        reasonably risk-free
+[00:44:29.02] FLO        they're actually quite
+[00:44:29.60] FLO        grateful because they
+[00:44:30.40] FLO        can go home they're
+[00:44:31.16] FLO        like ah that's
+[00:44:31.86] FLO        how big thank you
+[00:44:33.06] FLO        thank you thank you
+[00:44:33.58] UNRESOLVED thank you thank you
+[00:44:33.60] FLO        take my five billion
+[00:44:34.54] FLO        dollars and I'm going
+[00:44:35.90] FLO        to take a break for
+[00:44:36.52] FLO        the next six months
+[00:44:37.14] FLO        you know because now
+[00:44:37.92] FLO        my five billion dollars
+[00:44:38.74] FLO        are taken care of so I
+[00:44:39.84] FLO        think I think hardware
+[00:44:40.68] FLO        has like that that nice
+[00:44:42.10] FLO        property of like it can
+[00:44:43.04] FLO        be capital intensive I
+[00:44:44.06] FLO        think in a good way I
+[00:44:44.74] FLO        think we do need
+[00:44:45.30] FLO        capital intensive
+[00:44:45.94] FLO        businesses and I think
+[00:44:47.02] FLO        anyway software right
+[00:44:48.08] FLO        now like anyone who
+[00:44:49.24] FLO        used to invest in
+[00:44:50.02] FLO        software has parked
+[00:44:50.94] FLO        their five billion
+[00:44:51.58] FLO        dollars in in
+[00:44:52.42] FLO        anthropic and open AI
+[00:44:53.20] FLO        anyway so I think I
+[00:44:54.74] FLO        think hardware and
+[00:44:56.14] FLO        bio I think is going
+[00:44:57.26] FLO        to be a huge and
+[00:45:00.06] FLO        he's right now a
+[00:45:01.04] FLO        huge huge huge
+[00:45:01.86] FLO        domain and I think
+[00:45:03.12] FLO        he's going to grow
+[00:45:03.58] FLO        even relatively
+[00:45:04.38] FLO        speaking as a share of
+[00:45:05.42] FLO        the economy is going
+[00:45:06.42] FLO        to keep growing all
+[00:45:07.52] DAVID      right so I want to be
+[00:45:08.72] DAVID      respectful of your time
+[00:45:09.46] DAVID      we have two minutes
+[00:45:10.00] DAVID      left where should
+[00:45:11.00] DAVID      people go go to
+[00:45:12.32] FLO        lindy.ai sign up to
+[00:45:14.12] FLO        I think right now like
+[00:45:15.70] FLO        the best multiplayer
+[00:45:16.64] FLO        agentic scaffold all
+[00:45:18.04] DAVID      right and we're also
+[00:45:18.92] DAVID      going to include your
+[00:45:19.62] DAVID      Twitter and socialists
+[00:45:20.62] DAVID      below anything else
+[00:45:21.48] DAVID      you want to say for
+[00:45:22.18] DAVID      the viewers no thank
+[00:45:23.24] DAVID      you so much for having
+[00:45:23.80] DAVID      me David thank you as
+[00:45:24.78] DAVID      well

@@ -44,23 +44,26 @@ run them:
   does. `watch-video` refuses to improvise forensics; `video-autopsy` will not summarize a
   tutorial. The boundaries are enforced in the preflight scripts, not just described in prose.
 
-## Examples -- being regenerated
+## Examples -- nine real runs
 
-[`examples/`](examples/) is currently EMPTY, deliberately. The documents that were there were real
-run outputs, but not all of them were one clean run of one skill on one video: two were second
-passes written knowing what an earlier pass had said, and others had accumulated post-hoc edits
-(publication scrubs, coarsened identifiers, editorial defect notes) until a reader could not
-reconstruct their provenance. An example whose provenance is unclear demonstrates nothing.
+[`examples/`](examples/) holds **three skills against three sources, nine runs, all shipped**: a
+private screening interview, a published founder interview, and a published solo explainer. Each
+directory is one clean run of one skill on one video, produced by a process that had no knowledge
+that any earlier run of that source existed -- which is the whole point, and is why an earlier
+version of that tree was deleted rather than patched when two of its documents turned out to be
+second passes written against a known first pass.
 
-They are being replaced by a fresh run of all three skills against the same three sources -- a
-private screening interview, a published founder interview, a published solo explainer -- each run
-with no knowledge of any earlier run of that source, and published as produced apart from the
-sanitization the private recording requires. `video-autopsy` against the explainer is expected to
-refuse on its scope gate, and that refusal ships too: a skill that knows what it is *not* for is
-half the engineering. See [examples/README.md](examples/README.md).
+Published as produced, apart from the sanitization the private recording requires. Defects are
+annotated where they occur rather than repaired: the tree ships six disclosed problems, including a
+misattribution about a named third party, a document that points the reader at a passage which does
+not exist, and a file whose name promises a verbatim transcript it deliberately is not. Every one of
+them was found by a human read, not by a gate.
 
-Until then the skills are their own documentation: each package's `SKILL.md` states what it
-produces and `preflight.sh` states what it refuses.
+`video-autopsy` against the explainer **refused** on its MODE 1 scope gate and produced no
+deliverable, and that refusal ships as its own result: a skill that knows what it is *not* for is
+half the engineering. See [examples/README.md](examples/README.md) for what each run measured, a
+head-to-head of the cheap and deep packages on the same video, and the sanitization and honesty
+policies in full.
 
 ## Install
 

@@ -1,0 +1,264 @@
+[source: faster-whisper large-v3, verbatim]
+[device: cuda float16, beam_size=5, vad_filter=True, condition_on_previous_text=True]
+[language detected: en (prob 1.000), audio duration: 1081.72s]
+[audio level check: mean_volume -25.3 dB, max_volume -2.3 dB -- live track, not silent]
+[path: first pass, no recovery chain needed unless the quality gate below fails]
+
+[00:00:00.000 --> 00:00:03.800] So I've been using DeepSeek Harness for the past week now and I found a lot of things that I really
+[00:00:03.800 --> 00:00:07.160] like about it and a lot of things that I also don't really like about it. So today I'm just
+[00:00:07.160 --> 00:00:10.460] going to give you guys my honest thoughts, break down what I've been using it for, how it feels,
+[00:00:10.800 --> 00:00:15.120] and I'm also going to be specifically talking about it in comparison with Cloud Codes as I
+[00:00:15.120 --> 00:00:17.920] know that's on a lot of your guys' minds. So let's not waste any time and just get straight
+[00:00:17.920 --> 00:00:21.000] into this video. Okay, I'm going to try to do this in about 60 seconds. If you've never heard
+[00:00:21.000 --> 00:00:25.260] of DeepSeek Harness, what is it? So DeepSeek has different models, right? We had a big DeepSeek
+[00:00:25.260 --> 00:00:30.340] moment last year, DeepSeek R1, and then we have like DeepSeek V4 Flash and Pro right now. Decent
+[00:00:30.340 --> 00:00:35.400] models, pretty cheap, but we have a harness now from DeepSeek which is open source and it's free.
+[00:00:35.640 --> 00:00:39.500] So as we know, we have something like Codex, which is the harness, and the AI models that you can use
+[00:00:39.500 --> 00:00:45.160] inside Codex natively are GBT 5.6 Sol, GBT 5.6 Luna, things like that. We have Cloud Code, which
+[00:00:45.160 --> 00:00:49.660] is a different harness, and the AI models we natively use inside of Cloud Code are Cloud Opus,
+[00:00:49.740 --> 00:00:54.960] Cloud Fable, things like that. And now we have a DeepSeek Harness, which has other AI models inside.
+[00:00:54.960 --> 00:00:59.540] I mean, natively we have the DeepSeek models, but you can also add any of the other models. You can
+[00:00:59.540 --> 00:01:04.340] add Opus in there, you can add GBT in there, you can add Kimi, you can add Meta if you're crazy
+[00:01:04.340 --> 00:01:07.860] enough to do it. You can add basically whatever you want in there. Now, yes, you can also do that
+[00:01:07.860 --> 00:01:12.080] with these harnesses as well, but they're not exactly like made for it or promoted as much.
+[00:01:12.220 --> 00:01:15.400] But also things like OpenClaw, that's an agent harness. Also something like Hermes Agent,
+[00:01:15.500 --> 00:01:20.020] that's an agent harness. So it's not groundbreaking new tech, it's just a new harness. But what's
+[00:01:20.020 --> 00:01:24.860] really cool about this one is because the harness is open source, we can like fully customize.
+[00:01:24.960 --> 00:01:29.900] So with a closed source harness like Cloud Code, it has its basic kind of like prompting rules and
+[00:01:29.900 --> 00:01:34.880] it has its tool calls and it has its loops and it has its agentic harness that we can't touch.
+[00:01:35.080 --> 00:01:39.300] We can basically look at it like a car that we can sit in, we can drive it, we can change out
+[00:01:39.300 --> 00:01:44.100] the model of the engine, but we can't move things around. Whereas with our DeepSeek Harness, the
+[00:01:44.100 --> 00:01:47.700] open source harness, we can switch out the seats, we can switch out the steering wheel, we can switch
+[00:01:47.700 --> 00:01:51.460] things out, we can change the way the agent actually behaves under the hood, which is pretty
+[00:01:51.460 --> 00:01:54.840] cool. And that's why a lot of people are freaking out because if you go back to the site,
+[00:01:55.120 --> 00:01:59.400] it literally says everything is a plugin. And so by that, they don't mean just like skills and
+[00:01:59.400 --> 00:02:04.600] like MCP servers, they mean every capability is a plugin. Tools, skills, sessions, sandboxes,
+[00:02:04.660 --> 00:02:09.740] storage, loops, the UI, this is all a plugin environment. And so I will just be honest about
+[00:02:09.740 --> 00:02:13.400] that real quick. In this video, I'm not going to be talking about plugins that I installed from
+[00:02:13.400 --> 00:02:17.540] other people or plugins that I've built because I wanted to see out of the box what this thing
+[00:02:17.540 --> 00:02:21.480] felt like. And I will say about plugins, be careful because if people are giving out all
+[00:02:21.480 --> 00:02:24.920] these open source plugins, you don't know what might be in there. So be smart,
+[00:02:24.960 --> 00:02:28.880] have Cloud Code or have Codex review the plugins before you ever install anything like that off the
+[00:02:28.880 --> 00:02:33.320] internet. Okay, so here are some of the things that I want to talk about today when it comes to
+[00:02:33.320 --> 00:02:37.500] our Deep Sea Karnas. So the first thing is, let me just open up the UI and just show you what it
+[00:02:37.500 --> 00:02:42.480] looks like real quick. So it looks like a chatbot, right? It looks like kind of like the ChatGPT app
+[00:02:42.480 --> 00:02:46.820] or whatever you might be familiar with. It's not going to be anything new or super confusing. You
+[00:02:46.820 --> 00:02:49.660] can have products on the left, you can manage your different sessions, things like that,
+[00:02:49.880 --> 00:02:54.200] pretty normal stuff. And if you want to test this out, literally what I did is I gave the GitHub link
+[00:02:54.960 --> 00:02:58.720] and I said, hey, help me set this up. It opens this up in a local host. So this is completely
+[00:02:58.720 --> 00:03:02.480] local right now. And then you're pretty much all good. All you have to do from there is you're
+[00:03:02.480 --> 00:03:05.460] going to go to your settings, you're going to go to models, and you're going to put in some sort of
+[00:03:05.460 --> 00:03:10.160] key. I put in an open router key, which is why now I can choose between all of these different models
+[00:03:10.160 --> 00:03:15.560] that are available to me on open router. Unfortunately, you can't by default use like
+[00:03:15.560 --> 00:03:19.520] a Cloud subscription or a Codex subscription. I have seen some plugins where people say that
+[00:03:19.520 --> 00:03:24.120] it works. I haven't myself tested it, but if you are interested in that, then definitely look into
+[00:03:24.120 --> 00:03:24.940] that. But default, you can't use a Cloud subscription or a Codex subscription. You can't
+[00:03:24.940 --> 00:03:29.180] default. You're going to be charged here by token, you know, API billing. Anyways, that's what
+[00:03:29.180 --> 00:03:32.440] it looks like. We'll look at some other stuff in this UI in a bit, but let me just go back over
+[00:03:32.440 --> 00:03:37.220] here to this screen. Okay. So let's talk about output quality. This entirely depends on the
+[00:03:37.220 --> 00:03:41.400] model and the effort, of course. I mean, you have a harness that can do so much, but at the end of
+[00:03:41.400 --> 00:03:46.360] the day, the model is what's going to drive a lot of the actual quality that you're getting. If you
+[00:03:46.360 --> 00:03:50.200] put Fable 5 in here and then you put in like a super small local model, they're going to be a
+[00:03:50.200 --> 00:03:54.360] big difference in the output, right? So just get that out of the way real quick. What's cool is
+[00:03:54.940 --> 00:03:59.300] you can switch out different models and different modes. Because actually, if you go here, you can
+[00:03:59.300 --> 00:04:04.580] see that before I start a prompt, I can be in standard mode, PTC mode, minimal mode, or creator
+[00:04:04.580 --> 00:04:08.700] mode. So let me dive into these real quick. Standard mode is what you're going to be on most
+[00:04:08.700 --> 00:04:12.640] of the time. Full coding agent with file editing, shell, file, web search, blah, blah, blah. That's
+[00:04:12.640 --> 00:04:18.120] standard mode. Now, PTC mode is really cool. It almost makes me think of sort of like in Cloud
+[00:04:18.120 --> 00:04:22.400] Code with that dynamic workflows. It's not exactly that, but it feels more like, okay, I've got this
+[00:04:22.400 --> 00:04:24.700] big task. I have a lot of stuff that I want to run in parallel.
+[00:04:24.940 --> 00:04:29.740] I've got multi-chain. Let me just throw this on PTC mode instead of standard mode. And I've
+[00:04:29.740 --> 00:04:33.820] gotten some pretty cool outputs comparing standard mode to PTC mode when I didn't like that. Now,
+[00:04:33.840 --> 00:04:38.320] I want to talk about minimal mode because this is a two-tool coding agent with persistent bash
+[00:04:38.320 --> 00:04:43.360] and whatever that means. But minimal mode is really solid because it gets rid of some of the
+[00:04:43.360 --> 00:04:48.220] context and it just kind of executes faster. And for things that you don't need to look through
+[00:04:48.220 --> 00:04:52.680] tons of things or do so many different actions, minimal mode is solid. It's fast. It feels cheap.
+[00:04:54.940 --> 00:05:00.560] Standard versus minimal. If I shoot off high, who am I? In standard mode, it immediately has a
+[00:05:00.560 --> 00:05:06.340] context injection. It reads my agents.md and my cloud.md and my cloud.md local. Then it reads
+[00:05:06.340 --> 00:05:10.740] the deep seek system prompt. And then it looks in the skill catalog. So that's basically what
+[00:05:10.740 --> 00:05:14.780] happens right away. We get that full agentic loop and it understands things about me. And we've
+[00:05:14.780 --> 00:05:19.120] talked a lot about being tool agnostic and model agnostic, right? And harness agnostic. This thing,
+[00:05:19.760 --> 00:05:23.980] immediately I plugged it into my AIOS and I didn't have to change anything. It already feels like
+[00:05:24.940 --> 00:05:29.800] Now watch this. If I start a new chat in here and I go to minimal mode,
+[00:05:30.540 --> 00:05:36.640] hi, who am I? Watch what happens. It doesn't do that context injection right away. So this is
+[00:05:36.640 --> 00:05:40.240] almost more like you're getting one-off chats and you're trying to do quick tasks. You're not
+[00:05:40.240 --> 00:05:44.840] getting that whole, like I'm in cloud code or I'm in codex and I'm in my AIOS. So keep that in mind.
+[00:05:45.040 --> 00:05:49.080] But what that does mean is I didn't have to change like anything in order to use my cloud skills and
+[00:05:49.080 --> 00:05:53.580] my cloud context and all of that kind of stuff. So that is pretty cool. Okay. Let's go to cost.
+[00:05:53.580 --> 00:05:54.920] So the harness is completely
+[00:05:54.920 --> 00:05:59.620] free. You could run this harness 24 seven with a free model and you would never get charged,
+[00:05:59.620 --> 00:06:04.040] but for inference, that's not free. Deep seek models are cheap. They're pretty solid. Deep
+[00:06:04.040 --> 00:06:09.420] seek V4 flash is really good. Deep seek V4 pro is also really good. Um, obviously flash is cheaper,
+[00:06:09.420 --> 00:06:14.700] but both of those models can't see anything. So I had deep seek V4 flash is what I was testing this,
+[00:06:14.980 --> 00:06:19.340] this harness on for the first couple of days. And it was really good. But when I was doing things
+[00:06:19.340 --> 00:06:23.060] like this, for example, I made this website with deep seek V4 flash in the deep seek harness.
+[00:06:23.400 --> 00:06:24.720] And it's really solid, right?
+[00:06:24.920 --> 00:06:30.220] I took these assets. It had my brand guidelines. It has the scroll thing. It has like this standard
+[00:06:30.220 --> 00:06:35.000] feel matches the brand guidelines. But look at this. This is where something that codex or cloud
+[00:06:35.000 --> 00:06:38.800] code would have never let happen because of the verification checks. And because of the ability
+[00:06:38.800 --> 00:06:44.060] to screenshot, look, reason, iterate. There's a lot of things when it comes to a UI and design
+[00:06:44.060 --> 00:06:49.060] perspective that the deep seek models will not be very good at because it can't screenshot.
+[00:06:49.180 --> 00:06:53.700] It can't look now. That doesn't mean that deep seek harness couldn't be good at design. It just
+[00:06:53.700 --> 00:06:54.900] means that the models,
+[00:06:54.920 --> 00:06:58.420] that you're putting inside there, you have to be aware of what are their strengths and weaknesses.
+[00:06:58.960 --> 00:07:03.440] And so similarly, when we get to tokens, this can be really, really cheap tokens. So like,
+[00:07:03.500 --> 00:07:07.480] let's say you're using a local model or you're using one of open routers, free models,
+[00:07:07.760 --> 00:07:12.940] really cheap tokens. But guess what? If it's not an efficient harness, or if the model is so bad
+[00:07:12.940 --> 00:07:17.700] that it's not running efficiently, then ultimately that's not really that cheap. So token, you know,
+[00:07:17.720 --> 00:07:21.680] you look at your 1 million input, 1 million output, those numbers can be deceiving sometimes
+[00:07:21.680 --> 00:07:24.900] because it's also about efficiency and cost to,
+[00:07:24.920 --> 00:07:31.320] to completion rather than just cost for tokens, right? Okay, reliability. It feels very promising,
+[00:07:31.340 --> 00:07:35.300] but it certainly feels like a preview. You can see that literally says, you know, this is a developer
+[00:07:35.300 --> 00:07:39.240] preview, And that's what it feels like. There are some bugs. There are sometimes it just stopped
+[00:07:39.240 --> 00:07:43.820] working for me. There was literally one time where it locked my mouse, like my mouse could only move
+[00:07:43.820 --> 00:07:48.080] in a square that was about this big and I was like, uh, Codex, can you help me out? I don't know if I
+[00:07:48.080 --> 00:07:52.520] just got hacked or something, but it was able to fix it. There are some bugs. There are some bugs with
+[00:07:52.520 --> 00:07:52.960] like the compression. Sometimes it just feels like, oh, dthat's not going to work. It's not going to work.
+[00:07:52.960 --> 00:07:53.180] right.
+[00:07:53.280 --> 00:07:53.940] There are some bugs there are some bugs with like the compression. Sometimes it just feels like a little bit of a chum.
+[00:07:53.940 --> 00:07:58.860] times it just feels like it completely forgot what I was talking about. I do like the direction.
+[00:07:59.140 --> 00:08:02.700] It feels like it has a lot of promise, but like I said, there are some things right now that just
+[00:08:02.700 --> 00:08:06.080] feel a little bit buggy when you're getting into like long sessions or you're trying to work on
+[00:08:06.080 --> 00:08:10.420] some sort of big project. So just like I said, long sessions, you get some compaction bugs and
+[00:08:10.420 --> 00:08:14.040] sometimes you get some context regressions. You could also argue that's a little bit user error.
+[00:08:14.140 --> 00:08:16.940] And yeah, I was trying to see like where it would break and I was trying to see what would happen
+[00:08:16.940 --> 00:08:22.500] in like context rot territory, but it did overall, the UI still in some places felt a little bit
+[00:08:22.500 --> 00:08:27.500] buggy. Customization though, this is where this thing absolutely crushes. It's not even close to
+[00:08:27.500 --> 00:08:31.740] Codex or Cloud Code. Like it's way in a different league, of course, because you can do whatever
+[00:08:31.740 --> 00:08:35.340] you want in here. If I go back over here, I realized that when I was talking about these
+[00:08:35.340 --> 00:08:39.760] harnesses, I stopped talking about these modes, but look at this mode. This mode is called creator
+[00:08:39.760 --> 00:08:44.060] mode. This is literally when you want to create custom agent presets. You want to build plugins.
+[00:08:44.140 --> 00:08:48.280] You want to change the UI. This is how you do it. So you would turn to creator mode and you'd say,
+[00:08:48.280 --> 00:08:52.260] hey, can you like build me this for my harness? And look at this. This is another bug, right? I'm
+[00:08:52.260 --> 00:08:52.440] clicking.
+[00:08:52.500 --> 00:08:56.460] I'm on creator mode and it's just instantly switching back. So a little bit of a bug. I would
+[00:08:56.460 --> 00:08:59.600] have to restart the harness and it'd probably be fine. But also if I go to my settings, you can see
+[00:08:59.600 --> 00:09:03.260] here that when you go to your plugins, you can change these things right away, right? Like our
+[00:09:03.260 --> 00:09:07.060] shell, you can change these settings. You can change the agent loop. You can change the web
+[00:09:07.060 --> 00:09:10.720] search provider, or you can put in the deep seek provider. And then you can have this list of
+[00:09:10.720 --> 00:09:15.200] plugins where it has all of these things that you can turn on, turn off. You can customize these.
+[00:09:15.200 --> 00:09:18.540] You can also, like I said, there's a bunch of GitHub repos out there where people have been
+[00:09:18.540 --> 00:09:22.280] building custom deep seek harness or DSH plugins. But like I said,
+[00:09:22.500 --> 00:09:25.980] I want to focus on that in today's video because I wanted to just see how this thing felt on its
+[00:09:25.980 --> 00:09:30.700] own. But the customization is unmatched. Here's the thing though. For me personally, the majority
+[00:09:30.700 --> 00:09:34.080] of the time that I'm using Cloud Code and Codex, it's for video editing. It's for research. It's
+[00:09:34.080 --> 00:09:38.900] for knowledge work. It's for document creation. I have never felt a gap in Cloud Code or Codex
+[00:09:38.900 --> 00:09:43.180] where I'm like, hmm, I really wish the harness did this, this, and this. I really wish I could
+[00:09:43.520 --> 00:09:47.360] customize the harness in this way. Now, if you're a hardcore developer, if you're building products,
+[00:09:47.500 --> 00:09:51.880] you probably have had those moments. And if you actually have a pain in your typical day-to-day
+[00:09:52.500 --> 00:09:56.560] where you're like, man, I want to customize my harness, then this is going to be for you for
+[00:09:56.560 --> 00:10:00.580] sure. Me personally, I have some use cases in mind where I'm going to use this. Maybe I'm getting
+[00:10:00.580 --> 00:10:04.140] close to my limits. Maybe I have a bunch of knowledge work I need to get done or a bunch
+[00:10:04.140 --> 00:10:08.920] of research and I can, hey, come into deep seek. I can put on a really cheap model in here and then
+[00:10:08.920 --> 00:10:12.940] just go ahead and shoot that off in deep seek and boom, it's going to be good. But I don't have that
+[00:10:12.940 --> 00:10:19.020] need to build my own harness, at least not right now. I think though, seeing how this is waking
+[00:10:19.020 --> 00:10:22.320] people up and seeing like the energy around this idea of,
+[00:10:22.500 --> 00:10:25.940] wow, like we might soon be able to all have our own custom harnesses that are really,
+[00:10:25.940 --> 00:10:30.940] you know, custom made for us. It's very cool, especially because when you want to,
+[00:10:31.340 --> 00:10:34.540] if you run into some issue or, you know, something's going wrong, just say, hey,
+[00:10:34.660 --> 00:10:38.600] switch to career mode. Let's build a fix for this. Let's fix what just happened by building
+[00:10:38.600 --> 00:10:42.180] a custom plug into this harness. And I think that's really cool. And I think that's where
+[00:10:42.180 --> 00:10:45.580] we're headed. So finally, the question I wanted to sort of end off on here, and I'll still run
+[00:10:45.580 --> 00:10:49.900] through some more examples is that does this replace Claude? And I would say, no, no. I mean,
+[00:10:49.900 --> 00:10:52.460] if you want to do deep, deep stuff, I still think that the Claude code,
+[00:10:52.500 --> 00:10:56.720] the harness is going to have your back. I also think because if you want to use like Opus,
+[00:10:56.780 --> 00:11:00.580] then you're going to get a way better bang for your buck on the subscription inside of Claude
+[00:11:00.580 --> 00:11:04.440] code than if you used Opus inside of this deep seek harness, which I did a lot of testing with
+[00:11:04.440 --> 00:11:08.660] that. I'm going to get into that in just a few minutes here. And similarly with Codex, I just
+[00:11:08.660 --> 00:11:12.820] think that right now for what I'm doing, this does not replace Claude code to me at all. This is not
+[00:11:12.820 --> 00:11:16.460] a free Claude code. This is just a free harness and you can switch out different cheap models if
+[00:11:16.460 --> 00:11:20.960] you want, which by the way, you can use any model you want inside Claude code and Codex too. You
+[00:11:20.960 --> 00:11:21.880] just have to configure that.
+[00:11:22.500 --> 00:11:25.380] I made videos about that. If you want to check it out, I'll tag one right up here. It'll probably
+[00:11:25.380 --> 00:11:29.340] be right up here on putting your own model or a different model into Claude code. So if you're
+[00:11:29.340 --> 00:11:32.540] seeing that like deep seek harness is a free Claude code, it's not, it's a completely different
+[00:11:32.540 --> 00:11:36.560] harness. So let me show you some examples of that. The first thing that I've noticed about deep seek
+[00:11:36.560 --> 00:11:42.600] harness is it's super, super fast. Like this thing will find things in my iOS quicker than Claude.
+[00:11:42.680 --> 00:11:45.880] So for example, I would say, Hey, can you remember that project we were working on last week where
+[00:11:45.880 --> 00:11:48.700] we talked about this, this, and this, I don't remember what it was called, but can you go find
+[00:11:48.700 --> 00:11:52.300] it and pull it up? And I did that same prompt at the exact same time to both systems.
+[00:11:52.500 --> 00:11:57.180] Multiple times deep seek blue Claude code out of the water. Like I'm talking one minute in deep
+[00:11:57.180 --> 00:12:00.880] seek and five plus minutes in Claude code. Let me actually just show you guys a real quick example
+[00:12:00.880 --> 00:12:04.000] of that. Okay. So shooting off the exact same prompt at the same time to these different
+[00:12:04.000 --> 00:12:08.360] harnesses. I've got a huge wiki in here. This is my AI operating system. It has to look through so
+[00:12:08.360 --> 00:12:13.560] much stuff and it's going to be, my guess is it's going to find it quicker over here. Actually,
+[00:12:13.900 --> 00:12:18.500] sorry, the screen's a little bit off. I think that it's going to find it quicker in deep seek
+[00:12:18.500 --> 00:12:21.980] because every time I've done this, it has found a quicker and deep seek what is going on over here.
+[00:12:22.500 --> 00:12:26.080] I'm sorry. I hope that that isn't annoying, but yeah, let me just show you when this is done.
+[00:12:26.300 --> 00:12:30.260] Look at this. So already over here in deep seek about 50 seconds, it found the transcript. It
+[00:12:30.260 --> 00:12:33.540] searched through everything and it gave me the two sentence summary and Claude code over here is
+[00:12:33.540 --> 00:12:37.720] still searching. These are both using the same model. So the harness here just works so much
+[00:12:37.720 --> 00:12:41.940] more efficiently. And even when I'm, you know, pushing out sub agents, Hey, can you guys spin
+[00:12:41.940 --> 00:12:46.000] up a bunch of sub agents do research? I've done a ton of tests of literally side-by-side prompts,
+[00:12:46.120 --> 00:12:51.340] exact same thing. And deep seek just gets the answer for me so much quicker. It's so consistently
+[00:12:51.340 --> 00:12:54.760] quicker. And while this is still going, let me show you the trajectory thing in deep seek.
+[00:12:54.840 --> 00:13:01.120] So if I click into directory, it actually shows us a super granular, like intermediate steps,
+[00:13:01.120 --> 00:13:04.660] and it's all in one spot. And this continues to go out through the whole session. And you can
+[00:13:04.660 --> 00:13:09.120] also download the session log. So what's really cool about this is think about how, when you do
+[00:13:09.120 --> 00:13:12.360] something like this and you want to go back and say, Hey, turn that into a skill for me, or Hey,
+[00:13:12.440 --> 00:13:16.440] turn this into a plugin, or did you see what happened in this session? Can we build a plugin
+[00:13:16.440 --> 00:13:21.180] to fix X, Y, and Z that just happened so that next time your harness agentic loop runs, this doesn't
+[00:13:21.180 --> 00:13:26.080] happen. This is pretty cool. And I also like the direction that they're taking this visual sort of
+[00:13:26.080 --> 00:13:31.140] like trajectory in, because every time you shoot off a prompt, it'll show this as the user prompt.
+[00:13:31.240 --> 00:13:34.600] Here's all the content that came in. Here's all the things that happened. I really like this.
+[00:13:34.800 --> 00:13:38.400] Okay. So Claude code is still searching for that transcript. I'm just going to put him away right
+[00:13:38.400 --> 00:13:42.360] now. We don't really need to watch that happen. It's kind of sad. Let me talk about some other
+[00:13:42.360 --> 00:13:47.140] things that I've done. So I shot off a prompt to both of them and I asked them to look through my
+[00:13:47.140 --> 00:13:51.040] YouTube data to find the analytics that have been recently pulled and build me a little Excel sheet
+[00:13:51.180 --> 00:13:56.280] that breaks it down. I think this is a really good example that I typically like to see if agents
+[00:13:56.280 --> 00:14:01.000] can do, because it uses some skills. It uses some, um, like API calls and it uses some like
+[00:14:01.000 --> 00:14:06.880] reasoning and structuring scripts to build a deliverable. So this is the first one. This is
+[00:14:06.880 --> 00:14:11.700] the one that was created for me by deep sea harness with Opus five. So same model under the
+[00:14:11.700 --> 00:14:16.420] hood. And this one came back in about three minutes. Whereas the other one from Claude code
+[00:14:16.420 --> 00:14:20.640] took, I think it was 17 minutes. So big difference, like big, big difference there.
+[00:14:20.640 --> 00:14:25.780] Let's talk about quality though. So deep seat came back with the performance data on the
+[00:14:25.780 --> 00:14:30.580] trailing three months. It's got videos. So what I really like here is it also color coded these
+[00:14:30.580 --> 00:14:34.920] columns on views and engagement rate, which was pretty cool. We have top and bottom, and it
+[00:14:34.920 --> 00:14:40.160] created this top 10 by views chart. Now it's kind of tough to see because like it doesn't actually
+[00:14:40.160 --> 00:14:44.380] label anything. It literally just shows graphics, but it does correlate to these top 10 over here,
+[00:14:44.420 --> 00:14:48.780] which is cool. And we also have the bottom 10. We go into monthly trend. We can see once again,
+[00:14:48.780 --> 00:14:53.320] it created a little chart for us. What I'm noticing about this is it's pretty simple,
+[00:14:53.320 --> 00:14:57.720] but it delivers me the information in an effective way because it's easy to interpret. It's not too
+[00:14:57.720 --> 00:15:02.400] wordy. It's not word vomit. We have tag analysis as well with another color coded section. And then
+[00:15:02.400 --> 00:15:07.680] we have notes and sources. Now let's take a look at the one that Claude code made for us. So this
+[00:15:07.680 --> 00:15:12.660] is the exact same data. Um, obviously this one took longer, but this one's a lot wordier. Arguably
+[00:15:12.660 --> 00:15:16.660] this has better analytics. The drill down is a little bit better. It's a bit more specific.
+[00:15:16.660 --> 00:15:18.320] It gives us this last 90 days,
+[00:15:18.780 --> 00:15:23.760] just as good, if not better. We don't have any color coding. It gives us more tabs. It gives us
+[00:15:23.760 --> 00:15:29.640] more data. Honestly, it even did all videos, which is like all 467 videos. It did top 50.
+[00:15:29.760 --> 00:15:36.260] It did monthly trend. So this, as far as quality was a better output. I will say though, like this
+[00:15:36.260 --> 00:15:40.060] is a bit word vomit, but I will say, I also gave them both a very vague prompt. I literally just
+[00:15:40.060 --> 00:15:43.400] said, create me an Excel sheet showing me the data. If I would have instructed them, Hey,
+[00:15:43.440 --> 00:15:46.520] this is what I want to see. These are my pain points. And this is what I'm concerned about.
+[00:15:46.960 --> 00:15:48.560] Then they probably would have both tailored,
+[00:15:48.780 --> 00:15:52.440] something a little bit more specific, but I wanted to see what they did with a vague prompt.
+[00:15:52.540 --> 00:15:58.420] Here's another one. I asked them to use my storm research skill to build a report about, um, the
+[00:15:58.420 --> 00:16:03.120] effects of sugar on the body. And so we got these two outputs. This one is from cloud code. And this
+[00:16:03.120 --> 00:16:08.260] one is from, um, deep sea harness. Now they look the exact same because it's a skill. They use the
+[00:16:08.260 --> 00:16:11.640] skill. They were supposed to structure it like this. So they both follow the skill well, which
+[00:16:11.640 --> 00:16:15.420] is good. But when we actually like read, I'm not going to read all this out to you guys or make
+[00:16:15.420 --> 00:16:18.760] you read all this. But when I read these and I looked at the sources and I looked at how they're
+[00:16:18.780 --> 00:16:22.920] how they did it, here's what I found. Cloud code did this in about 5,000 words. Whereas deep sea
+[00:16:22.920 --> 00:16:27.740] harness did this in about 4,400. So cloud code had a little bit more wordage in here. We also
+[00:16:27.740 --> 00:16:33.920] see that cloud code had 26 sources. And then we had deep sea harness with 14, at least 14 that
+[00:16:33.920 --> 00:16:39.000] were considered load bearing. I think in total, it actually found 22, I believe. Now, when it
+[00:16:39.000 --> 00:16:43.540] comes to the actual like breadth, cloud code was way more in depth. It was way more scientific
+[00:16:43.540 --> 00:16:48.100] and deep sequence way more about like, Hey, let's make this relatable. Let's make this practical.
+[00:16:48.780 --> 00:16:51.440] So I'm not saying that one is better than the other based on what I prompted. I just think that
+[00:16:51.440 --> 00:16:57.280] that's really interesting how much that harness affects the underlying same exact model. Cloud
+[00:16:57.280 --> 00:17:02.460] code also kind of typically came across as more conservative with its findings and with its facts.
+[00:17:02.460 --> 00:17:06.660] While sometimes deep sea harness was like too confident. It like, it told me something that
+[00:17:06.660 --> 00:17:10.240] I was like, Oh, I actually don't know if I agree with that. So overall, which one of these do I
+[00:17:10.240 --> 00:17:14.860] trust more? I trust the cloud code one more. Like I'd probably be more willing to give the
+[00:17:14.860 --> 00:17:19.740] cloud code deliverable to a client or to my team compared to the deep sea harness one, but also keep
+[00:17:19.740 --> 00:17:24.240] in mind that the skills that I've built, that I'm having deep seek use were built for cloud code.
+[00:17:24.520 --> 00:17:28.520] And you, you all should hopefully understand that when you upgrade your model or you switch
+[00:17:28.520 --> 00:17:32.240] harnesses, the skills are interpreted a little bit different every time, which means if I was
+[00:17:32.240 --> 00:17:36.560] to build a skill specifically for deep sea harness, it would probably do a really, really good job.
+[00:17:36.560 --> 00:17:40.620] And it would also be a lot faster. So the point I'm trying to make here is I think it's good that
+[00:17:40.620 --> 00:17:44.000] you guys are like listening to my advice and you're listening to maybe other people on X or YouTube,
+[00:17:44.860 --> 00:17:48.340] you need to get in here, get your hands dirty with deep sea harness, put in the models that
+[00:17:48.340 --> 00:17:52.220] you want to try and just test these things out for how they work for you specifically.
+[00:17:52.540 --> 00:17:55.540] So anyways, I hope you guys found this one insightful. And if you did, please give it a
+[00:17:55.540 --> 00:17:58.520] like, it helps me out a ton. And as always, I appreciate you guys making it to the end of the
+[00:17:58.520 --> 00:18:01.460] video and I will see you on the next one. Thanks guys.
