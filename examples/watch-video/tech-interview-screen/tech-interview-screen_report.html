@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screening round -- August 2026 -- candidate record</title>
+<style>
+  :root{
+    /* Locked after the direction was chosen: file stock, ink, and two stamp colours. */
+    --stock:      #f2ede1;
+    --stock-deep: #e7dfcd;
+    --rule:       #cfc3a8;
+    --rule-hard:  #9c8f74;
+    --ink:        #211d16;
+    --ink-soft:   #5c5344;
+    --ink-faint:  #857a66;
+
+    /* Colour carries exactly three meanings on this page. Nothing else is coloured. */
+    --c-done:     #a3301c;   /* a gate this recording already cleared */
+    --c-build:    #1f4b70;   /* hands-on engineering time */
+    --c-lead:     #8a6410;   /* client, scoping and decision time */
+
+    --serif: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, "Times New Roman", serif;
+    --mono: ui-monospace, "SFMono-Regular", "DejaVu Sans Mono", "Liberation Mono", Consolas, monospace;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--stock); color:var(--ink);
+    font-family:var(--serif); font-size:18px; line-height:1.62;
+  }
+  .sheet{max-width:872px; margin:0 auto; padding:0 30px 96px}
+
+  /* ---------- masthead: a form header, not a hero ---------- */
+  .masthead{border-bottom:3px solid var(--ink); padding:44px 0 14px; margin-bottom:0}
+  .filing{
+    font-family:var(--mono); font-size:11px; letter-spacing:.20em; text-transform:uppercase;
+    color:var(--ink-faint); display:flex; flex-wrap:wrap; gap:10px 26px; margin-bottom:26px;
+  }
+  h1{
+    font-size:clamp(2.6rem, 6.4vw, 4.5rem); line-height:1.02; margin:0 0 .28em;
+    font-weight:600; letter-spacing:-.021em; max-width:16ch;
+  }
+  .standfirst{
+    font-size:1.28rem; line-height:1.5; color:var(--ink-soft); max-width:58ch; margin:0 0 30px;
+  }
+
+  /* ---------- ruled form fields ---------- */
+  .fields{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(190px,1fr));
+    border-top:1px solid var(--rule); margin:0 0 8px;
+  }
+  .field{padding:13px 18px 13px 0; border-bottom:1px solid var(--rule)}
+  .field dt{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:5px;
+  }
+  .field dd{margin:0; font-size:1rem; line-height:1.4}
+
+  /* ---------- provenance strip: the language map of the tape ---------- */
+  .prov{margin:40px 0 8px; border:1px solid var(--rule-hard); background:var(--stock-deep); padding:20px 22px 22px}
+  .prov h2{
+    font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink-soft); margin:0 0 14px; font-weight:400;
+  }
+  .tape{display:flex; height:34px; border:1px solid var(--ink); font-family:var(--mono); font-size:10px}
+  .tape span{
+    display:flex; align-items:center; justify-content:center; letter-spacing:.1em;
+    color:#fff; text-transform:uppercase; overflow:hidden; white-space:nowrap;
+  }
+  .tape .pt{background:var(--ink-soft)}
+  .tape .en{background:var(--c-build)}
+  .tape-scale{
+    display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px;
+    color:var(--ink-faint); margin-top:6px; letter-spacing:.08em;
+  }
+  .prov p{font-size:.95rem; line-height:1.55; color:var(--ink-soft); max-width:none; margin:16px 0 0}
+
+  /* ---------- section rhythm ---------- */
+  section{margin-top:72px}
+  h2.head{
+    font-size:1.9rem; font-weight:600; letter-spacing:-.012em; margin:0 0 6px;
+    padding-bottom:9px; border-bottom:1px solid var(--rule-hard);
+  }
+  h2.head .n{
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.19em; color:var(--ink-faint);
+    display:block; margin-bottom:9px; font-weight:400; text-transform:uppercase;
+  }
+  p{max-width:64ch}
+  h3{font-size:1.12rem; margin:34px 0 4px; font-weight:600; letter-spacing:-.005em}
+  .t{
+    font-family:var(--mono); font-size:11px; color:var(--c-done); letter-spacing:.06em;
+    font-weight:600; white-space:nowrap;
+  }
+
+  /* ---------- SIGNATURE ELEMENT: the six-gate rail ---------- */
+  .rail{margin:34px 0 0; border-top:1px solid var(--rule)}
+  .gate{
+    display:grid; grid-template-columns:56px 1fr 176px; gap:0 24px;
+    border-bottom:1px solid var(--rule); padding:20px 0;
+  }
+  .gate .num{
+    font-family:var(--mono); font-size:2.1rem; line-height:1; color:var(--rule-hard);
+    font-weight:600; padding-top:2px;
+  }
+  .gate h3{margin:0 0 5px; font-size:1.22rem}
+  .gate p{margin:0; font-size:.97rem; color:var(--ink-soft); max-width:52ch}
+  .gate .meta{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--ink-faint); line-height:1.9; padding-top:5px;
+  }
+  .gate .meta b{display:block; font-weight:400; color:var(--ink-soft)}
+
+  .gate.cleared .num{color:var(--c-done)}
+  .gate.cleared h3{color:var(--c-done)}
+  .stamp{
+    display:inline-block; margin-top:13px;
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--c-done); border:2px solid var(--c-done); padding:5px 9px;
+    transform-origin:left center;
+    transform:rotate(-4.5deg) scale(1.16); opacity:0;
+    animation:settle .62s cubic-bezier(.2,.8,.3,1) .45s forwards;
+  }
+  @keyframes settle{to{opacity:1; transform:rotate(-4.5deg) scale(1)}}
+  @media (prefers-reduced-motion: reduce){
+    .stamp{animation:none; opacity:1; transform:rotate(-4.5deg) scale(1)}
+  }
+
+  /* ---------- the split, shown rather than stated ---------- */
+  .split{margin:30px 0 0; max-width:640px}
+  .split .barlabel{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-faint); margin:0 0 9px;
+  }
+  .split .bar{display:flex; height:52px; border:1px solid var(--ink)}
+  .split .bar i{
+    font-style:normal; display:flex; align-items:center; padding-left:14px;
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:#fff; text-transform:uppercase;
+  }
+  .split .build{background:var(--c-build); width:60%}
+  .split .lead{background:var(--c-lead); width:40%}
+  .split .note{font-size:.92rem; color:var(--ink-soft); margin-top:10px; max-width:58ch}
+
+  /* ---------- legend: every accent, named ---------- */
+  .legend{
+    display:flex; flex-wrap:wrap; gap:10px 30px; margin:26px 0 0; padding:16px 0 0;
+    border-top:1px solid var(--rule); font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft);
+  }
+  .legend span{display:flex; align-items:center; gap:9px}
+  .legend b{width:15px; height:15px; display:inline-block; border:1px solid var(--ink)}
+
+  /* ---------- pull quotes and lists ---------- */
+  blockquote{
+    margin:22px 0; padding:2px 0 2px 22px; border-left:3px solid var(--rule-hard);
+    font-size:1.06rem; color:var(--ink-soft); max-width:60ch;
+  }
+  blockquote .attr{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-faint); margin-top:9px}
+  ul.plain{list-style:none; padding:0; margin:18px 0 0}
+  ul.plain > li{
+    padding:15px 0; border-bottom:1px solid var(--rule); max-width:none;
+  }
+  ul.plain > li:first-child{border-top:1px solid var(--rule)}
+  code{font-family:var(--mono); font-size:.87em; background:var(--stock-deep); padding:1px 5px}
+  pre{
+    font-family:var(--mono); font-size:.83rem; line-height:1.6; background:var(--stock-deep);
+    border-left:3px solid var(--rule-hard); padding:16px 18px; overflow-x:auto; max-width:none;
+  }
+
+  /* ---------- the discrepancy pair ---------- */
+  .pair{display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--rule-hard); margin:22px 0 0}
+  .pair > div{padding:18px 20px}
+  .pair > div:first-child{border-right:1px solid var(--rule-hard)}
+  .pair dt{font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--ink-faint); margin-bottom:8px}
+  .pair p{margin:0; font-size:.96rem; max-width:44ch}
+
+  a{color:var(--c-build)}
+  a:focus-visible, [tabindex]:focus-visible{outline:2px solid var(--c-done); outline-offset:3px}
+
+  footer{margin-top:80px; padding-top:20px; border-top:3px solid var(--ink);
+    font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--ink-faint); line-height:2}
+
+  @media (max-width:720px){
+    body{font-size:17px}
+    .gate{grid-template-columns:44px 1fr; }
+    .gate .meta{grid-column:2; padding-top:12px}
+    .pair{grid-template-columns:1fr}
+    .pair > div:first-child{border-right:0; border-bottom:1px solid var(--rule-hard)}
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="masthead">
+  <div class="filing">
+    <span>Candidate record</span>
+    <span>the Company</span>
+    <span>Lead AI Engineer</span>
+    <span>Opened August 2026</span>
+  </div>
+  <h1>Stage one of six, and the other five are already specified</h1>
+  <p class="standfirst">
+    A thirty-one minute Google Meet call in which the Company describes itself, defines a lead
+    role by its hands-on percentage rather than its title, and then reads out the entire remaining
+    hiring pipeline -- including what the take-home actually asks for, which is not code.
+  </p>
+
+  <dl class="fields">
+    <div class="field"><dt>Recording</dt><dd>[recording filename redacted]</dd></div>
+    <div class="field"><dt>Duration</dt><dd>about 31 minutes</dd></div>
+    <div class="field"><dt>Participants</dt><dd>the recruiter (the Company) and the candidate, plus a notetaker bot</dd></div>
+    <div class="field"><dt>Setting</dt><dd>Google Meet, two webcams, live captions on. Nothing screen-shared.</dd></div>
+    <div class="field"><dt>Transcript tier</dt><dd>Tier D -- faster-whisper large-v3, the last resort</dd></div>
+  </dl>
+</header>
+
+<div class="prov">
+  <h2>Why the transcript needed three passes</h2>
+  <div class="tape" role="img" aria-label="Language map of the recording: Portuguese for the first 55 seconds, English from 55 seconds to 25 minutes 43, Portuguese from 25 minutes 43 to the end.">
+    <span class="pt" style="width:2.9%"></span>
+    <span class="en" style="width:78.6%">English -- 00:55 to 25:43</span>
+    <span class="pt" style="width:18.5%">Portuguese</span>
+  </div>
+  <div class="tape-scale"><span>00:00</span><span>10:00</span><span>20:00</span><span>31:00</span></div>
+  <p>
+    The tier ladder was worked in order and none of the cheap rungs was available: no transcript was
+    supplied, no sidecar file sits beside the recording, and a local file has no platform captions to
+    fetch. Whisper was therefore required, and the first run of it was wrong in a way that does not
+    announce itself. Pinned to English across the whole file, the model did not fail on the
+    Portuguese stretches -- it <em>translated</em> them, returning fluent English prose that reads
+    exactly like a transcript and is not one. Language detection at fifteen-second resolution found
+    the two switch points above; three language-pinned passes over the resulting spans produced the
+    transcript this report is built on, at 155 words per minute across 4,892 verbatim words.
+  </p>
+</div>
+
+<section>
+  <h2 class="head"><span class="n">Summary</span>What the call contains</h2>
+  <p>
+    The recruiter, at the Company, opens with an unusually long company overview and
+    then spends the second half of the call on process and terms. The Company is an AI engineering studio
+    and startup incubator: founded in the early 2020s, a few dozen people across two countries,
+    entirely remote, and self-funded rather than investor-funded -- a point she leads
+    with, ahead of product or clients, because it is the source of the decision autonomy she is
+    selling. The company runs four lines at once: a small AI team building LLM products,
+    a generalist full-stack team, an engineering-staffing service placing candidates from the countries it operates in, and
+    an Entrepreneur in Residence programme open to its own employees, which currently has two
+    ventures in it and one going to market the following month.
+  </p>
+  <p>
+    The vacancy is a Lead AI Engineer, and the interesting thing she says about it is that everyone
+    on the AI team already holds that title, because each may be leading a different project. What
+    separates the people inside the team is not seniority but orientation -- some lean
+    individual-contributor, some are hands-on leads -- and the opening is for the second kind. The
+    role is not tied to a client at hiring time; allocation depends on when the hire joins and which
+    strengths the company finds in them, with a new project more likely than an existing one.
+  </p>
+  <p>
+    The candidate's half covers six years across Employer A, Employer B and Employer C, a year of solo work on a
+    crypto machine-learning pipeline, a retrieval build over that project's own documentation, and a
+    layered Claude Code orchestration pattern he runs against a self-imposed 300,000-token session
+    ceiling. Terms are settled in the last five minutes, in Portuguese: contractor engagement, an ask
+    of [compensation figure redacted] per month, immediate availability. Nothing is assessed technically;
+    that is what the next five gates are for, and she reads all five out.
+  </p>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">The signature finding</span>The pipeline, gate by gate</h2>
+  <p>
+    Each gate tests something the previous one could not. The reason this is worth drawing rather
+    than listing is the shape it makes: the written gate comes <em>before</em> any live technical
+    contact, and it asks for judgement about someone else's code rather than production of your own.
+  </p>
+
+  <div class="rail">
+    <div class="gate cleared">
+      <div class="num">01</div>
+      <div>
+        <h3>Recruiter screen</h3>
+        <p>Company overview, role context, background, compensation, availability, competing
+           processes. No technical probing of any kind.</p>
+      </div>
+      <div class="meta"><b>Format: live call</b><b>Length: 31 min</b><b>This recording</b>
+        <div class="stamp">Cleared August 2026</div>
+      </div>
+    </div>
+
+    <div class="gate">
+      <div class="num">02</div>
+      <div>
+        <h3>Take-home</h3>
+        <p>A written reflection, sent by email. Questions elaborating on past projects, plus a
+           critical analysis of an agent codebase with proposed improvements. Explicitly no code to
+           be written.</p>
+      </div>
+      <div class="meta"><b>Format: written</b><b>Window: 24 h, nominal</b><b>Send time: flexible</b></div>
+    </div>
+
+    <div class="gate">
+      <div class="num">03</div>
+      <div>
+        <h3>Technical screening</h3>
+        <p>A technical conversation with the Head of AI. The first point at which any claim made in
+           gates one and two meets someone able to test it.</p>
+      </div>
+      <div class="meta"><b>Format: live call</b><b>Length: 30 min</b></div>
+    </div>
+
+    <div class="gate">
+      <div class="num">04</div>
+      <div>
+        <h3>Pair coding</h3>
+        <p>The first and only gate at which code is written under observation.</p>
+      </div>
+      <div class="meta"><b>Format: live</b><b>Length: unstated</b></div>
+    </div>
+
+    <div class="gate">
+      <div class="num">05</div>
+      <div>
+        <h3>System design</h3>
+        <p>Separated from pair coding rather than folded into it, which is what a role described as
+           sixty percent hands-on and forty percent scoping would need in order to test both halves.</p>
+      </div>
+      <div class="meta"><b>Format: live</b><b>Length: unstated</b></div>
+    </div>
+
+    <div class="gate">
+      <div class="num">06</div>
+      <div>
+        <h3>Executive interview</h3>
+        <p>With the founder. In a small company that owns itself, this is the decision,
+           not a formality after one.</p>
+      </div>
+      <div class="meta"><b>Format: live</b><b>With: founder</b></div>
+    </div>
+  </div>
+
+  <p style="margin-top:26px">
+    On the twenty-four hour window, she was careful and specific: it is an internal tracking
+    convention rather than an enforced limit. There is no timer, the document can be opened and
+    returned to, and nothing restricts the candidate. She also holds the send time -- immediately
+    after the call, the next morning, or the next evening -- so the clock is schedulable rather than
+    something to absorb.
+  </p>
+
+  <h3>The number that defines the role</h3>
+  <div class="split">
+    <p class="barlabel">Stated allocation of a Lead AI Engineer week</p>
+    <div class="bar" role="img" aria-label="Sixty percent hands-on engineering, forty percent client and leadership work.">
+      <i class="build">60% hands-on</i>
+      <i class="lead">40% lead</i>
+    </div>
+    <p class="note">
+      Stated at <span class="t">05:30</span>, then repeated as a direct correction at
+      <span class="t">22:46</span> when the candidate recalled it as forty. Both statements are
+      legible in the Meet caption panel burnt into the recording.
+    </p>
+  </div>
+
+  <div class="legend">
+    <span><b style="background:var(--c-done)"></b>Gate already cleared</span>
+    <span><b style="background:var(--c-build)"></b>Hands-on engineering time</span>
+    <span><b style="background:var(--c-lead)"></b>Client, scoping and decision time</span>
+  </div>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Walkthrough</span>The call in order</h2>
+
+  <h3><span class="t">00:00 - 00:55</span> &nbsp;Portuguese open, then a language request</h3>
+  <p>
+    Greetings, an apology for a cat about to appear on camera, and the recruiter's own introduction. She
+    asks whether the rest of the conversation can be held in English; he says he prefers it, being
+    more used to giving interviews that way. From this point the caption panel and the audio agree.
+  </p>
+
+  <h3><span class="t">00:55 - 05:28</span> &nbsp;The company overview</h3>
+  <p>
+    Four and a half minutes, unbroken, covering bootstrapping, the four business lines, the
+    Entrepreneur in Residence programme, headcount, and the role. The frames show a standard two-tile
+    Meet layout throughout with a third tile reading "Taking notes &amp; recording" -- the notetaker
+    bot. His response is that he expected a brief overview and got considerably more than that.
+  </p>
+
+  <h3><span class="t">06:23 - 11:53</span> &nbsp;Career summary and the crypto pipeline</h3>
+  <p>
+    Six years, Employer A then Employer B then Employer C, with Employer C named as the most relevant to this role
+    and described in the past tense throughout. Then the last year: a machine-learning pipeline
+    predicting crypto price changes and searching for trading strategies against those predictions.
+    He is explicit about where it stands -- more complex than expected, live trading attempted and
+    then backed away from, and a two-week paper-trading run with an hourly production inference
+    pipeline standing between him and putting real money behind it.
+  </p>
+
+  <h3><span class="t">11:56 - 15:39</span> &nbsp;Hardest LLM project</h3>
+  <p>
+    He redirects mid-answer: his first instinct is an Employer C reinforcement-learning project, she
+    signals she wants something closer to LLM work, and he switches to the retrieval system he built
+    over a year of his own project documentation. The difficulty he names is not the retrieval
+    algorithm but the corpus and the evaluation -- gathering the documentation, defining metrics,
+    and benchmarking the available local models against each other. Embedding-model choice and top-k
+    both moved accuracy and recall materially. He closes by naming what the Employer C work could not
+    give him: production LLM experience, because producing training data for frontier labs means
+    never calling a third-party model.
+  </p>
+
+  <h3><span class="t">15:55 - 20:00</span> &nbsp;How he stays current, and the orchestration stack</h3>
+  <p>
+    A scheduled daily job pulling from trusted sources and summarising what moved in the last
+    twenty-four hours. That opens into a general optimisation disposition, illustrated with a water
+    filter he timed so he could set an alarm instead of watching it, and then into the actual
+    architecture. The Meet captions carry this passage cleanly enough to quote:
+  </p>
+  <blockquote>
+    I have an orchestration session, a Claude Code session, in which I dictate what it must do,
+    which is usually an Opus 5 or a Fable 5 agent, and it calls sub-agents, usually Sonnet 5, to do
+    the micro-tasks, and an Opus 5 sub-agent reviews their deliveries, and then the on-session
+    orchestrator reviews them too. And I specifically find that it can't cross 300K tokens because
+    it starts to diverge and not answer so well.
+    <span class="attr">Read from the Meet caption panel, 19:32, model names corrected</span>
+  </blockquote>
+  <p>
+    He then describes building a skill so an assistant can absorb a video without him watching it,
+    and states the general move plainly: asked to "watch a video" it declines, but specify the
+    operations and it can do the work.
+  </p>
+  <pre>1. extract the audio from the video
+2. transcribe the audio with a tool such as Whisper
+3. read the transcription
+4. whenever the transcript alone does not carry the meaning,
+   extract the frame at that timestamp and look at it</pre>
+  <p>
+    She responds that she has recently been building Claude skills for her own work -- the one point
+    in the call where the two of them are on shared technical ground rather than in question-and-answer.
+  </p>
+
+  <h3><span class="t">21:01 - 25:43</span> &nbsp;Feedback, culture, and why he is looking</h3>
+  <p>
+    The feedback question produces the most load-bearing answer in the call. A superior at Employer C
+    told him he was good at leading -- which he had not believed until he was doing it -- and also
+    observed that he was less motivated than when the work was hands-on. He gives that as the actual
+    reason he left: the role had reached one hundred percent leading with no building left in it.
+    That is what prompts him to say he is glad at least forty percent of this role is hands-on, and
+    what prompts her correction to sixty. On why he is looking now, he gives both reasons rather than
+    picking one: this specific opportunity, and a genuine return to the market to join current LLM
+    practice to the classical machine-learning pipelines he has worked in for years.
+  </p>
+
+  <h3><span class="t">25:43 - end of call</span> &nbsp;Portuguese again: terms and process</h3>
+  <p>
+    She thanks him for speaking English and switches back to Portuguese for the practical half.
+    Contractor engagement, which he confirms matches how Employer C worked. An ask of
+    [compensation figure redacted] per month, which he frames as his standing figure across concurrent processes. Immediate
+    availability. Then the six-stage pipeline read out in full, the take-home flexibility, and a
+    direct question about whether any other process is close to a decision -- he names one whose
+    contract would only start in about two weeks, and she asks for a heads-up so the Company can move
+    faster if needed. His own two questions close the call: whether there is a named client already
+    (no, allocation depends on timing and on his strengths) and whether the lead role carries a team
+    or is mainly client-facing (both, and everyone on the team is nominally a lead).
+  </p>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Insights</span>What is worth keeping</h2>
+  <ul class="plain">
+    <li>
+      <strong>A lead title with no percentage attached carries no information.</strong> This one call
+      contains both a sixty-percent-hands-on lead role and a prior lead role that drifted to one
+      hundred percent management -- the same title, and the difference is the whole reason he left the
+      previous one. <span class="t">05:30, 22:06</span>
+    </li>
+    <li>
+      <strong>The written gate tests judgement about someone else's code, which live coding cannot
+      reach.</strong> A critical analysis of an agent codebase with proposed improvements is a
+      different instrument from a build exercise, and it sits before any live technical contact.
+      <span class="t">26:59</span>
+    </li>
+    <li>
+      <strong>A context ceiling is an architecture decision, not a preference.</strong> Accepting that
+      a session degrades past 300K tokens forces state out of the session and into documents, because
+      the session will end before the work does. <span class="t">19:32</span>
+    </li>
+    <li>
+      <strong>A refused capability and a badly framed request look identical from outside.</strong>
+      "Watch this video" is declined; extract, transcribe, read, and sample frames on demand is four
+      operations that are each individually available. <span class="t">20:14</span>
+    </li>
+    <li>
+      <strong>Producing training data for frontier labs has a structural blind spot.</strong> The
+      work product is the data, so calling a third-party model would contaminate it -- which means
+      the role builds no production LLM application experience by construction. He names this himself
+      rather than being caught by it. <span class="t">15:03</span>
+    </li>
+    <li>
+      <strong>Bootstrapping was the lead of the pitch.</strong> Not the products, not the clients, not
+      the technology -- the absence of venture capital and the decision autonomy that follows from
+      owning the company. <span class="t">01:29</span>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Screen findings</span>Where the recording contradicts itself</h2>
+  <p>
+    Nothing was screen-shared in the thirty-one minutes -- no editor, no slides, no diagrams. The only
+    on-screen text of any substance is Google Meet's own live-caption panel, which is burnt into the
+    recording and labels each line with a speaker. That panel is a genuine second source, and it fails
+    in one specific place.
+  </p>
+
+  <div class="pair">
+    <div>
+      <dt>What the screen showed</dt>
+      <p>From 25:45 onward, the caption panel produces nonsense: "Palestination. Atlas, California.",
+        "Namaste problem.", "Todo sing!". A tooltip reading "Alterar idioma de transcricao" -- change
+        transcription language -- is visible and unused.</p>
+    </div>
+    <div>
+      <dt>What was actually said</dt>
+      <p>Ordinary Portuguese conversation about contractor terms, salary and the hiring pipeline,
+        fully recoverable from the audio. The captions were pinned to English and collapsed the
+        moment the language changed.</p>
+    </div>
+  </div>
+  <p style="margin-top:20px">
+    This matters beyond the recording, because the same failure destroyed the meeting's own
+    third-party notetaker transcript over the identical window, and it is the failure this pipeline's
+    first whisper pass reproduced. The difference is that a caption panel fails visibly, into
+    gibberish, while whisper fails invisibly, into fluent translation. Every figure in the last six
+    minutes of this report -- the salary, the six gates, the take-home terms -- was therefore
+    re-decoded from isolated audio cuts before being written down.
+  </p>
+  <p>
+    Three smaller items. The transcription of technical terms is unreliable in both systems: Opus 5
+    appears as "oppos5", Sonnet 5 as "Sona 5", Claude Code as "Cloud code", and a cron job as a
+    "Chrome job" -- all corrected in this report. The embedding model named around
+    <span class="t">13:58</span> renders as "Queen 3.5" on screen and "quen 3.5" in audio; the family
+    is Qwen but the version cannot be established from this recording, and nothing was shared on
+    screen that would settle it, so no version is quoted here. And the recording runs about
+    twenty-five seconds past the end of the call, over a browser tab the candidate switched to; its
+    contents are unrelated to the interview and are not reproduced.
+  </p>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Applicability</span>Daily routine</h2>
+  <p>
+    Almost none, and it is worth saying so plainly rather than manufacturing a connection. This is a
+    recruiter conversation, not instructional material; the orchestration pattern and the daily
+    scheduled fetch described in it are already the reader's own practice, described back to a third
+    party. The single genuine intake is a caution rather than a technique: the transcription failure
+    documented above is a property of the tooling that reads these recordings, and any future
+    processing of a bilingual call needs language detection before the transcription is pinned, not
+    after.
+  </p>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Applicability</span>Live projects</h2>
+
+  <h3>Job-search track</h3>
+  <p>
+    The highest-value output of the call, by a distance, and immediately actionable. The take-home is
+    now specified rather than merely scheduled: a written reflection with a critical analysis of an
+    agent codebase and proposed improvements. That is a question the existing work answers directly --
+    the governance and review patterns already designed for [REDACTED: a private repo], and the
+    guardrail ledger built in [REDACTED: a private repo], are exactly the vocabulary that critique needs.
+    The twenty-four hour window is an internal convention and the send time is the recruiter's to
+    choose, so it can be scheduled rather than raced.
+  </p>
+  <p>
+    [Content removed under publication rule 1.] A correction here would have compared a tenure
+    figure stated in the recording against a private employment record not present in the
+    recording, and separately measured this round against a prior-rounds track record likewise
+    outside the recording; both are withheld whole rather than partially redacted. What the
+    recording alone supports: the opening line counts four companies and then names three, and a
+    fourth is not identified anywhere in the recording.
+  </p>
+
+  <h3>The retrieval project</h3>
+  <p>
+    The account given in the call is looser than what the project actually supports, and the gap runs
+    the wrong way. [REDACTED: private project architecture detail -- the stronger, verifiable
+    retrieval design that was not mentioned in the call is described here] was not mentioned, while
+    an embedding-model version that cannot be substantiated
+    was. Before the Head of AI screening, pin the model from [REDACTED: private status file] rather
+    than from memory, and lead with the retrieval architecture rather than with top-k tuning.
+  </p>
+
+  <h3>the ML pipeline</h3>
+  <p>
+    Nothing in the call changes the pipeline. What is reusable is the articulation: the two-phase
+    reinforcement-learning account -- contributors hand-authoring trajectories for supervised
+    fine-tuning, then evaluating model-authored trajectories against a client quality bar -- is the
+    most compact statement of that workflow in the recorded material, and the scoping vocabulary
+    attached to it (throughput, task-quality guidelines, contributor headcount, project duration)
+    transfers directly to describing the pipeline's own stage structure.
+  </p>
+
+  <h3>That systems track track and the harness kit</h3>
+  <p>
+    No direct value to the trie track; nothing in the conversation touches performance engineering or
+    measurement discipline. The harness claim made in the call -- that a personal repository exists
+    but is not finished -- is accurate against the kit's real state: [REDACTED: private project
+    status detail]. If the take-home does ask for improvements to an agent codebase, [REDACTED:
+    private project detail -- the kit's own exclusion/decision record was described here] is a
+    ready-made demonstration of exactly the reasoning that
+    question exists to test.
+  </p>
+</section>
+
+<section>
+  <h2 class="head"><span class="n">Verdict</span>What this recording is for</h2>
+  <p>
+    It is a record, not a lesson. As instructional material it is thin: one company describes itself,
+    one candidate describes work he has done elsewhere, and nothing is demonstrated, shown, or tested.
+    Anyone hoping to learn AI engineering from it will come away with a six-line orchestration sketch
+    and a four-step recipe for making an assistant process video, both of which are already written
+    down above in less time than the call takes to watch.
+  </p>
+  <p>
+    As a record it is worth keeping, for one reason: the interviewer read out the entire remaining
+    process, in order, with formats and durations, and specified what the next gate actually asks for.
+    That is five gates of advance notice, and it is the part of this recording that has a use after
+    today. The named follow-up is the take-home itself, plus one human detail worth remembering --
+    the recruiter builds Claude skills for her own work, which is the only shared technical ground
+    established in the call and the only thing in it that would still be true at gate six.
+  </p>
+  <p>
+    A closing note on what this document is not. This is a content report. It says nothing about how
+    either participant sounded, how the talking time divided, how long the pauses ran, or how the
+    round went, because none of that was measured and none of it is in scope for the pipeline that
+    produced this page. That analysis exists and is a different instrument entirely.
+  </p>
+</section>
+
+<footer>
+  <div>Ingest cost: about 31 minutes source &middot; 1,893 frames extracted at 1 fps &middot; 39 frames read at pixel level across 6 composites &middot; 14 language-detection probes &middot; 6 isolated audio re-cuts &middot; 1 whisper pass discarded, 5 accepted</div>
+  <div>Transcript: tier D, faster-whisper large-v3, CUDA float16 &middot; 4,892 verbatim words, 155 wpm &middot; tiers A, B and C each proven unavailable before escalating</div>
+  <div>No audio, prosody, diarization, talk-time or behavioural analysis was performed</div>
+</footer>
+
+</div>
+</body>
+</html>

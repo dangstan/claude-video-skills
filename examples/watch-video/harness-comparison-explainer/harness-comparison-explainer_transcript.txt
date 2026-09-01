@@ -1,0 +1,385 @@
+TRANSCRIPT RECORD -- harness-comparison-explainer
+================================================================================
+Title    : 100 Hours Testing Deepseek Harness vs. Claude Code. What You Need to Know.
+Channel  : Nate Herk | AI Automation
+Published: 2026-08-23
+Duration : 18:02 (1081.7 s)
+URL      : https://youtu.be/UsfCe5fJK6A
+Ingested : 2026-08-31 by the watch-video pipeline
+
+SOURCE TIER
+--------------------------------------------------------------------------------
+[source: platform captions, tier C]
+
+The transcript ladder was worked in order and resolved at tier C:
+  Tier A -- no transcript was supplied with the invocation.                 EMPTY
+  Tier B -- no sidecar .txt/.srt/.vtt/.json beside the video, and no prior
+            run of this slug in the output directory.                       EMPTY
+  Tier C -- YouTube auto-generated English caption track (en-orig), fetched
+            with `yt-dlp --skip-download --write-auto-subs
+            --sub-langs "en-orig"`.                                       RESOLVED
+  Tier D -- faster-whisper. NOT RUN. Whisper is the last resort in this
+            package and tier C carried the run, so no audio was ever
+            extracted and no whisper model was ever loaded.
+
+PROCESSING
+--------------------------------------------------------------------------------
+1,237 raw caption cues were parsed and collapsed with the word-level
+rolling-window overlap rule (a YouTube auto-caption track is a two-line
+scrolling window, so each cue repeats the tail of the previous one as its head;
+a naive concatenation duplicates nearly every word). That produced 619
+deduplicated segments, 4,556 words.
+
+DEDUP SANITY CHECK
+--------------------------------------------------------------------------------
+Rate: 252.7 wpm.
+
+The wpm heuristic treats sustained speech above ~250 wpm as evidence that the
+rolling-window collapse failed rather than as a fast presenter. This transcript
+sits marginally above that line, so the check was escalated to a structural test
+rather than accepted or rejected on the rate alone:
+
+  - adjacent duplicated 6-grams across all 4,556 words : 0
+  - 8-grams occurring more than once                   : 0
+
+A failed collapse duplicates nearly every word and cannot produce either result.
+The rate is therefore a genuinely fast presenter and the transcript is accepted.
+Recorded here because the heuristic and the structural evidence disagreed.
+
+CAPTION RELIABILITY -- READ THIS BEFORE QUOTING
+--------------------------------------------------------------------------------
+Auto-captions mangle proper nouns, product names, acronyms and numbers, and this
+source is an unusually bad case: essentially every product name in it is
+corrupted. Observed corruptions and their correct forms:
+
+  "Deep Sea Carness" / "Deep Seek Harness" / "DeepC Carnis" /
+  "Deep Sea Caress" / "DeSseek"                     -> DeepSeek Harness (DSH)
+  "Cloud Code" / "claw code"                        -> Claude Code
+  "Codeex" / "CEX"                                  -> Codex
+  "Cloud Opus" / "Cloud Fable"                      -> Claude Opus / Claude Fable
+  "Kimmy"                                           -> Kimi
+  "cloudmd" / "cloudmd local"                       -> CLAUDE.md / CLAUDE.local.md
+  "agents MD"                                       -> AGENTS.md
+  "Chag app"                                        -> ChatGPT app
+  "open router"                                     -> OpenRouter
+  "storm research skill"                            -> STORM research skill
+  "directory" (at 12:49)                            -> Trajectory (the tab name)
+  "AIOS" / "AOS"                                    -> his AI operating system
+
+Two spoken names could NOT be verified against any frame and are recorded as
+caption output only, not as confirmed product names: "OpenClaw" and "Hermes
+Agent", both offered around 01:04-01:14 as further examples of agent harnesses.
+The three additional vendor marks actually visible on screen in that segment are
+Zed, Kilo Code and Meta. Likewise the GPT-5.6 variant names rendered by the
+captions as "GBT 5.6 Soul" and "GBT 5.6 Luna" never appeared on screen and
+should not be propagated in that spelling.
+
+Because of this, EVERY product name, number and quoted user-interface string in
+harness-comparison-explainer_knowledge.md and _report.html was re-derived from
+video frames rather than taken from the caption text.
+
+SCOPE OF THIS FILE
+--------------------------------------------------------------------------------
+This is a provenance and citation record, not a wholesale copy of the source's
+spoken content. It carries the tier attribution, the processing audit, the
+caption-corruption map, a timestamped segment index sufficient to navigate back
+to any moment in the video, and the short verbatim fragments that the two
+analysis documents actually cite. The full deduplicated caption text was used as
+the working input for the guided read and was not retained as a deliverable.
+Everything a reader needs in order to check a citation, re-derive a claim, or
+judge how far to trust the analysis is below.
+
+================================================================================
+SEGMENT INDEX
+================================================================================
+Timestamps are caption cue start times. "SCREEN" notes what the frame at that
+moment actually showed, read from pixels at 1 fps.
+
+[00:00] Cold open. States the premise: a week with DeepSeek Harness, things he
+        likes and things he does not, framed explicitly as a comparison against
+        Claude Code.
+        SCREEN: talking head, then a Claude Code session and a DSH session.
+
+[00:19] "Sixty-second" definition of a harness. DeepSeek's model line, then the
+        claim that the harness is new, open source and free.
+
+[00:31] The three-harness taxonomy: Codex / Claude Code / DeepSeek Harness, each
+        wrapping an interchangeable model.
+        SCREEN: canvas diagram, three boxes each containing a vendor mark and an
+        identical box reading "AI Model"; Zed, Kilo Code and Meta marks beneath.
+
+[00:53] Native versus configurable models. Any model can be dropped into DSH;
+        the other harnesses allow it but are not built or marketed for it.
+
+[01:04] Names two further agent harnesses (caption-corrupted, unverified -- see
+        the reliability note above). Concludes it is not groundbreaking
+        technology, just a new harness.
+
+[01:24] The car analogy. Closed harness = a car you drive and can re-engine but
+        cannot rearrange. Open harness = the seats and steering wheel come out.
+        SCREEN: slide, "Closed-source harness" (sealed battery pack, captioned
+        "Fixed system / Not easily changed") beside "Open-source harness" (the
+        same car exploded into steering, dashboard, tools module, memory module,
+        wheels, battery, panels), with "Same model" between them.
+
+[01:47] Reads the product page's positioning aloud.
+        SCREEN: landing page. Kicker "DeepSeek Harness developer preview".
+        Headline "Everything is a plugin". Body sentence: every capability is a
+        plugin that can be swapped or recomposed -- models, tools, skills,
+        sessions, sandboxes, storage, loops, scheduling, and the UI. Buttons:
+        View on GitHub / Developer docs / Community plugins / Cordis paper.
+        Quick start: `npx @deepseek-ai/dsh web`. EN and Chinese toggle.
+        NOTE: the spoken list omits "models" and "scheduling" (see errata).
+
+[02:09] Scope declaration: no third-party and no self-built plugins this video,
+        to judge the out-of-the-box feel. Then the supply-chain warning -- have
+        Claude Code or Codex review any community plugin before installing it.
+
+[02:31] UI tour. Chat-app shape, workspaces on the left, session history.
+
+[02:52] Setup: handed the GitHub link to Codex, asked it to set the project up;
+        runs on localhost, fully local.
+
+[03:02] Credentials. Settings > Models, paste a key. With an OpenRouter key the
+        whole OpenRouter catalogue becomes selectable. No subscription auth by
+        default -- per-token API billing. Third-party plugins claiming
+        subscription bridging exist but were not tested.
+        SCREEN: model picker filtered to "openrouter", DeepSeek section listing
+        V3 0324, V3.1, R1, R1 0528, V3.1 Terminus, V3.2, V3.2 Exp, V4 Flash.
+        Composer chips: "Herk-2", "Standard mode", "Workspace Write",
+        "Claude Opus 5 Default". Home screen reads "Into the Unknown" + Preview.
+
+[03:35] Scorecard row 1, output quality: depends on the model and the effort.
+        The harness can only do so much; the model drives the output.
+
+[03:55] The four modes.
+        SCREEN, quoted verbatim from the dropdown:
+          Standard mode -- "Full coding agent with file editing, shell, file and
+            web search, skills, planning, goals, subagents, and workflows."
+          PTC mode -- "All Standard mode capabilities, with tools exposed
+            through the Code Mode SDK so the model can combine multi-step
+            operations in one TypeScript program."
+          Minimal mode -- "Two-tool coding agent with persistent bash and
+            str_replace_editor."
+          Creator mode -- "Built for creating custom agent presets, with all
+            Standard mode capabilities plus runtime inspection, plugin
+            experiments, and preset-authoring guidance."
+        The acronym PTC is not expanded anywhere on screen.
+
+[04:52] Standard versus Minimal, demonstrated with "hi who am I".
+        SCREEN (Standard): three labelled context injections fire before the
+        answer -- "AGENTS.md, CLAUDE.md, CLAUDE.local.md" (all marked `loaded`,
+        wrapped in a <system-reminder> stating that more specific instructions
+        take precedence over broader ones and do not override system, developer
+        or direct user instructions); "@deepseek-ai/dsh-system-prompt";
+        "skill-catalog". The answer names him and describes the workspace as his
+        personal AI operating system.
+        SCREEN (Minimal): no injection. The agent answers that it has no
+        personal information and offers to read the Windows user account instead.
+
+[05:12] The portability point: plugged it into his existing setup and did not
+        have to change anything -- his Claude skills and Claude context came
+        along unmodified.
+
+[05:45] Scorecard row 2, cost. The harness is free; inference is not. DeepSeek
+        models are cheap. Flash is cheaper than Pro; neither can see.
+
+[06:19] The demo website, built in DSH with DeepSeek V4 Flash. Took the assets
+        and brand guidelines, got the scroll behaviour and the feel right --
+        then shipped a visual failure he says Codex or Claude Code would never
+        have allowed, because they can screenshot, look, reason and iterate.
+        SCREEN: "PERKFORM" protein coffee. Hero "Coffee that pulls its weight",
+        20g PROTEIN / 150mg CAFFEINE, nav SHOP/ABOUT/REVIEWS, product cards Bold
+        Mocha / Vanilla Latte / Salted Caramel. Defects visible: a scroll-driven
+        zoom overshooting into a full viewport of empty background; the product
+        image blown up until the can's own label is cropped off; an unstyled
+        white rectangle in the navigation bar.
+
+[06:40] The correct conclusion, stated by him: this is a model limitation, not a
+        harness limitation. Vision-dependent work needs a model that can see.
+
+[07:02] Scorecard row 3, tokens. Cheap tokens plus an inefficient harness or a
+        weak model is not cheap. Cost to completion, not cost per token;
+        headline million-in / million-out figures can be deceiving.
+
+[07:25] Scorecard row 4, reliability. "Feels very promising, but it certainly
+        feels like a preview" -- and the product says developer preview itself.
+        Reported defects: intermittent hangs; a session where the mouse cursor
+        was confined to a small square, diagnosed and fixed with Codex's help;
+        compaction bugs where it appeared to forget the conversation.
+
+[08:06] Scorecard row 5, long sessions: compaction bugs and context regressions.
+        Concedes partial user error -- he was deliberately probing for breaking
+        points and context-rot territory.
+
+[08:15] Scorecard row 6, customization: "this is where this thing absolutely
+        crushes", not close to Codex or Claude Code, a different league.
+
+[08:36] Creator mode explained -- build agent presets, build plugins, change the
+        UI -- and a bug demonstrated live on camera.
+        SCREEN, verified across a 12-second 1.5 fps burst: the dropdown is
+        opened at least five times and "Creator mode" is clicked each time. The
+        menu dismisses, the composer chip still reads "Standard mode", and the
+        checkmark never leaves Standard. The selection silently fails. His
+        workaround: restart the harness.
+
+[08:57] Settings walkthrough.
+        SCREEN: Settings sections General / Models / Plugins / Agent presets;
+        "Open configuration file". Plugin configuration cards: "Shell" (limits
+        every command), "Agent loop" (how the agent dispatches), "Parallel tool
+        calls: 10" (upper bound on parallel dispatch). A second list holds ~two
+        dozen toggles, all enabled, nearly all `ui-` prefixed: ui-deliverables,
+        ui-workspace, ui-input-trigger, ui-commands, ui-skill, ui-subagent,
+        ui-reference, ui-jobs, ui-goal, ui-message-feedback, ui-model-selection,
+        ui-permission-presets, ui-agent-preset, ui-settings-plugins, ui-plan,
+        ui-user-questions, ui-trajectory, agent-presets, a directory-picker
+        pair, web-search-perplexity, hmr.
+
+[09:28] The honest personal position: for video editing, research, knowledge work
+        and document creation he has never felt a gap in Claude Code or Codex and
+        has never wished he could customize the harness. Names who it IS for --
+        hardcore developers and product builders with a real recurring pain.
+
+[10:01] His own intended use: a cheap model in a second harness for bulk
+        knowledge work and research when approaching subscription limits.
+
+[10:21] Why the energy around it matters: the prospect of everyone running a
+        harness custom-made for them, plus the self-repair loop -- switch to
+        creator mode, build a plugin that fixes what just went wrong so the
+        agentic loop does not repeat it.
+
+[10:41] Scorecard row 7, "Replace Claude?" -- No. For deep work, Claude Code.
+        And if the model you want is Opus, a Claude Code subscription is far
+        better value than paying per token for Opus inside DSH.
+
+[11:12] The framing correction the video exists for: "This is not a free cloud
+        code. This is just a free harness." Notes you can put your own model
+        into Claude Code and Codex too, and tags his own earlier video on it.
+
+[11:32] First observed advantage: speed. Claims retrieval in his vault is
+        roughly one minute in DSH against five-plus minutes in Claude Code,
+        reproduced across multiple runs of the same prompt.
+
+[11:55] The live race. Same prompt fired at both harnesses simultaneously:
+        find the transcript of a past video about the levels of his AI second
+        brain, then give a two-sentence summary.
+        SCREEN at the 52-second mark --
+          Claude Code (left): "Searching repo for second brain references",
+            status "52s - 158 tokens - 1 running task - Running tools...";
+            branch chip "Herk-2.0 master", diff "+38,503 -1,862";
+            model row reads "Opus 5" with effort "High".
+          DSH (right): already found it. Lists three variants --
+            transcript-timestamped.txt (582 lines, with timestamps),
+            transcript.txt (plain text), transcript.json (structured) --
+            recovers the published title and moves into summarising.
+            Status bar: "1 turns - 4 steps | LLM 15.3s - Tool call 33.4s |
+            TTFT avg 1.7s - 92 tok/s | Cache hit 52% | Input 156K tok".
+            Model chip reads "Claude Opus 5 Default".
+        NOTE: he says "these are both using the same model". True of the model,
+        not of the configuration -- effort High versus Default. See errata.
+
+[12:38] Says the same advantage holds when fanning out subagents for research.
+
+[12:49] The Trajectory tab (he calls it "directory").
+        SCREEN: tabs Chat / Trajectory; filters Duration / Turns / Calls plus
+        search; a three-lane timeline banded Input / Model / Tools; typed event
+        rows SYSTEM / USER / CONTEXT / ASSISTANT / TOOL with raw JSON arguments
+        and returned results. Observed rows include a `glob` returning
+        TOOL_TIMEOUT in red, greps carrying their literal regexes, a `pwsh`
+        Get-ChildItem, and a `read` with a full Windows path. One CONTEXT row
+        reads "Current runtime context. This snapshot supersedes earlier
+        runtime-context snapshots." The session log is downloadable. Later
+        status bar: "1 turns - 5 steps | LLM 20.7s - Tool call 33.4s | TTFT avg
+        1.6s - 88 tok/s | Cache hit 65% | Input 222K tok".
+        NOTE: the TOOL_TIMEOUT is not mentioned in the narration and is not
+        visible in the chat view.
+
+[13:02] The stated purpose of the trajectory: read a session, then ask the
+        harness to turn it into a skill, or into a plugin that prevents the same
+        failure on the next run of the loop.
+
+[13:35] Second comparison. A deliberately vague prompt to both: find recently
+        pulled YouTube analytics and build an Excel sheet breaking them down.
+        Chosen because it forces skills, API calls and structuring scripts into
+        one deliverable.
+
+[14:09] Claims DSH returned in about 3 minutes against about 17 minutes for
+        Claude Code. No on-screen timer corroborates either figure.
+
+[14:20] The DSH workbook.
+        SCREEN: "YouTube Performance Report - Trailing 3 Months". Tabs Summary /
+        Videos / Top & Bottom / Monthly Trend / Tag Analysis / Notes & Sources.
+        Multi-hue conditional formatting on views and engagement rate; top-10
+        and bottom-10 bar charts carrying no data labels, so they read as shape
+        only and must be cross-referenced against the adjacent table.
+
+[15:01] The Claude Code workbook.
+        SCREEN: "YouTube Channel Report". Tabs README / Summary / Last 90 Days /
+        All Videos / Top 50 / Monthly Trend / Duration Buckets / Q2 Daily, and
+        more beyond the visible strip. The All Videos sheet runs fifteen columns
+        across the full catalogue: Video ID, Title, Published, Type, Runtime,
+        Runtime (sec), Views, Likes, Comments, Days Live, Views/Day, Like Rate,
+        Comment Rate, Engagement Rate, Tags.
+        NOTE: he says "we don't have any color coding". Several columns of this
+        sheet do carry banded blue tinting; what it lacks is the multi-hue
+        conditional formatting the DSH workbook used. See errata.
+
+[15:22] Quality verdict on the workbooks: Claude Code better as analysis --
+        deeper drill-down, more specific, more tabs, more data, all 467 videos
+        (stated; not verifiable in frame) -- but a bit word vomit. DSH simpler
+        and easier to interpret. Both got a vague prompt; a specific one naming
+        pain points would likely have changed both.
+
+[15:44] Third comparison. Both harnesses run his own STORM research skill on the
+        effects of sugar on the body.
+
+[16:06] Notes both outputs look the same because both followed the skill --
+        which he counts, correctly, in their favour.
+        SCREEN: both render "STORM RESEARCH - V2 (VERIFIED)", the title "The
+        Effect of Sugar on the Body", the same five-lens standfirst naming the
+        practitioner, academic, skeptic, economist and historian lenses, the
+        same "HOW TO READ THIS" panel, the same numbered spine starting with a
+        60-Second Summary, and the same per-claim badge vocabulary
+        (SUPPORTED BY / CHALLENGED BY / CORRECTED, and cards labelled e.g.
+        "CONTESTED SIGNAL - MONITOR, DO NOT ASSERT - CONFIDENCE 4/10 -
+        SPONSORED VENUE").
+
+[16:16] The measured differences.
+        SCREEN, Claude Code verification banner: "26 sources listed, 25
+        independently checked against primary sources on 23 August 2026.
+        Result: 8 confirmed clean, 13 corrected, 2 demoted, 2 figures
+        untraceable to any primary source, 1 carried as an unverified lead."
+        Audience line: "A health-conscious decision-maker who also explains this
+        evidence publicly."
+        SCREEN, DeepSeek verification banner: "All 14 load-bearing citations
+        independently checked against primary sources on August 23, 2026.
+        Result: 0 fabricated, 6 corrected, 3 demoted." Two citations flagged in
+        place as industry-authored or industry-sponsored. Audience line:
+        "Health-conscious general reader & public-facing content creator." It
+        also adds a reading-guide bullet of its own separating free and added
+        sugars from intrinsic sugars in whole fruit.
+        Word counts stated: ~5,000 (Claude Code) against ~4,400 (DSH).
+        NOTE: he adds "I think in total it actually found 22 I believe" -- that
+        figure appears nowhere in the artifact and is hedged twice. See errata.
+
+[16:40] Character verdict. Claude Code more in-depth, more scientific, more
+        conservative with its findings. DSH more relatable and practical, and at
+        times over-confident -- asserting things he did not agree with. His
+        stated interest is how much the harness affects the same exact model.
+
+[17:01] Trust verdict: he trusts the Claude Code output more and would be more
+        willing to hand it to a client or his team.
+
+[17:11] The caveat he raises against his own result: the skills were built for
+        Claude Code, and skills are interpreted differently every time you
+        change model or harness. A skill authored natively for DSH would
+        probably do very well and run faster.
+
+[17:32] Closing instruction: take his advice and other people's as input, then
+        get hands-on, put your own models in, and test it against your own work.
+
+[17:52] Outro.
+
+================================================================================
+END OF RECORD
+================================================================================
