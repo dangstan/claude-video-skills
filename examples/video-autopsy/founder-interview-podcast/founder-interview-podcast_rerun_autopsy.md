@@ -92,6 +92,14 @@ into a conversation that immediately hands the floor back. David's role in this 
 credible interlocutor who has done the same work, not to extract answers. He earns the floor four
 times by disagreeing usefully, and gives it back each time.
 
+> **DEFECT NOTE, added for publication -- not run output.** Two of the three timestamps named in
+> the paragraph above are not among David's four long HOLDS, which is what the paragraph calls
+> them. The measured floor-hold pass below lists his four blocks of 60 s or more as `10:41`,
+> `14:24`, `30:20` and `34:43`. The turns at `18:26` and `32:24` are real and are his, but they run
+> 25 s and 38 s -- well under the 60 s bar this document set for a hold. Only `10:41` belongs to
+> both sets. The prose and the measurement each arrive at "four", and nothing in the text signals
+> that they are different fours. The HTML report carries the same claim and the same note.
+
 The interview has a single, consistent thesis that Flo returns to from eight different directions:
 that the current generation of coding agents is **single-player software**, that this is the last
 structural constraint left, and that the company which becomes the place where a team's context,

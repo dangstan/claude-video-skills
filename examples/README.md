@@ -103,7 +103,7 @@ These are unmodified run outputs. When a document gets something wrong, the erro
 in the original analysis is edited to look better after the fact -- a showcase that quietly repairs
 its own mistakes is not evidence of anything.
 
-Six defects are flagged this way. Every one was found by reading the two or three documents of a
+Nine defects are flagged this way. Every one was found by reading the two or three documents of a
 single source against each other, or by looking at a rendered page; no identifier grep or automated
 check found any of them.
 
@@ -124,6 +124,14 @@ check found any of them.
 - The same report's phase timeline draws four of the ten blocks its own caption claims, plots one of
   the four at the wrong time, and collides its phase labels. That one only shows up in a render;
   reading the markup does not surface it.
+- The re-run of that same source was checked against exactly those defects, and the chart half of
+  them does not reproduce: its ribbon draws all twenty floor-holds its caption claims, sixteen and
+  four by speaker, each matching the document's own measured table, and all four annotations land on
+  the second they cite. Two others do. Its caption reads three of the four blue bars the chart
+  correctly draws, and concludes "the only stretch" from the three; and the leader line of one
+  annotation is drawn straight through the label of the annotation below it. Both are flagged in the
+  document. The second is a render-only defect for the third time in this tree -- counting marks and
+  reading captions against them is not something the markup will do for you.
 
 Real pipelines have defects. What the examples are meant to show is that a second evidence pass
 catches them -- and that the second pass has to be a reading of the documents against each other and
