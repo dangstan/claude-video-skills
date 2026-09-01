@@ -35,66 +35,61 @@ a scrub keyed on IDENTIFIERS cannot contain a leak whose problem is PROVENANCE:
    a whole-section shell, in the markdown and in the HTML report alike; giving them the same
    line-by-line treatment is pending review.
 
-### The re-run pairs, and the gate that refused the first pass
+### What a second pass found -- and why no second pass is shipped here
 
-TWO sources ship a re-run pair: a first video-autopsy run, and a second pass over the same recording
-under a hardened version of the skill. Each is here for what it corrected, not for what it confirmed.
+**Everything in this tree is a single run of a skill against a video, with no knowledge of any
+earlier run of the same source.** That is the whole claim an example makes, and a document written
+as a delta against a prior pass cannot make it. Two such documents were shipped here and have been
+removed: they were second passes, written knowing what the first pass had said. One of them
+explicitly left its outcome estimate, behavioural check and claims ledger unmeasured on the grounds
+that the earlier pass already had them -- a shape no clean run produces. What they contain is a
+record of how the SKILL was hardened, which belongs in the skill's own history, not in a directory
+whose contract is "this is what you get when you point it at a video".
 
-`tech-interview-screen` ships TWO video-autopsy documents. The first is the original run. The second,
-`_rerun_autopsy.md`, is a second pass over the same recording under a hardened version of the skill,
-and it is here because of what it corrected rather than what it confirmed:
+The findings are worth stating even though the documents are not shipped, because two of them are
+why rules exist in `video-autopsy/SKILL.md` today:
 
-- The first pass said both ASR engines degraded across a mid-call language switch. Measured, whisper
-  did not: it transcribed the switched span in the other language, coherently, at BETTER than the
-  file's mean confidence. The engine that failed was the language-locked meeting export.
-- The detection rule the skill had just gained -- find the switch by a drop in confidence -- was
-  refuted by the recording it was written for. It flagged three minutes of fluent correct English and
-  missed both switched minutes. The rule now runs language identification over the output text.
-- A phase the first pass marked VOID turned out to be a real measurement.
+- On the screening call, the first pass said both ASR engines degraded across a mid-call language
+  switch. Whisper did not: it transcribed the switched span in the other language, coherently, at
+  better than the file's mean confidence. The engine that failed was the language-locked meeting
+  export. The detection rule the skill had just gained -- find the switch by a drop in confidence --
+  was refuted by the very recording it was written for, flagging three minutes of fluent correct
+  English and missing both switched minutes. The rule now runs language identification over the
+  output text.
+- On the founder interview, the second pass reached the SAME inverted face map as the first, by a
+  different route. Caption `>>` markers mark THAT the speaker changed, never TO WHOM; alternating
+  over them from a confidently identified opening turn is valid only if no boundary was ever missed.
+  Measured on that file, 68 markers were correct for seven turns, then inverted at a hard cut into a
+  pre-recorded sponsor read -- a cut is not a speaker change any caption model can see -- and stayed
+  wrong for the rest of the recording. Hardening one route to a wrong map does not harden the
+  others. That is the rule now in Step 3.
+- A caption cross-check on the same file produced a negative result worth as much as the positive
+  ones: the dropout detector returned zero flagged bins while whisper was emitting a hallucination
+  loop. A detector keyed on ABSENCE cannot see a wrong-value failure.
 
-Both documents were also re-published through `video-autopsy/publish_check.sh`, which **refused the
-first pass** on three quasi-identifiers -- an exact start time with a zone, a timestamp to the
-second, and an exact duration -- none of which names anybody and all of which let a person who was
-in that meeting match the document against their own calendar. They have been coarsened.
+That second pass also could not have been a blind test of the face-map rule, and said so: the
+correct map was already in the operator's notes before it started. It established that the evidence
+the rule demands is present in footage of this kind, not that the rule catches the error unaided.
+That caveat is a further reason it is not an example.
 
-`founder-interview-podcast` ships the second pair. Its first run inverted the two participants'
-faces -- the defect note in that document is the largest one in this tree -- and the re-run is the
-pass that settled the map from the frames and found how the inversion happened. The route was not
-the one the skill had already been hardened against:
+### The gate that refused a copy already shipped
 
-- The first pass read identity off a personalised surface. The re-run walked into the OTHER route
-  to the same wrong answer: caption `>>` markers mark THAT the speaker changed, never TO WHOM, and
-  alternating over them from a confidently identified opening turn is only valid if no boundary was
-  ever missed. Measured on this file, 68 markers were correct for seven turns and then inverted at a
-  hard cut into a pre-recorded sponsor read -- a cut is not a speaker change any caption model can
-  see -- and stayed wrong for the rest of the recording.
-- That is the lesson the re-run is published for: hardening one route to a wrong map does not harden
-  the others. The rule now in `video-autopsy/SKILL.md` Step 3 came out of this run.
-- Its caption cross-check also produced a NEGATIVE result worth as much as the positive ones. The
-  dropout detector -- caption text with no whisper counterpart -- returned zero flagged bins while
-  whisper was in fact emitting a hallucination loop. A detector keyed on ABSENCE cannot see a
-  wrong-value failure; what found it was a run of segments of exactly 1.00 s and the compression
-  ratio.
+`video-autopsy/publish_check.sh` **refused the `tech-interview-screen` documents** on three
+quasi-identifiers -- an exact start time with a zone, a timestamp to the second, and an exact
+duration. None names anybody; all three let a person who was in that meeting match the document
+against their own calendar. They have been coarsened, and that scrub is the only edit those files
+carry beyond their defect notes.
 
-The gate refused this pair too, and on a different failure class: not quasi-identifiers but SOURCE.
-The run's "Run notes" section is external by construction -- it describes the machine the run
-executed on -- so it is a declared shell here, and the transcript of record and the reproduction
-scripts are not published for the same reason. That refusal exposed a defect in the document's own
-header, flagged in place: it declares "the publication gate does not apply" because the recording is
-public, and states that it carries no external-record tags while carrying six of them. The gate
-applies to what the RUN leaves behind, not to the subject's privacy. The exact-duration and
-calendar-date warnings are NOT coarsened here, unlike the `tech-interview-screen` pair: this
-recording is a published video anyone can watch and time, and its sibling document in the same
-directory has shipped the same duration since it was published. `publish_check.sh` encodes that
-distinction itself -- quasi-identifiers FAIL on `--source private` and only WARN on
-`--source published`.
+The same gate distinguishes source kinds, which is why the founder documents keep numbers the
+screening-call ones do not: quasi-identifiers FAIL on `--source private` and only WARN on
+`--source published`. The founder recording is a video anyone can watch and time, so its exact
+duration is coarsened nowhere.
 
-**One mismatch between the shipped examples and the current skill, so it is not read as a defect.**
-Every example here except `founder-interview-podcast_rerun_autopsy.*` predates the requirement,
-added 2026-08-31, that a report and transcript header name the signal that cross-checked the speaker
-attribution and its agreement rate. Under the honesty policy below these documents are not re-run to
-conform; a header that does not carry that line is a document written before the rule, not a run
-that skipped it.
+**One mismatch between these examples and the current skill, so it is not read as a defect.** Every
+document here predates the requirement, added 2026-08-31, that a report and transcript header name
+the signal that cross-checked the speaker attribution and its agreement rate. Under the honesty
+policy below they are not re-run to conform: a header without that line is a document written before
+the rule, not a run that skipped it.
 
 ### Honesty policy: defects are flagged, never rewritten
 
@@ -103,7 +98,7 @@ These are unmodified run outputs. When a document gets something wrong, the erro
 in the original analysis is edited to look better after the fact -- a showcase that quietly repairs
 its own mistakes is not evidence of anything.
 
-Nine defects are flagged this way. Every one was found by reading the two or three documents of a
+Six defects are flagged this way. Every one was found by reading the two or three documents of a
 single source against each other, or by looking at a rendered page; no identifier grep or automated
 check found any of them.
 
@@ -124,14 +119,6 @@ check found any of them.
 - The same report's phase timeline draws four of the ten blocks its own caption claims, plots one of
   the four at the wrong time, and collides its phase labels. That one only shows up in a render;
   reading the markup does not surface it.
-- The re-run of that same source was checked against exactly those defects, and the chart half of
-  them does not reproduce: its ribbon draws all twenty floor-holds its caption claims, sixteen and
-  four by speaker, each matching the document's own measured table, and all four annotations land on
-  the second they cite. Two others do. Its caption reads three of the four blue bars the chart
-  correctly draws, and concludes "the only stretch" from the three; and the leader line of one
-  annotation is drawn straight through the label of the annotation below it. Both are flagged in the
-  document. The second is a render-only defect for the third time in this tree -- counting marks and
-  reading captions against them is not something the markup will do for you.
 
 Real pipelines have defects. What the examples are meant to show is that a second evidence pass
 catches them -- and that the second pass has to be a reading of the documents against each other and
@@ -188,9 +175,7 @@ a look at the rendered page, because not one of these was reachable by a string 
   the tree: the run swapped the two participants' faces and so credits the sponsor read to the
   wrong man. Left in and flagged, with the evidence that settles it -- see the honesty policy
   above. It also carries a second note on its phase timeline, which draws four of the ten blocks
-  its own caption claims. It ships a **re-run pair**: `_rerun_autopsy.md/html` is the
-  second pass that settled the face map from the frames, found the route the inversion took, and
-  produced the turn-boundary rule now in the skill -- see the re-run section above.
+  its own caption claims.
 - [`harness-comparison-explainer/`](video-autopsy/harness-comparison-explainer/) -- what the
   skill does when pointed at footage it is not for: it stops before spending compute and routes
   to the right sibling. No autopsy deliverable exists for this source *because the run refused to
