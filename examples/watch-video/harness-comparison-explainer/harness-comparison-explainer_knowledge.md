@@ -513,8 +513,8 @@ gain.
 
 **Agent orchestration and skill authoring generally.** The strongest transferable finding for you
 is section 7.3: skills are harness-coupled and get re-interpreted on any harness or model change.
-You maintain a substantial skill surface (`graphify`, `watch-video`, `watch-video-max`,
-`video-autopsy`, a family of project-specific skills) plus hook-enforced behaviours. If any of those are ever
+You maintain a substantial skill surface (`watch-video`, `watch-video-max`,
+`video-autopsy`, [REDACTED: private knowledge-graph tool], a family of project-specific skills) plus hook-enforced behaviours. If any of those are ever
 run under a different harness, expect silent reinterpretation rather than failure -- the divergence
 observed here was two headers that both looked correct and specified different audiences. A cheap
 mitigation matching how you already work: make the skill state its own invariants explicitly enough
@@ -533,7 +533,8 @@ spillover pattern -- a cheap model in a second harness for bulk knowledge work w
 limits -- but with the trajectory-view caveat that its output is the one he would *not* hand to a
 client, which is the wrong trade for anything that lands in your governed docs.
 
-**polymarket_agent, claude-doc-reader, worldsim_project.** No mechanism, no value. None of them
+**[REDACTED: private trading-agent project], [REDACTED: private document-rendering project],
+[REDACTED: private simulation project].** No mechanism, no value. None of them
 are bounded by the harness layer.
 
 **Career / interview track.** Tangential but real: the taxonomy in section 1 -- harness versus
